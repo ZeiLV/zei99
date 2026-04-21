@@ -64,7 +64,7 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
     }
   };
 
-  const onTap = (e: React.MouseEvent<HTMLDivElement>) => {
+  const onTap = (e: React.MouseEvent<HTMLElement>) => {
     if (isVip) return;
     armHide();
     const rect = e.currentTarget.getBoundingClientRect();
