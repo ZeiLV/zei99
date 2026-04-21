@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { LogOut, Pencil, Plus, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
+import { ImageUpload } from "@/components/ImageUpload";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -270,11 +271,21 @@ const Admin = () => {
               placeholder="Anime, Sarguzasht"
             />
           </Field>
-          <Field label="Poster URL (9:16)">
-            <Input value={editingContent.poster_url ?? ""} onChange={(e) => setEditingContent({ ...editingContent, poster_url: e.target.value })} />
+          <Field label="Poster (9:16)">
+            <ImageUpload
+              value={editingContent.poster_url ?? ""}
+              onChange={(url) => setEditingContent({ ...editingContent, poster_url: url })}
+              folder="posters"
+              aspect="9/16"
+            />
           </Field>
-          <Field label="Banner URL">
-            <Input value={editingContent.banner_url ?? ""} onChange={(e) => setEditingContent({ ...editingContent, banner_url: e.target.value })} />
+          <Field label="Banner (16:9)">
+            <ImageUpload
+              value={editingContent.banner_url ?? ""}
+              onChange={(url) => setEditingContent({ ...editingContent, banner_url: url })}
+              folder="banners"
+              aspect="16/9"
+            />
           </Field>
           <div className="flex justify-end gap-2 pt-2">
             <Button variant="ghost" onClick={() => setEditingContent(null)}>Bekor</Button>

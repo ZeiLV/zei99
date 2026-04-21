@@ -4,7 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ZEI DUBBING — Cyberpunk neon design system. All colors HSL. */
+/* ZEI DUBBING — Cyberpunk multicolor neon design system. All colors HSL. */
 
 @layer base {
   :root {
@@ -38,9 +38,12 @@
 
     --radius: 0.75rem;
 
-    /* Neon-specific tokens */
-    --neon: 187 100% 50%;
+    /* Multicolor neon palette */
+    --neon: 187 100% 50%;            /* Cyan-blue (#00E5FF) */
     --neon-soft: 187 100% 70%;
+    --neon-cyan: 180 100% 50%;       /* #00FFFF */
+    --neon-purple: 285 100% 50%;     /* #BF00FF */
+    --neon-pink: 330 100% 50%;       /* #FF007F */
     --glass: 0 0% 100%;
 
     --shadow-neon-sm: 0 0 8px hsl(var(--neon) / 0.6);
@@ -49,6 +52,7 @@
 
     --gradient-glass: linear-gradient(135deg, hsl(0 0% 100% / 0.06), hsl(0 0% 100% / 0.02));
     --gradient-banner: linear-gradient(180deg, transparent 0%, hsl(0 0% 0% / 0.5) 60%, hsl(0 0% 0%) 100%);
+    --gradient-multineon: linear-gradient(120deg, hsl(var(--neon-cyan)), hsl(var(--neon)) 35%, hsl(var(--neon-purple)) 70%, hsl(var(--neon-pink)));
 
     --transition-smooth: cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -73,7 +77,7 @@
   }
 
   ::selection {
-    background: hsl(var(--neon) / 0.3);
+    background: hsl(var(--neon-purple) / 0.4);
     color: hsl(var(--foreground));
   }
 }
@@ -103,6 +107,15 @@
     text-shadow: 0 0 6px hsl(var(--neon) / 0.7), 0 0 18px hsl(var(--neon) / 0.45);
   }
 
+  .multineon-text {
+    background: var(--gradient-multineon);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 8px hsl(var(--neon) / 0.55))
+            drop-shadow(0 0 18px hsl(var(--neon-purple) / 0.45));
+  }
+
   .neon-border {
     border: 1px solid hsl(var(--neon) / 0.6);
     box-shadow: var(--shadow-neon-sm), inset 0 0 12px hsl(var(--neon) / 0.08);
@@ -124,6 +137,25 @@
   50% { box-shadow: 0 0 20px hsl(var(--neon) / 0.8), 0 0 48px hsl(var(--neon) / 0.45); }
 }
 .animate-neon-pulse { animation: neon-pulse 2.4s ease-in-out infinite; }
+
+/* Multicolor breathing backlight — used behind cards / heroes */
+@keyframes breathing-glow {
+  0%, 100% {
+    opacity: 0.55;
+    filter: blur(48px) saturate(140%);
+    transform: scale(1);
+    background: radial-gradient(circle at 25% 30%, hsl(var(--neon) / 0.55), transparent 60%),
+                radial-gradient(circle at 75% 70%, hsl(var(--neon-purple) / 0.45), transparent 60%);
+  }
+  50% {
+    opacity: 0.85;
+    filter: blur(64px) saturate(180%);
+    transform: scale(1.06);
+    background: radial-gradient(circle at 30% 70%, hsl(var(--neon-pink) / 0.55), transparent 60%),
+                radial-gradient(circle at 75% 25%, hsl(var(--neon-cyan) / 0.55), transparent 60%);
+  }
+}
+.animate-breathing { animation: breathing-glow 7s ease-in-out infinite; }
 
 @keyframes typewriter {
   from { width: 0; }
@@ -162,3 +194,26 @@
   100% { transform: translateY(100%); }
 }
 .animate-scan-line { animation: scan-line 2s linear infinite; }
+
+/* Intro: neon lines converging into the wordmark */
+@keyframes line-sweep-h {
+  0%   { transform: translateX(-120%); opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateX(120%); opacity: 0; }
+}
+@keyframes line-sweep-v {
+  0%   { transform: translateY(-120%); opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(120%); opacity: 0; }
+}
+.animate-line-h { animation: line-sweep-h 2.4s var(--transition-smooth) infinite; }
+.animate-line-v { animation: line-sweep-v 2.4s var(--transition-smooth) infinite; }
+
+@keyframes wordmark-coalesce {
+  0%   { opacity: 0; letter-spacing: 1.5em; filter: blur(14px) brightness(2); }
+  60%  { opacity: 1; letter-spacing: 0.4em; filter: blur(2px) brightness(1.4); }
+  100% { opacity: 1; letter-spacing: 0.08em; filter: blur(0) brightness(1); }
+}
+.animate-wordmark-coalesce { animation: wordmark-coalesce 1.6s var(--transition-smooth) forwards; }

@@ -47,6 +47,18 @@ export const VideoPlayer = ({ gdriveUrl, isVip }: Props) => {
     else v.pause();
   };
 
+  const doSkip = (side: "left" | "right", el: HTMLElement) => {
+    const v = videoRef.current;
+    if (v) {
+      if (side === "left") v.currentTime = Math.max(0, v.currentTime - 5);
+      else v.currentTime = Math.min(v.duration || 0, v.currentTime + 5);
+    } else if (useIframeFallback) {
+      // Iframe fallback: visual hint only (Drive iframe controls own playback)
+    }
+    setSkipHint({ side });
+    setTimeout(() => setSkipHint(null), 600);
+  };
+
   const onTap = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isVip) return;
     armHide();
@@ -55,20 +67,9 @@ export const VideoPlayer = ({ gdriveUrl, isVip }: Props) => {
     const now = Date.now();
     if (lastTap.current && now - lastTap.current.time < 280 && Math.abs(x - lastTap.current.x) < 60) {
       const w = rect.width;
-      const v = videoRef.current;
-      if (v) {
-        if (x < w * 0.2) {
-          v.currentTime = Math.max(0, v.currentTime - 5);
-          setSkipHint({ side: "left" });
-          setTimeout(() => setSkipHint(null), 600);
-        } else if (x > w * 0.8) {
-          v.currentTime = Math.min(v.duration || 0, v.currentTime + 5);
-          setSkipHint({ side: "right" });
-          setTimeout(() => setSkipHint(null), 600);
-        } else {
-          togglePlay();
-        }
-      }
+      if (x < w * 0.3) doSkip("left", e.currentTarget);
+      else if (x > w * 0.7) doSkip("right", e.currentTarget);
+      else togglePlay();
       lastTap.current = null;
     } else {
       lastTap.current = { time: now, x };
@@ -94,6 +95,9 @@ export const VideoPlayer = ({ gdriveUrl, isVip }: Props) => {
     const ss = Math.floor(s % 60).toString().padStart(2, "0");
     return `${m}:${ss}`;
   };
+
+  // Iframe variant of preview URL that hides Drive's "open in new tab" / external action button.
+  const cleanPreview = preview ? `${preview}?usp=embed&rm=minimal` : "";
 
   return (
     <div
@@ -127,13 +131,20 @@ export const VideoPlayer = ({ gdriveUrl, isVip }: Props) => {
             }}
           />
         ) : fileId ? (
-          <iframe
-            src={preview}
-            className="w-full h-full"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-            onLoad={() => setBuffering(false)}
-          />
+          <div className="relative w-full h-full">
+            <iframe
+              src={cleanPreview}
+              className="w-full h-full"
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+              onLoad={() => setBuffering(false)}
+            />
+            {/* Mask to hide Drive's external/open-in-new-tab button (top-right corner) */}
+            <div
+              className="absolute top-0 right-0 w-16 h-12 bg-black pointer-events-auto"
+              aria-hidden
+            />
+          </div>
         ) : (
           <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
             Video manbasi noto'g'ri
@@ -162,7 +173,7 @@ export const VideoPlayer = ({ gdriveUrl, isVip }: Props) => {
       {/* VIP overlay */}
       {isVip && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-10 bg-background/40">
-          <div className="font-display text-lg sm:text-2xl neon-text tracking-widest text-center px-6">
+          <div className="font-display text-lg sm:text-2xl multineon-text tracking-widest text-center px-6">
             VIP Obuna Bo'ling
           </div>
           <a
@@ -176,7 +187,7 @@ export const VideoPlayer = ({ gdriveUrl, isVip }: Props) => {
         </div>
       )}
 
-      {/* Controls */}
+      {/* Controls (only for native video element) */}
       {!isVip && !useIframeFallback && fileId && (
         <div
           className={`absolute inset-x-0 bottom-0 transition-opacity duration-300 ${
@@ -251,6 +262,13 @@ export const VideoPlayer = ({ gdriveUrl, isVip }: Props) => {
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Iframe fallback: minimal overlay with seek hints area only — external button covered */}
+      {!isVip && useIframeFallback && fileId && (
+        <div className="absolute bottom-3 right-3 text-[10px] font-display tracking-widest text-foreground/50 pointer-events-none">
+          ZEI · PLAYER
         </div>
       )}
     </div>
