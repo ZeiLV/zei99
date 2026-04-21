@@ -17,30 +17,51 @@ export type Database = {
       content: {
         Row: {
           banner_url: string | null
+          category: string
           created_at: string
           description: string | null
+          duration: string | null
           genre: string[]
           id: string
+          is_featured: boolean
+          is_trending: boolean
           poster_url: string | null
+          rating: number | null
           title: string
+          views: number
+          year: number | null
         }
         Insert: {
           banner_url?: string | null
+          category?: string
           created_at?: string
           description?: string | null
+          duration?: string | null
           genre?: string[]
           id?: string
+          is_featured?: boolean
+          is_trending?: boolean
           poster_url?: string | null
+          rating?: number | null
           title: string
+          views?: number
+          year?: number | null
         }
         Update: {
           banner_url?: string | null
+          category?: string
           created_at?: string
           description?: string | null
+          duration?: string | null
           genre?: string[]
           id?: string
+          is_featured?: boolean
+          is_trending?: boolean
           poster_url?: string | null
+          rating?: number | null
           title?: string
+          views?: number
+          year?: number | null
         }
         Relationships: []
       }
@@ -53,6 +74,8 @@ export type Database = {
           id: string
           is_vip: boolean
           title: string
+          video_type: string
+          video_url: string | null
         }
         Insert: {
           content_id: string
@@ -62,6 +85,8 @@ export type Database = {
           id?: string
           is_vip?: boolean
           title: string
+          video_type?: string
+          video_url?: string | null
         }
         Update: {
           content_id?: string
@@ -71,6 +96,8 @@ export type Database = {
           id?: string
           is_vip?: boolean
           title?: string
+          video_type?: string
+          video_url?: string | null
         }
         Relationships: [
           {
@@ -115,6 +142,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_views: { Args: { _content_id: string }; Returns: undefined }
     }
     Enums: {
       app_role: "admin"
