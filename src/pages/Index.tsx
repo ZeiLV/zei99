@@ -1,32 +1,49 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { useParams } from "react-router-dom";
 import { Intro } from "@/components/Intro";
 import { Header } from "@/components/Header";
 import { PosterCard } from "@/components/PosterCard";
 import { ContentDetail } from "@/components/ContentDetail";
+import { ContentRow } from "@/components/ContentRow";
 import { HeroSlider } from "@/components/HeroSlider";
 import { supabase } from "@/integrations/supabase/client";
-import { Content } from "@/lib/types";
+import { Category, Content, CATEGORIES } from "@/lib/types";
 
-const Index = () => {
-  const [showIntro, setShowIntro] = useState(() => !sessionStorage.getItem("zei-intro-done"));
+interface Props {
+  category?: Category;
+}
+
+const Index = ({ category }: Props) => {
+  const [showIntro, setShowIntro] = useState(() =>
+    category ? false : !sessionStorage.getItem("zei-intro-done")
+  );
   const [content, setContent] = useState<Content[]>([]);
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Content | null>(null);
+  const [activeGenre, setActiveGenre] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setSelected(null);
+    setActiveGenre(null);
+  }, [category]);
+
+  useEffect(() => {
     (async () => {
-      const { data } = await supabase
-        .from("content")
-        .select("*")
-        .order("created_at", { ascending: false });
+      setLoading(true);
+      let query = supabase.from("content").select("*").order("created_at", { ascending: false });
+      if (category) query = query.eq("category", category);
+      const { data } = await query;
       setContent((data ?? []) as Content[]);
       setLoading(false);
     })();
-  }, []);
+  }, [category]);
+
+  const allGenres = Array.from(new Set(content.flatMap((c) => c.genre ?? []))).sort();
 
   const filtered = content.filter((c) => {
+    if (activeGenre && !c.genre?.includes(activeGenre)) return false;
     if (!search.trim()) return true;
     const q = search.toLowerCase();
     return (
@@ -35,46 +52,89 @@ const Index = () => {
     );
   });
 
+  const trending = content.filter((c) => c.is_trending).slice(0, 12);
+  const popular = [...content].sort((a, b) => (b.views ?? 0) - (a.views ?? 0)).slice(0, 12);
+  const newest = content.slice(0, 12);
+
   const finishIntro = () => {
     sessionStorage.setItem("zei-intro-done", "1");
     setShowIntro(false);
   };
 
+  const categoryMeta = category ? CATEGORIES.find((c) => c.value === category) : null;
+  const pageTitle = categoryMeta
+    ? `${categoryMeta.label} — ZEI DUBBING`
+    : "ZEI DUBBING — Premium VIP Anime Portal";
+  const pageDesc = categoryMeta
+    ? `${categoryMeta.label} kategoriyasidagi eng yaxshi kontent — ZEI DUBBING o'zbek tilida.`
+    : "ZEI DUBBING — anime, drama, kino va multfilm uchun premium VIP portal. O'zbek tilida tarjima va yuqori sifatli kontent.";
+
   return (
     <>
       <Helmet>
-        <title>ZEI DUBBING — Premium VIP Anime Portal</title>
-        <meta
-          name="description"
-          content="ZEI DUBBING — anime va media uchun premium VIP portal. O'zbek tilida tarjima va yuqori sifatli kontent."
-        />
-        <link rel="canonical" href={typeof window !== "undefined" ? window.location.origin + "/" : "/"} />
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDesc} />
+        <link rel="canonical" href={typeof window !== "undefined" ? window.location.href : "/"} />
       </Helmet>
 
       {showIntro && <Intro onDone={finishIntro} />}
 
       {!showIntro && (
         <div className="min-h-screen relative">
-          {/* Global ambient backlight */}
           <div className="fixed inset-0 -z-10 animate-breathing pointer-events-none opacity-60" />
 
-          <Header
-            search={search}
-            onSearchChange={setSearch}
-            onLogoTap={() => setSelected(null)}
-          />
+          <Header search={search} onSearchChange={setSearch} />
 
           {selected ? (
             <ContentDetail content={selected} onBack={() => setSelected(null)} />
           ) : (
             <>
-              <h1 className="sr-only">ZEI DUBBING — Premium anime portali</h1>
+              <h1 className="sr-only">{pageTitle}</h1>
 
-              {!search.trim() && content.length > 0 && (
+              {!category && !search.trim() && content.length > 0 && (
                 <HeroSlider items={content} onSelect={setSelected} />
               )}
 
-              <main className="pt-6 sm:pt-10 px-4 sm:px-6 max-w-7xl mx-auto pb-16">
+              {category && (
+                <div className="pt-24 sm:pt-28 px-4 sm:px-6 max-w-7xl mx-auto">
+                  <h2 className="font-display text-2xl sm:text-3xl multineon-text tracking-wider">
+                    {categoryMeta?.label.toUpperCase()}
+                  </h2>
+                  {allGenres.length > 0 && (
+                    <div className="mt-4 flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1">
+                      <button
+                        onClick={() => setActiveGenre(null)}
+                        className={`shrink-0 px-3 py-1.5 rounded-full text-[11px] font-display tracking-widest transition-all ${
+                          !activeGenre
+                            ? "bg-neon/15 text-neon neon-glow-sm"
+                            : "glass text-foreground/70 hover:text-neon"
+                        }`}
+                      >
+                        HAMMASI
+                      </button>
+                      {allGenres.map((g) => (
+                        <button
+                          key={g}
+                          onClick={() => setActiveGenre(g)}
+                          className={`shrink-0 px-3 py-1.5 rounded-full text-[11px] font-display tracking-widest transition-all ${
+                            activeGenre === g
+                              ? "bg-neon/15 text-neon neon-glow-sm"
+                              : "glass text-foreground/70 hover:text-neon"
+                          }`}
+                        >
+                          {g.toUpperCase()}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <main
+                className={`px-4 sm:px-6 max-w-7xl mx-auto pb-16 ${
+                  category ? "pt-6" : "pt-8 sm:pt-12"
+                }`}
+              >
                 {loading ? (
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
                     {Array.from({ length: 12 }).map((_, i) => (
@@ -83,6 +143,31 @@ const Index = () => {
                         className="aspect-[9/16] rounded-xl glass animate-pulse"
                       />
                     ))}
+                  </div>
+                ) : !category && !search.trim() ? (
+                  // Netflix-style rows on home
+                  <div className="space-y-8 sm:space-y-10">
+                    {trending.length > 0 && (
+                      <ContentRow title="TREND" icon="🔥" items={trending} onSelect={setSelected} />
+                    )}
+                    {newest.length > 0 && (
+                      <ContentRow title="YANGI QO'SHILGAN" icon="✨" items={newest} onSelect={setSelected} />
+                    )}
+                    {popular.length > 0 && (
+                      <ContentRow title="MASHHUR" icon="⭐" items={popular} onSelect={setSelected} />
+                    )}
+                    {CATEGORIES.map((cat) => {
+                      const items = content.filter((c) => c.category === cat.value).slice(0, 12);
+                      if (items.length === 0) return null;
+                      return (
+                        <ContentRow
+                          key={cat.value}
+                          title={cat.label.toUpperCase()}
+                          items={items}
+                          onSelect={setSelected}
+                        />
+                      );
+                    })}
                   </div>
                 ) : filtered.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-24 text-center">
