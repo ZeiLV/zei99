@@ -86,7 +86,7 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
 
       <div
         ref={containerRef}
-        className="relative w-full rounded-xl overflow-hidden bg-black border border-neon/30 p-1"
+        className="relative w-full overflow-hidden bg-black player-frame p-1"
         style={{ aspectRatio: "16 / 9" }}
       >
         {!isVip && hasSource ? (
@@ -222,8 +222,9 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
                   if (watchdog.current) window.clearTimeout(watchdog.current);
                 }}
               />
-              {/* Mask Drive's external link button (top-right) — block clicks too */}
-              <div className="absolute top-0 right-0 w-16 h-12 bg-black z-[3]" aria-hidden />
+              {/* Mask Drive's external link button + top-bar — block clicks too */}
+              <div className="absolute top-0 right-0 w-24 h-14 bg-black z-[3]" aria-hidden />
+              <div className="absolute top-0 left-0 right-0 h-10 bg-gradient-to-b from-black via-black/80 to-transparent z-[2] pointer-events-none" aria-hidden />
 
               {/* Reload button — only for drive */}
               <button
