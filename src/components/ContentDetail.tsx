@@ -122,21 +122,21 @@ export const ContentDetail = ({ content, onBack }: Props) => {
 
         {/* Player */}
         {selected && (
-          <div className="mt-10 sm:mt-12 mb-8">
+          <div className="mt-10 sm:mt-12 mb-10 sm:mb-12">
             <VideoPlayer
               videoType={selected.video_type}
               gdriveUrl={selected.gdrive_url}
               videoUrl={selected.video_url}
               isVip={selected.is_vip}
             />
-            <div className="mt-5 font-display text-sm tracking-widest text-foreground/90">
+            <div className="mt-8 font-display text-sm tracking-widest text-foreground/90">
               EP {selected.episode_number}: {selected.title}
             </div>
           </div>
         )}
 
         {/* Episodes */}
-        <h2 className="font-display text-lg tracking-widest mt-12 mb-5 text-foreground/90">
+        <h2 className="font-display text-lg tracking-widest mt-14 mb-6 text-foreground/90">
           EPIZODLAR
         </h2>
         {loading ? (
@@ -144,27 +144,50 @@ export const ContentDetail = ({ content, onBack }: Props) => {
         ) : episodes.length === 0 ? (
           <div className="text-muted-foreground text-sm">Epizodlar hali yo'q</div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-16">
-            {episodes.map((ep) => (
-              <button
-                key={ep.id}
-                onClick={() => setSelected(ep)}
-                className={`text-left glass rounded-lg p-4 flex items-center gap-3 transition-all hover:neon-glow-sm ${
-                  selected?.id === ep.id ? "neon-border" : ""
-                }`}
-              >
-                <div className="font-display text-2xl text-neon w-10 text-center">
-                  {ep.episode_number}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium truncate">{ep.title}</div>
-                  <div className="text-[11px] text-muted-foreground mt-0.5">
-                    {ep.is_vip ? "VIP" : "Bepul"}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pb-16 animate-fade-up">
+            {episodes.map((ep) => {
+              const active = selected?.id === ep.id;
+              return (
+                <button
+                  key={ep.id}
+                  onClick={() => setSelected(ep)}
+                  className={`group text-left glass rounded-xl p-4 flex items-center gap-4 transition-all duration-300 hover:scale-[1.015] hover:neon-glow-sm ${
+                    active ? "neon-border" : ""
+                  }`}
+                >
+                  <div className={`font-display text-2xl w-12 text-center ${active ? "text-neon" : "text-foreground/70 group-hover:text-neon"} transition-colors`}>
+                    {ep.episode_number.toString().padStart(2, "0")}
                   </div>
-                </div>
-                {ep.is_vip && <Lock className="h-4 w-4 text-neon/80" />}
-              </button>
-            ))}
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-medium truncate">{ep.title}</div>
+                    <div className="text-[11px] text-muted-foreground mt-0.5">
+                      {ep.is_vip ? "Premium epizod" : "Bepul tomosha"}
+                    </div>
+                  </div>
+                  {ep.is_vip ? (
+                    <a
+                      href="https://t.me/m/QoYHq2A0Nzgy"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="shrink-0 px-3 py-1.5 rounded-full font-display text-[10px] tracking-widest transition-all hover:scale-105"
+                      style={{
+                        background: "hsl(var(--neon-pink) / 0.18)",
+                        color: "hsl(var(--neon-pink))",
+                        border: "1px solid hsl(var(--neon-pink) / 0.55)",
+                        boxShadow: "0 0 10px hsl(var(--neon-pink) / 0.45)",
+                      }}
+                    >
+                      OBUNA
+                    </a>
+                  ) : (
+                    <span className="shrink-0 px-3 py-1.5 rounded-full font-display text-[10px] tracking-widest text-neon border border-neon/40 bg-neon/10">
+                      KO'RISH
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
         )}
       </div>
