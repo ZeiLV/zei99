@@ -50,7 +50,7 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
               onTouchEnd={endPress}
               onTouchCancel={endPress}
               onContextMenu={(e) => e.preventDefault()}
-              className="font-display text-base sm:text-xl font-black multineon-text select-none transition-all duration-300 hover:scale-105"
+              className="logo-cyber text-base sm:text-2xl select-none transition-all duration-300 hover:scale-[1.04]"
               style={{ WebkitUserSelect: "none", userSelect: "none", WebkitTouchCallout: "none" }}
             >
               ZEI DUBBING
