@@ -71,7 +71,7 @@ export const ContentDetail = ({ content, onBack }: Props) => {
         </button>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 -mt-20 sm:-mt-28 relative z-10">
+      <div className="max-w-[1200px] mx-auto px-[15px] sm:px-6 -mt-20 sm:-mt-28 relative z-10">
         <h1 className="font-display text-2xl sm:text-4xl font-black neon-text">{content.title}</h1>
 
         {/* Meta row */}
@@ -122,21 +122,21 @@ export const ContentDetail = ({ content, onBack }: Props) => {
 
         {/* Player */}
         {selected && (
-          <div className="mt-6 sm:mt-8">
+          <div className="mt-8 sm:mt-10">
             <VideoPlayer
               videoType={selected.video_type}
               gdriveUrl={selected.gdrive_url}
               videoUrl={selected.video_url}
               isVip={selected.is_vip}
             />
-            <div className="mt-3 font-display text-sm tracking-widest text-foreground/90">
+            <div className="mt-4 font-display text-sm tracking-widest text-foreground/90">
               EP {selected.episode_number}: {selected.title}
             </div>
           </div>
         )}
 
         {/* Episodes */}
-        <h2 className="font-display text-lg tracking-widest mt-8 mb-3 text-foreground/90">
+        <h2 className="font-display text-lg tracking-widest mt-10 mb-4 text-foreground/90">
           EPIZODLAR
         </h2>
         {loading ? (

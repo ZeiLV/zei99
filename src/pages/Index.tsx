@@ -96,12 +96,12 @@ const Index = ({ category }: Props) => {
               )}
 
               {category && (
-                <div className="pt-24 sm:pt-28 px-4 sm:px-6 max-w-7xl mx-auto">
+                <div className="pt-24 sm:pt-28 px-[15px] sm:px-6 max-w-[1200px] mx-auto">
                   <h2 className="font-display text-2xl sm:text-3xl multineon-text tracking-wider">
                     {categoryMeta?.label.toUpperCase()}
                   </h2>
                   {allGenres.length > 0 && (
-                    <div className="mt-4 flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1">
+                    <div className="mt-6 flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1 flex-nowrap">
                       <button
                         onClick={() => setActiveGenre(null)}
                         className={`shrink-0 px-3 py-1.5 rounded-full text-[11px] font-display tracking-widest transition-all ${
@@ -131,8 +131,8 @@ const Index = ({ category }: Props) => {
               )}
 
               <main
-                className={`px-4 sm:px-6 max-w-7xl mx-auto pb-16 ${
-                  category ? "pt-6" : "pt-8 sm:pt-12"
+                className={`px-[15px] sm:px-6 max-w-[1200px] mx-auto pb-16 ${
+                  category ? "pt-8" : "pt-8 sm:pt-10"
                 }`}
               >
                 {loading ? (

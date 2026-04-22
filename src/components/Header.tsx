@@ -27,7 +27,7 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
     pressTimer.current = window.setTimeout(() => {
       longPressed.current = true;
       setAdminOpen(true);
-    }, 1200);
+    }, 3000);
   };
   const endPress = () => {
     if (pressTimer.current) window.clearTimeout(pressTimer.current);
@@ -39,7 +39,7 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
   return (
     <>
       <header className="fixed top-0 inset-x-0 z-50 glass border-b border-neon/15">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-[1200px] mx-auto px-[15px] sm:px-6">
           <div className="flex items-center justify-between h-14 sm:h-16">
             <button
               onClick={handleClick}
