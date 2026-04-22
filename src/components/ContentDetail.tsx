@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Content, Episode } from "@/lib/types";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft, Lock, Star, Eye, Calendar, Clock } from "lucide-react";
+import { ArrowLeft, Star, Eye, Calendar, Clock } from "lucide-react";
 import { VideoPlayer } from "./VideoPlayer";
 
 interface Props {
