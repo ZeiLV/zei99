@@ -122,21 +122,21 @@ export const ContentDetail = ({ content, onBack }: Props) => {
 
         {/* Player */}
         {selected && (
-          <div className="mt-10 sm:mt-12 mb-10 sm:mb-12">
+          <div className="mt-10 sm:mt-12" style={{ marginBottom: "2.5rem" }}>
             <VideoPlayer
               videoType={selected.video_type}
               gdriveUrl={selected.gdrive_url}
               videoUrl={selected.video_url}
               isVip={selected.is_vip}
             />
-            <div className="mt-8 font-display text-sm tracking-widest text-foreground/90">
+            <div className="mt-6 font-display text-sm tracking-widest text-foreground/90">
               EP {selected.episode_number}: {selected.title}
             </div>
           </div>
         )}
 
         {/* Episodes */}
-        <h2 className="font-display text-lg tracking-widest mt-14 mb-6 text-foreground/90">
+        <h2 className="font-display text-lg tracking-widest mb-6 text-foreground/90" style={{ marginTop: "2.5rem" }}>
           EPIZODLAR
         </h2>
         {loading ? (
