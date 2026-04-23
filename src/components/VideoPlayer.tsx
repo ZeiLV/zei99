@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { gdriveToStream } from "@/lib/gdrive";
-import { Maximize, Pause, Play, RefreshCw, Volume2, VolumeX } from "lucide-react";
+import { Maximize, Pause, Play, Volume2, VolumeX } from "lucide-react";
 
 interface Props {
   videoType: "gdrive" | "direct";
@@ -19,13 +19,12 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
   const [time, setTime] = useState(0);
   const [buffering, setBuffering] = useState(true);
   const [showControls, setShowControls] = useState(false);
-  const [reloadKey, setReloadKey] = useState(0);
   const hideTimer = useRef<number | null>(null);
   const watchdog = useRef<number | null>(null);
 
   const isDirect = videoType === "direct" && !!videoUrl;
   const { fileId, preview } = gdriveToStream(gdriveUrl ?? "");
-  const driveSrc = preview ? `${preview}?t=${reloadKey}` : "";
+  const driveSrc = preview ?? "";
   const directSrc = videoUrl ?? "";
 
   useEffect(() => {
@@ -64,8 +63,6 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
     if (document.fullscreenElement) document.exitFullscreen();
     else el.requestFullscreen?.();
   };
-
-  const reload = () => setReloadKey((k) => k + 1);
 
   const fmt = (s: number) => {
     if (!isFinite(s)) return "0:00";
@@ -209,43 +206,17 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
               />
             </>
           ) : (
-            <>
-              <iframe
-                key={`gd-${reloadKey}`}
-                src={driveSrc}
-                className="absolute inset-0 w-full h-full"
-                allow="autoplay; encrypted-media; fullscreen"
-                allowFullScreen
-                referrerPolicy="no-referrer"
-                onLoad={() => {
-                  setBuffering(false);
-                  if (watchdog.current) window.clearTimeout(watchdog.current);
-                }}
-              />
-              {/* Mask Drive's external link button + top-bar — block clicks too */}
-              <div className="absolute top-0 right-0 w-24 h-14 bg-black z-[3]" aria-hidden />
-              <div className="absolute top-0 left-0 right-0 h-10 bg-gradient-to-b from-black via-black/80 to-transparent z-[2] pointer-events-none" aria-hidden />
-
-              {/* Reload button — only for drive */}
-              <button
-                onClick={reload}
-                className="absolute top-2 left-2 h-9 w-9 rounded-full glass-strong flex items-center justify-center text-neon hover:neon-glow-sm transition-all z-[8]"
-                aria-label="Qayta yuklash"
-                title="Qayta yuklash"
-              >
-                <RefreshCw className="h-4 w-4" />
-              </button>
-
-              {/* Fullscreen for iframe */}
-              <button
-                onClick={goFullscreen}
-                className="absolute top-2 right-2 h-9 w-9 rounded-full glass-strong flex items-center justify-center text-neon hover:neon-glow-sm transition-all z-[8]"
-                aria-label="To'liq ekran"
-                title="To'liq ekran"
-              >
-                <Maximize className="h-4 w-4" />
-              </button>
-            </>
+            <iframe
+              src={driveSrc}
+              className="absolute inset-0 w-full h-full block"
+              allow="autoplay; encrypted-media; fullscreen"
+              allowFullScreen
+              referrerPolicy="no-referrer"
+              onLoad={() => {
+                setBuffering(false);
+                if (watchdog.current) window.clearTimeout(watchdog.current);
+              }}
+            />
           )
         ) : !isVip ? (
           <div className="absolute inset-0 flex items-center justify-center text-muted-foreground text-sm">
