@@ -205,20 +205,22 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
               />
             </>
           ) : (
-            <iframe
-              src={driveSrc}
-              className="absolute inset-0 w-full h-full block"
-              allow="autoplay; encrypted-media; fullscreen"
-              allowFullScreen
-              referrerPolicy="no-referrer"
-              onLoad={() => {
-                setBuffering(false);
-                if (watchdog.current) window.clearTimeout(watchdog.current);
-              }}
-            />
+            <div className="relative w-full" style={{ aspectRatio: "16 / 9" }}>
+              <iframe
+                src={driveSrc}
+                className="absolute inset-0 w-full h-full block"
+                allow="autoplay; encrypted-media; fullscreen"
+                allowFullScreen
+                referrerPolicy="no-referrer"
+                onLoad={() => {
+                  setBuffering(false);
+                  if (watchdog.current) window.clearTimeout(watchdog.current);
+                }}
+              />
+            </div>
           )
         ) : !isVip ? (
-          <div className="absolute inset-0 flex items-center justify-center text-muted-foreground text-sm">
+          <div className="w-full flex items-center justify-center text-muted-foreground text-sm bg-black" style={{ aspectRatio: "16 / 9" }}>
             Video manbasi noto'g'ri
           </div>
         ) : null}
