@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { gdriveToStream } from "@/lib/gdrive";
-import { Maximize, Pause, Play, Volume2, VolumeX } from "lucide-react";
+import { Maximize, Pause, Play, RotateCcw, RotateCw, Volume2, VolumeX, Gauge } from "lucide-react";
 
 interface Props {
   videoType: "gdrive" | "direct";
@@ -8,6 +8,8 @@ interface Props {
   videoUrl: string | null;
   isVip: boolean;
 }
+
+const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
 
 export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -19,8 +21,12 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
   const [time, setTime] = useState(0);
   const [buffering, setBuffering] = useState(true);
   const [showControls, setShowControls] = useState(false);
+  const [speed, setSpeed] = useState(1);
+  const [speedOpen, setSpeedOpen] = useState(false);
+  const [flash, setFlash] = useState<null | "back" | "fwd" | "play" | "pause">(null);
   const hideTimer = useRef<number | null>(null);
   const watchdog = useRef<number | null>(null);
+  const flashTimer = useRef<number | null>(null);
 
   const isDirect = videoType === "direct" && !!videoUrl;
   const { fileId, preview } = gdriveToStream(gdriveUrl ?? "");
@@ -31,6 +37,7 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
     setBuffering(true);
     setTime(0);
     setPlaying(false);
+    setSpeed(1);
     if (watchdog.current) window.clearTimeout(watchdog.current);
     watchdog.current = window.setTimeout(() => setBuffering(false), 12000);
     return () => {
@@ -44,11 +51,33 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
     hideTimer.current = window.setTimeout(() => setShowControls(false), 2800);
   };
 
+  const triggerFlash = (kind: "back" | "fwd" | "play" | "pause") => {
+    setFlash(kind);
+    if (flashTimer.current) window.clearTimeout(flashTimer.current);
+    flashTimer.current = window.setTimeout(() => setFlash(null), 500);
+  };
+
   const togglePlay = () => {
     const v = videoRef.current;
     if (!v) return;
-    if (v.paused) v.play();
-    else v.pause();
+    if (v.paused) { v.play(); triggerFlash("play"); }
+    else { v.pause(); triggerFlash("pause"); }
+  };
+
+  const skip = (delta: number) => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.currentTime = Math.max(0, Math.min(v.duration || 0, v.currentTime + delta));
+    triggerFlash(delta > 0 ? "fwd" : "back");
+    armHide();
+  };
+
+  const changeSpeed = (s: number) => {
+    const v = videoRef.current;
+    if (v) v.playbackRate = s;
+    setSpeed(s);
+    setSpeedOpen(false);
+    armHide();
   };
 
   const seek = (pct: number) => {
@@ -63,6 +92,23 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
     if (document.fullscreenElement) document.exitFullscreen();
     else el.requestFullscreen?.();
   };
+
+  // Keyboard shortcuts (direct only)
+  useEffect(() => {
+    if (!isDirect) return;
+    const onKey = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+      if (e.key === " " || e.key === "k") { e.preventDefault(); togglePlay(); armHide(); }
+      else if (e.key === "ArrowRight") { e.preventDefault(); skip(10); }
+      else if (e.key === "ArrowLeft") { e.preventDefault(); skip(-10); }
+      else if (e.key === "f") { e.preventDefault(); goFullscreen(); }
+      else if (e.key === "m") { const v = videoRef.current; if (v) v.muted = !v.muted; armHide(); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDirect]);
 
   const fmt = (s: number) => {
     if (!isFinite(s)) return "0:00";
@@ -112,8 +158,23 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
                 }}
               />
 
-              {/* Big center play overlay when paused */}
-              {!playing && !buffering && (
+              {/* Center action flash (play/pause/skip) */}
+              {flash && (
+                <div className="pointer-events-none absolute inset-0 z-[6] flex items-center justify-center">
+                  <span
+                    key={`flash-${flash}-${Date.now()}`}
+                    className="h-20 w-20 sm:h-24 sm:w-24 rounded-full glass-strong flex items-center justify-center text-neon neon-glow-md animate-scale-in"
+                  >
+                    {flash === "play" && <Play className="h-9 w-9 sm:h-11 sm:w-11 ml-1" />}
+                    {flash === "pause" && <Pause className="h-9 w-9 sm:h-11 sm:w-11" />}
+                    {flash === "fwd" && <RotateCw className="h-8 w-8 sm:h-10 sm:w-10" />}
+                    {flash === "back" && <RotateCcw className="h-8 w-8 sm:h-10 sm:w-10" />}
+                  </span>
+                </div>
+              )}
+
+              {/* Big center play overlay when paused (and no flash to avoid double) */}
+              {!playing && !buffering && !flash && (
                 <button
                   onClick={togglePlay}
                   className="absolute inset-0 flex items-center justify-center z-[6] group"
@@ -125,14 +186,18 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
                 </button>
               )}
 
+              {/* Double-tap zones for mobile (skip ±10s) */}
+              <div className="absolute inset-y-0 left-0 w-1/3 z-[5]" onDoubleClick={() => skip(-10)} />
+              <div className="absolute inset-y-0 right-0 w-1/3 z-[5]" onDoubleClick={() => skip(10)} />
+
               {/* Native controls — only on hover/move, only direct */}
               <div
-                className={`absolute inset-x-0 bottom-0 z-[7] transition-opacity duration-300 ${
-                  showControls || !playing ? "opacity-100" : "opacity-0 pointer-events-none"
+                className={`absolute inset-x-0 bottom-0 z-[7] transition-all duration-200 ${
+                  showControls || !playing ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 pointer-events-none"
                 }`}
                 onMouseMove={armHide}
               >
-                <div className="bg-gradient-to-t from-black/85 via-black/50 to-transparent px-3 py-3 sm:px-4 sm:py-4 flex flex-col gap-2">
+                <div className="bg-gradient-to-t from-black/90 via-black/55 to-transparent px-3 py-3 sm:px-4 sm:py-4 flex flex-col gap-2">
                   <div
                     className="h-1 hover:h-1.5 transition-all bg-white/15 rounded-full cursor-pointer relative group"
                     onClick={(e) => {
@@ -148,9 +213,27 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 text-xs">
-                    <button onClick={togglePlay} className="text-white hover:text-neon transition-colors">
+                  <div className="flex items-center gap-2 sm:gap-3 text-xs">
+                    <button onClick={togglePlay} className="text-white hover:text-neon transition-colors" aria-label={playing ? "Pauza" : "O'ynatish"}>
                       {playing ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+                    </button>
+
+                    <button
+                      onClick={() => skip(-10)}
+                      className="text-white hover:text-neon transition-colors flex items-center gap-0.5"
+                      aria-label="10 soniya orqaga"
+                    >
+                      <RotateCcw className="h-4 w-4" />
+                      <span className="text-[10px] font-display tracking-wider">10</span>
+                    </button>
+
+                    <button
+                      onClick={() => skip(10)}
+                      className="text-white hover:text-neon transition-colors flex items-center gap-0.5"
+                      aria-label="10 soniya oldinga"
+                    >
+                      <RotateCw className="h-4 w-4" />
+                      <span className="text-[10px] font-display tracking-wider">10</span>
                     </button>
 
                     <button
@@ -159,6 +242,7 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
                         if (v) v.muted = !v.muted;
                       }}
                       className="text-white hover:text-neon transition-colors"
+                      aria-label="Ovoz"
                     >
                       {muted || volume === 0 ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
                     </button>
@@ -183,9 +267,36 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
                       {fmt(time)} / {fmt(duration)}
                     </span>
 
+                    {/* Speed selector */}
+                    <div className="ml-auto relative">
+                      <button
+                        onClick={() => setSpeedOpen((o) => !o)}
+                        className="text-white hover:text-neon transition-colors flex items-center gap-1 px-2 py-1 rounded-md glass"
+                        aria-label="Tezlik"
+                      >
+                        <Gauge className="h-4 w-4" />
+                        <span className="text-[11px] font-display tracking-wider tabular-nums">{speed}x</span>
+                      </button>
+                      {speedOpen && (
+                        <div className="absolute bottom-full right-0 mb-2 glass-strong rounded-lg p-1 flex flex-col min-w-[80px] animate-scale-in z-[8]">
+                          {SPEEDS.map((s) => (
+                            <button
+                              key={s}
+                              onClick={() => changeSpeed(s)}
+                              className={`px-3 py-1.5 text-[11px] font-display tracking-wider rounded-md text-left transition-colors ${
+                                s === speed ? "text-neon bg-neon/10" : "text-white/85 hover:text-neon hover:bg-white/5"
+                              }`}
+                            >
+                              {s}x
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
                     <button
                       onClick={goFullscreen}
-                      className="ml-auto text-white hover:text-neon transition-colors"
+                      className="text-white hover:text-neon transition-colors"
                       aria-label="To'liq ekran"
                     >
                       <Maximize className="h-4 w-4" />
@@ -196,7 +307,7 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
 
               {/* Hover catcher (desktop) */}
               <div
-                className="absolute inset-0 z-[5]"
+                className="absolute inset-0 z-[4]"
                 onMouseMove={armHide}
                 onMouseLeave={() => {
                   if (playing) setShowControls(false);
