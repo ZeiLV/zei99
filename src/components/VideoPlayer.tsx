@@ -234,7 +234,10 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
 
         {/* VIP overlay */}
         {isVip && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-10 bg-background/60 backdrop-blur-sm">
+          <div
+            className="w-full flex flex-col items-center justify-center gap-4 z-10 bg-background/60 backdrop-blur-sm"
+            style={{ aspectRatio: "16 / 9" }}
+          >
             <div className="font-display text-lg sm:text-2xl multineon-text tracking-widest text-center px-6">
               VIP Obuna Bo'ling
             </div>
