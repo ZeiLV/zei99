@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { gdriveToStream } from "@/lib/gdrive";
-import { Maximize, Pause, Play, Volume2, VolumeX } from "lucide-react";
+import { Maximize, Pause, Play, RotateCcw, RotateCw, Volume2, VolumeX, Gauge } from "lucide-react";
 
 interface Props {
   videoType: "gdrive" | "direct";
@@ -8,6 +8,8 @@ interface Props {
   videoUrl: string | null;
   isVip: boolean;
 }
+
+const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
 
 export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -19,8 +21,12 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
   const [time, setTime] = useState(0);
   const [buffering, setBuffering] = useState(true);
   const [showControls, setShowControls] = useState(false);
+  const [speed, setSpeed] = useState(1);
+  const [speedOpen, setSpeedOpen] = useState(false);
+  const [flash, setFlash] = useState<null | "back" | "fwd" | "play" | "pause">(null);
   const hideTimer = useRef<number | null>(null);
   const watchdog = useRef<number | null>(null);
+  const flashTimer = useRef<number | null>(null);
 
   const isDirect = videoType === "direct" && !!videoUrl;
   const { fileId, preview } = gdriveToStream(gdriveUrl ?? "");
@@ -31,6 +37,7 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
     setBuffering(true);
     setTime(0);
     setPlaying(false);
+    setSpeed(1);
     if (watchdog.current) window.clearTimeout(watchdog.current);
     watchdog.current = window.setTimeout(() => setBuffering(false), 12000);
     return () => {
@@ -44,11 +51,33 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
     hideTimer.current = window.setTimeout(() => setShowControls(false), 2800);
   };
 
+  const triggerFlash = (kind: "back" | "fwd" | "play" | "pause") => {
+    setFlash(kind);
+    if (flashTimer.current) window.clearTimeout(flashTimer.current);
+    flashTimer.current = window.setTimeout(() => setFlash(null), 500);
+  };
+
   const togglePlay = () => {
     const v = videoRef.current;
     if (!v) return;
-    if (v.paused) v.play();
-    else v.pause();
+    if (v.paused) { v.play(); triggerFlash("play"); }
+    else { v.pause(); triggerFlash("pause"); }
+  };
+
+  const skip = (delta: number) => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.currentTime = Math.max(0, Math.min(v.duration || 0, v.currentTime + delta));
+    triggerFlash(delta > 0 ? "fwd" : "back");
+    armHide();
+  };
+
+  const changeSpeed = (s: number) => {
+    const v = videoRef.current;
+    if (v) v.playbackRate = s;
+    setSpeed(s);
+    setSpeedOpen(false);
+    armHide();
   };
 
   const seek = (pct: number) => {
@@ -63,6 +92,23 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
     if (document.fullscreenElement) document.exitFullscreen();
     else el.requestFullscreen?.();
   };
+
+  // Keyboard shortcuts (direct only)
+  useEffect(() => {
+    if (!isDirect) return;
+    const onKey = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+      if (e.key === " " || e.key === "k") { e.preventDefault(); togglePlay(); armHide(); }
+      else if (e.key === "ArrowRight") { e.preventDefault(); skip(10); }
+      else if (e.key === "ArrowLeft") { e.preventDefault(); skip(-10); }
+      else if (e.key === "f") { e.preventDefault(); goFullscreen(); }
+      else if (e.key === "m") { const v = videoRef.current; if (v) v.muted = !v.muted; armHide(); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDirect]);
 
   const fmt = (s: number) => {
     if (!isFinite(s)) return "0:00";
