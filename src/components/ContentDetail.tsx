@@ -71,7 +71,7 @@ export const ContentDetail = ({ content, onBack }: Props) => {
         </button>
       </div>
 
-      <div className="max-w-[1200px] mx-auto px-[15px] sm:px-6 -mt-20 sm:-mt-28 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-[15px] sm:px-8 -mt-20 sm:-mt-28 relative z-10">
         <h1 className="font-display text-2xl sm:text-4xl font-black neon-text">{content.title}</h1>
 
         {/* Meta row */}
