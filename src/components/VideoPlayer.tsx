@@ -83,8 +83,7 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
 
       <div
         ref={containerRef}
-        className="relative w-full overflow-hidden bg-black player-frame p-1"
-        style={{ aspectRatio: "16 / 9" }}
+        className="relative w-full overflow-hidden bg-transparent player-frame"
       >
         {!isVip && hasSource ? (
           isDirect ? (
@@ -95,7 +94,7 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
                 src={directSrc}
                 playsInline
                 preload="metadata"
-                className="absolute inset-0 w-full h-full object-contain bg-black"
+                className="block w-full h-auto max-h-[85vh] object-contain bg-black"
                 onClick={() => {
                   armHide();
                   togglePlay();
@@ -206,20 +205,22 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
               />
             </>
           ) : (
-            <iframe
-              src={driveSrc}
-              className="absolute inset-0 w-full h-full block"
-              allow="autoplay; encrypted-media; fullscreen"
-              allowFullScreen
-              referrerPolicy="no-referrer"
-              onLoad={() => {
-                setBuffering(false);
-                if (watchdog.current) window.clearTimeout(watchdog.current);
-              }}
-            />
+            <div className="relative w-full" style={{ aspectRatio: "16 / 9" }}>
+              <iframe
+                src={driveSrc}
+                className="absolute inset-0 w-full h-full block"
+                allow="autoplay; encrypted-media; fullscreen"
+                allowFullScreen
+                referrerPolicy="no-referrer"
+                onLoad={() => {
+                  setBuffering(false);
+                  if (watchdog.current) window.clearTimeout(watchdog.current);
+                }}
+              />
+            </div>
           )
         ) : !isVip ? (
-          <div className="absolute inset-0 flex items-center justify-center text-muted-foreground text-sm">
+          <div className="w-full flex items-center justify-center text-muted-foreground text-sm bg-black" style={{ aspectRatio: "16 / 9" }}>
             Video manbasi noto'g'ri
           </div>
         ) : null}
@@ -233,7 +234,10 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
 
         {/* VIP overlay */}
         {isVip && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-10 bg-background/60 backdrop-blur-sm">
+          <div
+            className="w-full flex flex-col items-center justify-center gap-4 z-10 bg-background/60 backdrop-blur-sm"
+            style={{ aspectRatio: "16 / 9" }}
+          >
             <div className="font-display text-lg sm:text-2xl multineon-text tracking-widest text-center px-6">
               VIP Obuna Bo'ling
             </div>
