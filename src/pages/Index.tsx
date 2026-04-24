@@ -96,7 +96,7 @@ const Index = ({ category }: Props) => {
               )}
 
               {category && (
-                <div className="pt-24 sm:pt-28 px-[15px] sm:px-6 max-w-[1200px] mx-auto">
+                <div className="pt-24 sm:pt-28 px-[15px] sm:px-8 max-w-[1440px] mx-auto">
                   <h2 className="font-display text-2xl sm:text-3xl multineon-text tracking-wider">
                     {categoryMeta?.label.toUpperCase()}
                   </h2>
