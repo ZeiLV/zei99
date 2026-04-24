@@ -83,8 +83,7 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
 
       <div
         ref={containerRef}
-        className="relative w-full overflow-hidden bg-black player-frame p-1"
-        style={{ aspectRatio: "16 / 9" }}
+        className="relative w-full overflow-hidden bg-transparent player-frame"
       >
         {!isVip && hasSource ? (
           isDirect ? (
@@ -95,7 +94,7 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
                 src={directSrc}
                 playsInline
                 preload="metadata"
-                className="absolute inset-0 w-full h-full object-contain bg-black"
+                className="block w-full h-auto max-h-[85vh] object-contain bg-black"
                 onClick={() => {
                   armHide();
                   togglePlay();
