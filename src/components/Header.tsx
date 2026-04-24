@@ -39,7 +39,7 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
   return (
     <>
       <header className="fixed top-0 inset-x-0 z-50 glass border-b border-neon/15">
-        <div className="max-w-[1200px] mx-auto px-[15px] sm:px-6">
+        <div className="max-w-[1440px] mx-auto px-[15px] sm:px-8">
           <div className="flex items-center justify-between h-14 sm:h-16">
             <button
               onClick={handleClick}
