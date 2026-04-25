@@ -225,10 +225,10 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
                     }}
                   >
                     <div
-                      className="h-full bg-neon rounded-full relative"
+                      className="h-full bg-white rounded-full relative"
                       style={{ width: `${duration ? (time / duration) * 100 : 0}%` }}
                     >
-                      <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 h-3 w-3 rounded-full bg-neon opacity-0 group-hover:opacity-100 transition" />
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 h-3 w-3 rounded-full bg-white opacity-0 group-hover:opacity-100 transition" />
                     </div>
                   </div>
 
