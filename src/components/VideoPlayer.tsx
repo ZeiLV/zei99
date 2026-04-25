@@ -88,22 +88,26 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
   };
 
   const goFullscreen = () => {
-    const el = containerRef.current;
-    if (!el) return;
     const doc: any = document;
-    const anyEl: any = el;
     const isFs = doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement;
     if (isFs) {
       (doc.exitFullscreen || doc.webkitExitFullscreen || doc.mozCancelFullScreen || doc.msExitFullscreen)?.call(doc);
-    } else {
-      const req = anyEl.requestFullscreen || anyEl.webkitRequestFullscreen || anyEl.webkitEnterFullscreen || anyEl.mozRequestFullScreen || anyEl.msRequestFullscreen;
-      if (req) req.call(anyEl);
-      else {
-        // iOS Safari fallback: fullscreen the video element directly
-        const v: any = videoRef.current;
-        const vReq = v && (v.webkitEnterFullscreen || v.requestFullscreen);
-        vReq?.call(v);
-      }
+      return;
+    }
+    // Target the actual media element so no surrounding chrome is visible
+    const target: any = isDirect ? videoRef.current : iframeRef.current;
+    if (!target) return;
+    const req =
+      target.requestFullscreen ||
+      target.webkitRequestFullscreen ||
+      target.webkitEnterFullscreen ||
+      target.mozRequestFullScreen ||
+      target.msRequestFullscreen;
+    if (req) {
+      try { req.call(target); } catch { /* noop */ }
+    } else if (containerRef.current) {
+      // Last resort
+      (containerRef.current as any).requestFullscreen?.();
     }
   };
 
