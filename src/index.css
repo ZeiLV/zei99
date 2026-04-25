@@ -273,26 +273,66 @@
 }
 .animate-wordmark-coalesce { animation: wordmark-coalesce 1.6s var(--transition-smooth) forwards; }
 
-/* Fullscreen player styles */
+/* Fullscreen player styles — strip ALL chrome, fill the screen */
+:fullscreen,
+:-webkit-full-screen,
+:-moz-full-screen {
+  border: 0 !important;
+  outline: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  background: #000 !important;
+}
+
+/* Video element fullscreen (direct video) */
+video:fullscreen,
+video:-webkit-full-screen {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  object-fit: contain !important;
+  background: #000 !important;
+}
+
+/* Iframe fullscreen (gdrive) */
+iframe:fullscreen,
+iframe:-webkit-full-screen {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  border: 0 !important;
+  background: #000 !important;
+}
+
+/* If container ever ends up fullscreen, neutralize any halos/borders inside */
 .fullscreen-target:fullscreen,
-.fullscreen-target:-webkit-full-screen,
-.fullscreen-target:-moz-full-screen {
-  width: 100vw;
-  height: 100vh;
-  background: #000;
+.fullscreen-target:-webkit-full-screen {
+  width: 100vw !important;
+  height: 100vh !important;
+  background: #000 !important;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+}
+.fullscreen-target:fullscreen *,
+.fullscreen-target:-webkit-full-screen * {
+  box-shadow: none !important;
+  border-radius: 0 !important;
 }
 .fullscreen-target:fullscreen video,
-.fullscreen-target:-webkit-full-screen video {
-  width: 100% !important;
-  height: 100% !important;
-  max-height: 100vh !important;
-  object-fit: contain;
-}
+.fullscreen-target:-webkit-full-screen video,
 .fullscreen-target:fullscreen iframe,
 .fullscreen-target:-webkit-full-screen iframe {
-  width: 100% !important;
-  height: 100% !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  object-fit: contain !important;
+  border: 0 !important;
 }
+
