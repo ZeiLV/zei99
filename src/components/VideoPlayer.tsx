@@ -89,8 +89,21 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
   const goFullscreen = () => {
     const el = containerRef.current;
     if (!el) return;
-    if (document.fullscreenElement) document.exitFullscreen();
-    else el.requestFullscreen?.();
+    const doc: any = document;
+    const anyEl: any = el;
+    const isFs = doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement;
+    if (isFs) {
+      (doc.exitFullscreen || doc.webkitExitFullscreen || doc.mozCancelFullScreen || doc.msExitFullscreen)?.call(doc);
+    } else {
+      const req = anyEl.requestFullscreen || anyEl.webkitRequestFullscreen || anyEl.webkitEnterFullscreen || anyEl.mozRequestFullScreen || anyEl.msRequestFullscreen;
+      if (req) req.call(anyEl);
+      else {
+        // iOS Safari fallback: fullscreen the video element directly
+        const v: any = videoRef.current;
+        const vReq = v && (v.webkitEnterFullscreen || v.requestFullscreen);
+        vReq?.call(v);
+      }
+    }
   };
 
   // Keyboard shortcuts (direct only)
