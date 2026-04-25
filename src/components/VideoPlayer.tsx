@@ -14,6 +14,7 @@ const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
 export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
   const [volume, setVolume] = useState(1);
