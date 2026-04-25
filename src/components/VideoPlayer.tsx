@@ -334,14 +334,24 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
               <iframe
                 src={driveSrc}
                 className="absolute inset-0 w-full h-full block"
-                allow="autoplay; encrypted-media; fullscreen"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
                 allowFullScreen
+                {...({ webkitallowfullscreen: "true", mozallowfullscreen: "true" } as any)}
                 referrerPolicy="no-referrer"
                 onLoad={() => {
                   setBuffering(false);
                   if (watchdog.current) window.clearTimeout(watchdog.current);
                 }}
               />
+              {/* Custom fullscreen button for iframe (gdrive) */}
+              <button
+                onClick={goFullscreen}
+                className="absolute bottom-3 right-3 z-[20] h-10 w-10 rounded-full glass-strong flex items-center justify-center text-white hover:text-neon transition-colors neon-glow-md"
+                aria-label="To'liq ekran"
+                title="To'liq ekran (F)"
+              >
+                <Maximize className="h-5 w-5" />
+              </button>
             </div>
           )
         ) : !isVip ? (
