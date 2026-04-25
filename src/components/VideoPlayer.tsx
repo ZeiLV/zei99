@@ -337,6 +337,7 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
           ) : (
             <div className="relative w-full" style={{ aspectRatio: "16 / 9" }}>
               <iframe
+                ref={iframeRef}
                 src={driveSrc}
                 className="absolute inset-0 w-full h-full block"
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
