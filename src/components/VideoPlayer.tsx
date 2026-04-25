@@ -182,7 +182,7 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
                 <div className="pointer-events-none absolute inset-0 z-[6] flex items-center justify-center">
                   <span
                     key={`flash-${flash}-${Date.now()}`}
-                    className="h-20 w-20 sm:h-24 sm:w-24 rounded-full glass-strong flex items-center justify-center text-neon neon-glow-md animate-scale-in"
+                    className="h-20 w-20 sm:h-24 sm:w-24 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white animate-scale-in"
                   >
                     {flash === "play" && <Play className="h-9 w-9 sm:h-11 sm:w-11 ml-1" />}
                     {flash === "pause" && <Pause className="h-9 w-9 sm:h-11 sm:w-11" />}
@@ -199,7 +199,7 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
                   className="absolute inset-0 flex items-center justify-center z-[6] group"
                   aria-label="O'ynatish"
                 >
-                  <span className="h-16 w-16 sm:h-20 sm:w-20 rounded-full glass-strong flex items-center justify-center text-neon group-hover:scale-110 transition-transform neon-glow-md">
+                  <span className="h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 flex items-center justify-center text-white group-hover:scale-110 transition-all">
                     <Play className="h-7 w-7 sm:h-9 sm:w-9 ml-1" />
                   </span>
                 </button>
