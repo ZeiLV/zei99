@@ -142,7 +142,8 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
 
       <div
         ref={containerRef}
-        className="relative w-full overflow-hidden bg-transparent player-frame"
+        className="relative w-full overflow-hidden bg-transparent player-frame fullscreen-target"
+        style={{ zIndex: 9999 }}
       >
         {!isVip && hasSource ? (
           isDirect ? (
