@@ -89,8 +89,21 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
   const goFullscreen = () => {
     const el = containerRef.current;
     if (!el) return;
-    if (document.fullscreenElement) document.exitFullscreen();
-    else el.requestFullscreen?.();
+    const doc: any = document;
+    const anyEl: any = el;
+    const isFs = doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement;
+    if (isFs) {
+      (doc.exitFullscreen || doc.webkitExitFullscreen || doc.mozCancelFullScreen || doc.msExitFullscreen)?.call(doc);
+    } else {
+      const req = anyEl.requestFullscreen || anyEl.webkitRequestFullscreen || anyEl.webkitEnterFullscreen || anyEl.mozRequestFullScreen || anyEl.msRequestFullscreen;
+      if (req) req.call(anyEl);
+      else {
+        // iOS Safari fallback: fullscreen the video element directly
+        const v: any = videoRef.current;
+        const vReq = v && (v.webkitEnterFullscreen || v.requestFullscreen);
+        vReq?.call(v);
+      }
+    }
   };
 
   // Keyboard shortcuts (direct only)
@@ -129,7 +142,8 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
 
       <div
         ref={containerRef}
-        className="relative w-full overflow-hidden bg-transparent player-frame"
+        className="relative w-full overflow-hidden bg-transparent player-frame fullscreen-target"
+        style={{ zIndex: 9999 }}
       >
         {!isVip && hasSource ? (
           isDirect ? (
@@ -320,14 +334,24 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
               <iframe
                 src={driveSrc}
                 className="absolute inset-0 w-full h-full block"
-                allow="autoplay; encrypted-media; fullscreen"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
                 allowFullScreen
+                {...({ webkitallowfullscreen: "true", mozallowfullscreen: "true" } as any)}
                 referrerPolicy="no-referrer"
                 onLoad={() => {
                   setBuffering(false);
                   if (watchdog.current) window.clearTimeout(watchdog.current);
                 }}
               />
+              {/* Custom fullscreen button for iframe (gdrive) */}
+              <button
+                onClick={goFullscreen}
+                className="absolute bottom-3 right-3 z-[20] h-10 w-10 rounded-full glass-strong flex items-center justify-center text-white hover:text-neon transition-colors neon-glow-md"
+                aria-label="To'liq ekran"
+                title="To'liq ekran (F)"
+              >
+                <Maximize className="h-5 w-5" />
+              </button>
             </div>
           )
         ) : !isVip ? (

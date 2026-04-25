@@ -272,3 +272,27 @@
   100% { opacity: 1; letter-spacing: 0.08em; filter: blur(0) brightness(1); }
 }
 .animate-wordmark-coalesce { animation: wordmark-coalesce 1.6s var(--transition-smooth) forwards; }
+
+/* Fullscreen player styles */
+.fullscreen-target:fullscreen,
+.fullscreen-target:-webkit-full-screen,
+.fullscreen-target:-moz-full-screen {
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fullscreen-target:fullscreen video,
+.fullscreen-target:-webkit-full-screen video {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 100vh !important;
+  object-fit: contain;
+}
+.fullscreen-target:fullscreen iframe,
+.fullscreen-target:-webkit-full-screen iframe {
+  width: 100% !important;
+  height: 100% !important;
+}
