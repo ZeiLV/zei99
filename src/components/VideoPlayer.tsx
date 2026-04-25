@@ -349,15 +349,6 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
                   if (watchdog.current) window.clearTimeout(watchdog.current);
                 }}
               />
-              {/* Custom fullscreen button for iframe (gdrive) */}
-              <button
-                onClick={goFullscreen}
-                className="absolute bottom-3 right-3 z-[20] h-10 w-10 rounded-md bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center text-white transition-colors"
-                aria-label="To'liq ekran"
-                title="To'liq ekran (F)"
-              >
-                <Maximize className="h-5 w-5" />
-              </button>
             </div>
           )
         ) : !isVip ? (
