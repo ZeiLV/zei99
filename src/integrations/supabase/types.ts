@@ -109,6 +109,42 @@ export type Database = {
           },
         ]
       }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          email: string | null
+          id: string
+          public_id: string
+          updated_at: string
+          user_id: string
+          vip_until: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+          public_id?: string
+          updated_at?: string
+          user_id: string
+          vip_until?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+          public_id?: string
+          updated_at?: string
+          user_id?: string
+          vip_until?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -135,6 +171,11 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      generate_public_id: { Args: never; Returns: string }
+      grant_vip_days: {
+        Args: { _days: number; _public_id: string }
+        Returns: string
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -143,6 +184,8 @@ export type Database = {
         Returns: boolean
       }
       increment_views: { Args: { _content_id: string }; Returns: undefined }
+      is_vip: { Args: { _user_id: string }; Returns: boolean }
+      revoke_vip: { Args: { _public_id: string }; Returns: undefined }
     }
     Enums: {
       app_role: "admin"
