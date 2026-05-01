@@ -396,6 +396,20 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
           </div>
         )}
       </div>
+
+      {/* Download button — under player, right-aligned */}
+      {!isVip && hasSource && downloadUrl && (
+        <div className="mt-3 flex justify-end">
+          <button
+            onClick={handleDownload}
+            className="inline-flex items-center gap-2 px-4 py-2.5 sm:py-2 rounded-lg bg-secondary/80 hover:bg-secondary text-foreground border border-neon/30 hover:border-neon/60 transition-all text-xs sm:text-sm font-display tracking-widest neon-glow-sm hover:scale-[1.03] active:scale-95"
+            aria-label="Yuklab olish"
+          >
+            <Download className="h-4 w-4 text-neon" />
+            <span>YUKLAB OLISH</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 };
