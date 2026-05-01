@@ -15,8 +15,12 @@ interface Props {
 }
 
 const Index = ({ category }: Props) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const deepId = searchParams.get("id");
+  const deepEp = searchParams.get("ep");
+
   const [showIntro, setShowIntro] = useState(() =>
-    category ? false : !sessionStorage.getItem("zei-intro-done")
+    category ? false : !sessionStorage.getItem("zei-intro-done") && !deepId
   );
   const [content, setContent] = useState<Content[]>([]);
   const [search, setSearch] = useState("");
