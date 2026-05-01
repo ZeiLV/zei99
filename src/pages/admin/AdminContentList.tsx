@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Content, CATEGORIES, Category } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Pencil, Trash2, Tv, Search, Star, Eye, TrendingUp } from "lucide-react";
+import { Plus, Pencil, Trash2, Tv, Search, Star, Eye, TrendingUp, Link2 } from "lucide-react";
 import { toast } from "sonner";
 
 const AdminContentList = () => {
