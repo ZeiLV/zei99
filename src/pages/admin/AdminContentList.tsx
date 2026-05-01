@@ -150,6 +150,9 @@ const AdminContentList = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-1 shrink-0">
+                <Button size="sm" variant="ghost" onClick={() => copyLink(c.id)} title="Havolani nusxalash">
+                  <Link2 className="h-4 w-4 text-neon" />
+                </Button>
                 <Link to={`/admin/content/${c.id}/episodes`}>
                   <Button size="sm" variant="ghost" title="Epizodlar">
                     <Tv className="h-4 w-4" />
