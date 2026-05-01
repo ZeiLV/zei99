@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Plus, Pencil, Trash2, X, Lock, Lock as LockIcon } from "lucide-react";
+import { ArrowLeft, Plus, Pencil, Trash2, X, Lock, Lock as LockIcon, Link2 } from "lucide-react";
 import { toast } from "sonner";
 
 interface EpForm {
@@ -90,6 +90,17 @@ const AdminEpisodes = () => {
     load();
   };
 
+  const copyEpisodeLink = async (ep: Episode) => {
+    if (!id) return;
+    const url = `${window.location.origin}/?id=${id}&ep=${ep.episode_number}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success(`EP ${ep.episode_number} havolasi nusxalandi`);
+    } catch {
+      toast.error("Nusxalab bo'lmadi");
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -147,6 +158,14 @@ const AdminEpisodes = () => {
                 <span className="hidden sm:inline text-[10px] font-display tracking-widest text-neon/70">VIP</span>
                 <Switch checked={ep.is_vip} onCheckedChange={() => toggleVip(ep)} />
               </div>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => copyEpisodeLink(ep)}
+                title="Havolani nusxalash"
+              >
+                <Link2 className="h-4 w-4 text-neon" />
+              </Button>
               <Button
                 size="sm"
                 variant="ghost"

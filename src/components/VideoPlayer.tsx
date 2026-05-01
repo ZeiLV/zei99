@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { gdriveToStream } from "@/lib/gdrive";
-import { Maximize, Pause, Play, RotateCcw, RotateCw, Volume2, VolumeX, Gauge } from "lucide-react";
+import { Maximize, Pause, Play, RotateCcw, RotateCw, Volume2, VolumeX, Gauge, Download } from "lucide-react";
 
 interface Props {
   videoType: "gdrive" | "direct";
@@ -136,6 +136,18 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
   };
 
   const hasSource = isDirect ? !!directSrc : !!fileId;
+
+  const downloadUrl = isDirect
+    ? directSrc
+    : fileId
+    ? `https://drive.google.com/uc?export=download&id=${fileId}`
+    : "";
+
+  const handleDownload = () => {
+    if (!downloadUrl) return;
+    // Open in new tab — browser handles direct download or Drive virus-scan page
+    window.open(downloadUrl, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <div className="relative w-full">
@@ -384,6 +396,20 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
           </div>
         )}
       </div>
+
+      {/* Download button — under player, right-aligned */}
+      {!isVip && hasSource && downloadUrl && (
+        <div className="mt-3 flex justify-end">
+          <button
+            onClick={handleDownload}
+            className="inline-flex items-center gap-2 px-4 py-2.5 sm:py-2 rounded-lg bg-secondary/80 hover:bg-secondary text-foreground border border-neon/30 hover:border-neon/60 transition-all text-xs sm:text-sm font-display tracking-widest neon-glow-sm hover:scale-[1.03] active:scale-95"
+            aria-label="Yuklab olish"
+          >
+            <Download className="h-4 w-4 text-neon" />
+            <span>YUKLAB OLISH</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 };

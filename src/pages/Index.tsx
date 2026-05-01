@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { Intro } from "@/components/Intro";
 import { Header } from "@/components/Header";
 import { PosterCard } from "@/components/PosterCard";
@@ -15,8 +15,12 @@ interface Props {
 }
 
 const Index = ({ category }: Props) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const deepId = searchParams.get("id");
+  const deepEp = searchParams.get("ep");
+
   const [showIntro, setShowIntro] = useState(() =>
-    category ? false : !sessionStorage.getItem("zei-intro-done")
+    category ? false : !sessionStorage.getItem("zei-intro-done") && !deepId
   );
   const [content, setContent] = useState<Content[]>([]);
   const [search, setSearch] = useState("");
@@ -39,6 +43,14 @@ const Index = ({ category }: Props) => {
       setLoading(false);
     })();
   }, [category]);
+
+  // Deep-link: select content from ?id=
+  useEffect(() => {
+    if (!deepId || content.length === 0) return;
+    if (selected?.id === deepId) return;
+    const found = content.find((c) => c.id === deepId);
+    if (found) setSelected(found);
+  }, [deepId, content, selected?.id]);
 
   const allGenres = Array.from(new Set(content.flatMap((c) => c.genre ?? []))).sort();
 
@@ -86,7 +98,18 @@ const Index = ({ category }: Props) => {
           <Header search={search} onSearchChange={setSearch} />
 
           {selected ? (
-            <ContentDetail content={selected} onBack={() => setSelected(null)} />
+            <ContentDetail
+              content={selected}
+              initialEpisodeNumber={deepEp ? Number(deepEp) : null}
+              onBack={() => {
+                setSelected(null);
+                if (deepId || deepEp) {
+                  searchParams.delete("id");
+                  searchParams.delete("ep");
+                  setSearchParams(searchParams, { replace: true });
+                }
+              }}
+            />
           ) : (
             <>
               <h1 className="sr-only">{pageTitle}</h1>

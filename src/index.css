@@ -8,51 +8,53 @@
 
 @layer base {
   :root {
-    --background: 0 0% 2%;
-    --foreground: 0 0% 100%;
+    /* Deep Dark Blue (Midnight) — #0A0F1E */
+    --background: 226 50% 8%;
+    --foreground: 210 30% 96%;
 
-    --card: 0 0% 4%;
-    --card-foreground: 0 0% 100%;
+    --card: 226 45% 11%;
+    --card-foreground: 210 30% 96%;
 
-    --popover: 0 0% 6%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 226 45% 12%;
+    --popover-foreground: 210 30% 96%;
 
-    --primary: 187 100% 50%;
-    --primary-foreground: 0 0% 0%;
+    --primary: 200 95% 60%;
+    --primary-foreground: 226 50% 8%;
 
-    --secondary: 0 0% 8%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 226 40% 14%;
+    --secondary-foreground: 210 30% 96%;
 
-    --muted: 0 0% 10%;
-    --muted-foreground: 0 0% 60%;
+    --muted: 226 35% 16%;
+    --muted-foreground: 215 20% 70%;
 
-    --accent: 187 100% 50%;
-    --accent-foreground: 0 0% 0%;
+    --accent: 200 95% 60%;
+    --accent-foreground: 226 50% 8%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 75% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 187 100% 50%;
-    --input: 0 0% 10%;
-    --ring: 187 100% 50%;
+    --border: 220 40% 22%;
+    --input: 226 40% 14%;
+    --ring: 200 90% 60%;
 
     --radius: 0.75rem;
 
-    /* Multicolor neon palette */
-    --neon: 187 100% 50%;            /* Cyan-blue (#00E5FF) */
-    --neon-soft: 187 100% 70%;
-    --neon-cyan: 180 100% 50%;       /* #00FFFF */
-    --neon-purple: 285 100% 50%;     /* #BF00FF */
-    --neon-pink: 330 100% 50%;       /* #FF007F */
-    --glass: 0 0% 100%;
+    /* Softer neon palette tuned for midnight blue */
+    --neon: 200 95% 60%;             /* Soft sky blue */
+    --neon-soft: 200 90% 75%;
+    --neon-cyan: 190 90% 60%;
+    --neon-purple: 265 75% 65%;
+    --neon-pink: 325 80% 65%;
+    --glass: 220 40% 100%;
 
-    --shadow-neon-sm: 0 0 8px hsl(var(--neon) / 0.6);
-    --shadow-neon-md: 0 0 16px hsl(var(--neon) / 0.55), 0 0 32px hsl(var(--neon) / 0.3);
-    --shadow-neon-lg: 0 0 24px hsl(var(--neon) / 0.7), 0 0 48px hsl(var(--neon) / 0.4), 0 0 96px hsl(var(--neon) / 0.2);
+    --shadow-neon-sm: 0 0 6px hsl(var(--neon) / 0.35);
+    --shadow-neon-md: 0 0 12px hsl(var(--neon) / 0.30), 0 0 24px hsl(var(--neon) / 0.18);
+    --shadow-neon-lg: 0 0 18px hsl(var(--neon) / 0.40), 0 0 36px hsl(var(--neon-purple) / 0.25), 0 0 72px hsl(var(--neon) / 0.12);
 
-    --gradient-glass: linear-gradient(135deg, hsl(0 0% 100% / 0.06), hsl(0 0% 100% / 0.02));
-    --gradient-banner: linear-gradient(180deg, transparent 0%, hsl(0 0% 0% / 0.5) 60%, hsl(0 0% 0%) 100%);
-    --gradient-multineon: linear-gradient(120deg, hsl(var(--neon-cyan)), hsl(var(--neon)) 35%, hsl(var(--neon-purple)) 70%, hsl(var(--neon-pink)));
+    --gradient-glass: linear-gradient(135deg, hsl(220 40% 100% / 0.05), hsl(220 40% 100% / 0.015));
+    --gradient-banner: linear-gradient(180deg, transparent 0%, hsl(226 50% 5% / 0.55) 60%, hsl(226 50% 5%) 100%);
+    --gradient-multineon: linear-gradient(120deg, hsl(var(--neon-cyan)), hsl(var(--neon)) 40%, hsl(var(--neon-purple)) 75%, hsl(var(--neon-pink)));
+    --gradient-bg: radial-gradient(ellipse at top, hsl(226 55% 12%) 0%, hsl(226 55% 7%) 60%, hsl(226 60% 5%) 100%);
 
     --transition-smooth: cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -70,7 +72,8 @@
 
   body {
     font-family: 'Inter', system-ui, sans-serif;
-    background: hsl(var(--background));
+    background: var(--gradient-bg);
+    background-attachment: fixed;
     color: hsl(var(--foreground));
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;

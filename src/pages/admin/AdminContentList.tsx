@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Content, CATEGORIES, Category } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Pencil, Trash2, Tv, Search, Star, Eye, TrendingUp } from "lucide-react";
+import { Plus, Pencil, Trash2, Tv, Search, Star, Eye, TrendingUp, Link2 } from "lucide-react";
 import { toast } from "sonner";
 
 const AdminContentList = () => {
@@ -40,6 +40,16 @@ const AdminContentList = () => {
     if (error) return toast.error(error.message);
     toast.success("O'chirildi");
     load();
+  };
+
+  const copyLink = async (contentId: string) => {
+    const url = `${window.location.origin}/?id=${contentId}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success("Havola nusxalandi");
+    } catch {
+      toast.error("Nusxalab bo'lmadi");
+    }
   };
 
   return (
@@ -140,6 +150,9 @@ const AdminContentList = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-1 shrink-0">
+                <Button size="sm" variant="ghost" onClick={() => copyLink(c.id)} title="Havolani nusxalash">
+                  <Link2 className="h-4 w-4 text-neon" />
+                </Button>
                 <Link to={`/admin/content/${c.id}/episodes`}>
                   <Button size="sm" variant="ghost" title="Epizodlar">
                     <Tv className="h-4 w-4" />

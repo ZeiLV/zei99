@@ -7,6 +7,7 @@ import { VideoPlayer } from "./VideoPlayer";
 interface Props {
   content: Content;
   onBack: () => void;
+  initialEpisodeNumber?: number | null;
 }
 
 const formatViews = (n: number) => {
@@ -15,11 +16,12 @@ const formatViews = (n: number) => {
   return `${n}`;
 };
 
-export const ContentDetail = ({ content, onBack }: Props) => {
+export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) => {
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [selected, setSelected] = useState<Episode | null>(null);
   const [loading, setLoading] = useState(true);
   const viewLogged = useRef(false);
+  const playerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     (async () => {
@@ -31,10 +33,23 @@ export const ContentDetail = ({ content, onBack }: Props) => {
         .order("episode_number", { ascending: true });
       const eps = (data ?? []) as Episode[];
       setEpisodes(eps);
-      setSelected(eps[0] ?? null);
+
+      // Pick deep-linked episode if present, otherwise first
+      const target =
+        (initialEpisodeNumber != null
+          ? eps.find((e) => e.episode_number === initialEpisodeNumber)
+          : null) ?? eps[0] ?? null;
+      setSelected(target);
       setLoading(false);
+
+      // Smooth scroll to player when arriving via deep link
+      if (initialEpisodeNumber != null && target) {
+        setTimeout(() => {
+          playerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 250);
+      }
     })();
-  }, [content.id]);
+  }, [content.id, initialEpisodeNumber]);
 
   // Increment view once per content open (when a non-vip episode actually plays)
   useEffect(() => {
@@ -122,7 +137,7 @@ export const ContentDetail = ({ content, onBack }: Props) => {
 
         {/* Player */}
         {selected && (
-          <div className="mt-10 sm:mt-12" style={{ marginBottom: "2.5rem" }}>
+          <div ref={playerRef} className="mt-10 sm:mt-12 scroll-mt-24" style={{ marginBottom: "2.5rem" }}>
             <VideoPlayer
               videoType={selected.video_type}
               gdriveUrl={selected.gdrive_url}
