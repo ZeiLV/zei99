@@ -137,7 +137,7 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
 
         {/* Player */}
         {selected && (
-          <div className="mt-10 sm:mt-12" style={{ marginBottom: "2.5rem" }}>
+          <div ref={playerRef} className="mt-10 sm:mt-12 scroll-mt-24" style={{ marginBottom: "2.5rem" }}>
             <VideoPlayer
               videoType={selected.video_type}
               gdriveUrl={selected.gdrive_url}
