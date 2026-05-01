@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { Intro } from "@/components/Intro";
 import { Header } from "@/components/Header";
 import { PosterCard } from "@/components/PosterCard";
