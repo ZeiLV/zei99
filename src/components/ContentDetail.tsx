@@ -7,6 +7,7 @@ import { VideoPlayer } from "./VideoPlayer";
 interface Props {
   content: Content;
   onBack: () => void;
+  initialEpisodeNumber?: number | null;
 }
 
 const formatViews = (n: number) => {
