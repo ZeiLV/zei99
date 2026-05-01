@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { gdriveToStream } from "@/lib/gdrive";
-import { Maximize, Pause, Play, RotateCcw, RotateCw, Volume2, VolumeX, Gauge, Download } from "lucide-react";
+import { Maximize, Pause, Play, RotateCcw, RotateCw, Volume2, VolumeX, Gauge, Download, Crown } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { VipModal } from "./VipModal";
 
 interface Props {
   videoType: "gdrive" | "direct";
@@ -143,9 +145,15 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
     ? `https://drive.google.com/uc?export=download&id=${fileId}`
     : "";
 
+  const { isVip: userIsVip } = useAuth();
+  const [showVipModal, setShowVipModal] = useState(false);
+
   const handleDownload = () => {
+    if (!userIsVip) {
+      setShowVipModal(true);
+      return;
+    }
     if (!downloadUrl) return;
-    // Open in new tab — browser handles direct download or Drive virus-scan page
     window.open(downloadUrl, "_blank", "noopener,noreferrer");
   };
 
@@ -402,14 +410,20 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
         <div className="mt-3 flex justify-end">
           <button
             onClick={handleDownload}
-            className="inline-flex items-center gap-2 px-4 py-2.5 sm:py-2 rounded-lg bg-secondary/80 hover:bg-secondary text-foreground border border-neon/30 hover:border-neon/60 transition-all text-xs sm:text-sm font-display tracking-widest neon-glow-sm hover:scale-[1.03] active:scale-95"
+            className={`inline-flex items-center gap-2 px-4 py-2.5 sm:py-2 rounded-lg transition-all text-xs sm:text-sm font-display tracking-widest hover:scale-[1.03] active:scale-95 ${
+              userIsVip
+                ? "bg-secondary/80 hover:bg-secondary text-foreground border border-neon/30 hover:border-neon/60 neon-glow-sm"
+                : "bg-amber-400/10 hover:bg-amber-400/20 text-amber-400 border border-amber-400/30 hover:border-amber-400/60"
+            }`}
             aria-label="Yuklab olish"
           >
-            <Download className="h-4 w-4 text-neon" />
-            <span>YUKLAB OLISH</span>
+            {userIsVip ? <Download className="h-4 w-4 text-neon" /> : <Crown className="h-4 w-4" />}
+            <span>{userIsVip ? "YUKLAB OLISH" : "VIP YUKLAB OLISH"}</span>
           </button>
         </div>
       )}
+
+      <VipModal open={showVipModal} onOpenChange={setShowVipModal} />
     </div>
   );
 };
