@@ -161,6 +161,14 @@ const AdminEpisodes = () => {
               <Button
                 size="sm"
                 variant="ghost"
+                onClick={() => copyEpisodeLink(ep)}
+                title="Havolani nusxalash"
+              >
+                <Link2 className="h-4 w-4 text-neon" />
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
                 onClick={() =>
                   setEditing({
                     id: ep.id,
