@@ -44,6 +44,14 @@ const Index = ({ category }: Props) => {
     })();
   }, [category]);
 
+  // Deep-link: select content from ?id=
+  useEffect(() => {
+    if (!deepId || content.length === 0) return;
+    if (selected?.id === deepId) return;
+    const found = content.find((c) => c.id === deepId);
+    if (found) setSelected(found);
+  }, [deepId, content, selected?.id]);
+
   const allGenres = Array.from(new Set(content.flatMap((c) => c.genre ?? []))).sort();
 
   const filtered = content.filter((c) => {
