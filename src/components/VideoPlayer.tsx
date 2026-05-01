@@ -137,6 +137,18 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) =>
 
   const hasSource = isDirect ? !!directSrc : !!fileId;
 
+  const downloadUrl = isDirect
+    ? directSrc
+    : fileId
+    ? `https://drive.google.com/uc?export=download&id=${fileId}`
+    : "";
+
+  const handleDownload = () => {
+    if (!downloadUrl) return;
+    // Open in new tab — browser handles direct download or Drive virus-scan page
+    window.open(downloadUrl, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <div className="relative w-full">
       {/* Breathing glow halo behind player */}
