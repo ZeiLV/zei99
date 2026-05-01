@@ -98,7 +98,18 @@ const Index = ({ category }: Props) => {
           <Header search={search} onSearchChange={setSearch} />
 
           {selected ? (
-            <ContentDetail content={selected} onBack={() => setSelected(null)} />
+            <ContentDetail
+              content={selected}
+              initialEpisodeNumber={deepEp ? Number(deepEp) : null}
+              onBack={() => {
+                setSelected(null);
+                if (deepId || deepEp) {
+                  searchParams.delete("id");
+                  searchParams.delete("ep");
+                  setSearchParams(searchParams, { replace: true });
+                }
+              }}
+            />
           ) : (
             <>
               <h1 className="sr-only">{pageTitle}</h1>
