@@ -171,6 +171,11 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
                 {c.label.toUpperCase()}
               </NavLink>
             ))}
+            {user && (
+              <div className="ml-auto pl-2 sm:hidden">
+                <VipStatusButton />
+              </div>
+            )}
           </nav>
         </div>
       </header>
