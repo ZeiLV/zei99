@@ -42,6 +42,16 @@ const AdminContentList = () => {
     load();
   };
 
+  const copyLink = async (contentId: string) => {
+    const url = `${window.location.origin}/?id=${contentId}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success("Havola nusxalandi");
+    } catch {
+      toast.error("Nusxalab bo'lmadi");
+    }
+  };
+
   return (
     <div className="space-y-5 max-w-6xl">
       <div className="flex items-center justify-between gap-3 flex-wrap">
