@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { gdriveToStream } from "@/lib/gdrive";
-import { Maximize, Pause, Play, RotateCcw, RotateCw, Volume2, VolumeX, Gauge } from "lucide-react";
+import { Maximize, Pause, Play, RotateCcw, RotateCw, Volume2, VolumeX, Gauge, Download } from "lucide-react";
 
 interface Props {
   videoType: "gdrive" | "direct";
