@@ -90,6 +90,17 @@ const AdminEpisodes = () => {
     load();
   };
 
+  const copyEpisodeLink = async (ep: Episode) => {
+    if (!id) return;
+    const url = `${window.location.origin}/?id=${id}&ep=${ep.episode_number}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success(`EP ${ep.episode_number} havolasi nusxalandi`);
+    } catch {
+      toast.error("Nusxalab bo'lmadi");
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
