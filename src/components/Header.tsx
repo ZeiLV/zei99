@@ -1,8 +1,10 @@
-import { Search, X } from "lucide-react";
+import { LogOut, Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { AdminLoginModal } from "./AdminLoginModal";
 import { CATEGORIES } from "@/lib/types";
+import { VipStatusButton } from "./VipStatusButton";
+import { useAuth } from "@/hooks/useAuth";
 
 interface HeaderProps {
   search: string;
@@ -17,6 +19,7 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
     if (expanded) inputRef.current?.focus();
@@ -84,7 +87,7 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
               ))}
             </nav>
 
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
               <div
                 className={`flex items-center transition-all duration-300 ease-out ${
                   expanded ? "w-44 sm:w-72" : "w-10"
@@ -120,6 +123,25 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
                   </button>
                 )}
               </div>
+
+              {user && (
+                <>
+                  <div className="hidden sm:block">
+                    <VipStatusButton />
+                  </div>
+                  <button
+                    onClick={async () => {
+                      await signOut();
+                      navigate("/auth", { replace: true });
+                    }}
+                    className="h-10 w-10 rounded-full glass flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all"
+                    aria-label="Chiqish"
+                    title="Chiqish"
+                  >
+                    <LogOut className="h-4 w-4" />
+                  </button>
+                </>
+              )}
             </div>
           </div>
 
