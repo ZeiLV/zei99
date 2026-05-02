@@ -63,7 +63,7 @@ export const HeroSlider = ({ items, onSelect }: Props) => {
               <button
                 key={s.id}
                 onClick={() => onSelect(s)}
-                className="relative shrink-0 w-full aspect-video bg-secondary overflow-hidden group"
+                className="relative shrink-0 w-full aspect-[16/10] sm:aspect-video bg-secondary overflow-hidden group"
                 aria-label={s.title}
               >
                 {img ? (
