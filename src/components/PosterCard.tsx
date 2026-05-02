@@ -49,12 +49,12 @@ export const PosterCard = ({ content, onClick }: Props) => {
       </div>
 
       {/* Title below poster */}
-      <div className="mt-2 px-0.5">
-        <div className="text-[13px] sm:text-sm font-semibold text-foreground line-clamp-2 leading-snug">
+      <div className="mt-2.5 px-0.5">
+        <div className="text-[15px] sm:text-sm font-semibold text-foreground line-clamp-2 leading-snug min-h-[2.6em]">
           {content.title}
         </div>
         {content.year && (
-          <div className="text-[11px] text-foreground/50 mt-0.5">
+          <div className="text-[12px] sm:text-[11px] text-foreground/50 mt-1">
             {content.year}
           </div>
         )}
