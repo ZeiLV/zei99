@@ -87,12 +87,12 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
               ))}
             </nav>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 sm:gap-3">
               <div
                 className={`flex items-center transition-all duration-300 ease-out ${
-                  expanded ? "w-44 sm:w-72" : "w-10"
+                  expanded ? "w-40 sm:w-72" : "w-10"
                 }`}
-              >
+              ></div>
                 {expanded ? (
                   <div className="glass-strong rounded-full flex items-center w-full pl-4 pr-1 h-10">
                     <input
