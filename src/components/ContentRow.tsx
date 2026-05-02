@@ -23,12 +23,21 @@ export const ContentRow = ({ title, icon, items, onSelect }: Props) => {
   };
 
   return (
-    <section className="space-y-2 sm:space-y-3">
-      <div className="flex items-center justify-between px-1">
+    <section className="space-y-3 sm:space-y-4">
+      <div className="flex items-center justify-between px-1 pb-2 relative">
         <h2 className="font-display text-sm sm:text-base tracking-widest text-foreground/90 flex items-center gap-2">
           {icon && <span className="text-base">{icon}</span>}
           {title}
         </h2>
+        <span
+          aria-hidden
+          className="absolute left-1 right-1 bottom-0 h-px"
+          style={{
+            background:
+              "linear-gradient(90deg, hsl(var(--neon) / 0.5), hsl(var(--neon) / 0.05) 60%, transparent)",
+            boxShadow: "0 0 8px hsl(var(--neon) / 0.35)",
+          }}
+        />
         <div className="hidden sm:flex items-center gap-1">
           <button
             onClick={() => scroll("left")}
