@@ -159,14 +159,14 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
         ) : episodes.length === 0 ? (
           <div className="text-muted-foreground text-sm">Epizodlar hali yo'q</div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pb-16 animate-fade-up">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pb-16 animate-fade-up w-full">
             {episodes.map((ep) => {
               const active = selected?.id === ep.id;
               return (
                 <button
                   key={ep.id}
                   onClick={() => setSelected(ep)}
-                  className={`group text-left glass rounded-xl p-4 flex items-center gap-4 transition-all duration-300 hover:scale-[1.015] hover:neon-glow-sm ${
+                  className={`group text-left glass rounded-xl p-4 flex items-center gap-4 transition-all duration-300 hover:scale-[1.015] hover:neon-glow-sm w-full min-h-[64px] ${
                     active ? "neon-border" : ""
                   }`}
                 >

@@ -25,8 +25,8 @@ export const ContentRow = ({ title, icon, items, onSelect }: Props) => {
   return (
     <section className="space-y-3 sm:space-y-4">
       <div className="flex items-center justify-between px-1 pb-2 relative">
-        <h2 className="font-display text-sm sm:text-base tracking-widest text-foreground/90 flex items-center gap-2">
-          {icon && <span className="text-base">{icon}</span>}
+        <h2 className="font-display text-base sm:text-base tracking-widest text-foreground/90 flex items-center gap-2">
+          {icon && <span className="text-lg">{icon}</span>}
           {title}
         </h2>
         <span
@@ -63,7 +63,7 @@ export const ContentRow = ({ title, icon, items, onSelect }: Props) => {
         {items.map((c) => (
           <div
             key={c.id}
-            className="shrink-0 snap-start w-[42%] sm:w-[28%] md:w-[22%] lg:w-[17%] xl:w-[14%]"
+            className="shrink-0 snap-start w-[46%] sm:w-[28%] md:w-[22%] lg:w-[17%] xl:w-[14%]"
           >
             <PosterCard content={c} onClick={() => onSelect(c)} />
           </div>
