@@ -23,6 +23,17 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
   const viewLogged = useRef(false);
   const playerRef = useRef<HTMLDivElement>(null);
 
+  // Force desktop viewport on the watch page (mobile responsiveness preserved elsewhere)
+  useEffect(() => {
+    const meta = document.querySelector('meta[name="viewport"]') as HTMLMetaElement | null;
+    if (!meta) return;
+    const original = meta.getAttribute("content") ?? "width=device-width, initial-scale=1, viewport-fit=cover";
+    meta.setAttribute("content", "width=1280, viewport-fit=cover");
+    return () => {
+      meta.setAttribute("content", original);
+    };
+  }, []);
+
   useEffect(() => {
     (async () => {
       setLoading(true);
