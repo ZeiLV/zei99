@@ -92,7 +92,7 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
                 className={`flex items-center transition-all duration-300 ease-out ${
                   expanded ? "w-40 sm:w-72" : "w-10"
                 }`}
-              ></div>
+              >
                 {expanded ? (
                   <div className="glass-strong rounded-full flex items-center w-full pl-4 pr-1 h-10">
                     <input
@@ -126,9 +126,7 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
 
               {user && (
                 <>
-                  <div className="hidden sm:block">
-                    <VipStatusButton />
-                  </div>
+                  <VipStatusButton />
                   <button
                     onClick={async () => {
                       await signOut();
