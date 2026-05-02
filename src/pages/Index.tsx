@@ -169,7 +169,7 @@ const Index = ({ category }: Props) => {
                   </div>
                 ) : !category && !search.trim() ? (
                   // Netflix-style rows on home
-                  <div className="space-y-8 sm:space-y-10">
+                  <div className="space-y-12 sm:space-y-16">
                     {trending.length > 0 && (
                       <ContentRow title="TREND" icon="🔥" items={trending} onSelect={setSelected} />
                     )}
