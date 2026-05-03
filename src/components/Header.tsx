@@ -88,7 +88,7 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
               ))}
             </nav>
 
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-2 sm:gap-2.5 relative">
               <div
                 className={`flex items-center transition-all duration-300 ease-out ${
                   expanded ? "w-40 sm:w-72" : "w-10"
