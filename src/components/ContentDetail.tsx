@@ -3,6 +3,7 @@ import { Content, Episode } from "@/lib/types";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft, Star, Eye, Calendar, Clock } from "lucide-react";
 import { VideoPlayer } from "./VideoPlayer";
+import { Reviews } from "./Reviews";
 
 interface Props {
   content: Content;
@@ -216,6 +217,8 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
             })}
           </div>
         )}
+
+        <Reviews contentId={content.id} />
       </div>
     </div>
   );
