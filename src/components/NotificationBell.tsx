@@ -92,24 +92,33 @@ export const NotificationBell = () => {
       </button>
       {open && (
         <>
-          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-12 z-50 w-72 glass-strong rounded-2xl p-3 neon-border animate-fade-up">
-            <div className="font-display text-xs tracking-widest text-neon mb-2 px-1">
+          <div className="fixed inset-0 z-[60]" onClick={() => setOpen(false)} />
+          <div
+            className="absolute right-0 top-[calc(100%+10px)] z-[70] w-[280px] max-w-[calc(100vw-24px)] rounded-xl p-3 animate-fade-up"
+            style={{
+              background: "hsl(220 50% 8% / 0.85)",
+              backdropFilter: "blur(14px)",
+              WebkitBackdropFilter: "blur(14px)",
+              border: "1px solid hsl(var(--neon) / 0.35)",
+              boxShadow: "0 8px 32px hsl(220 60% 4% / 0.6), 0 0 0 1px hsl(var(--neon) / 0.08)",
+            }}
+          >
+            <div className="font-display text-[10px] tracking-widest text-neon/90 mb-2 px-1">
               BILDIRISHNOMALAR
             </div>
             {items.length === 0 ? (
-              <div className="text-xs text-muted-foreground p-3 text-center">
+              <div className="text-[11px] text-foreground/50 py-6 text-center">
                 Hozircha bildirishnoma yo'q
               </div>
             ) : (
-              <div className="max-h-80 overflow-y-auto space-y-1.5">
+              <div className="max-h-72 overflow-y-auto space-y-1.5 pr-0.5">
                 {items.map((n) => (
                   <div
                     key={n.id}
-                    className="p-2.5 rounded-lg glass hover:neon-glow-sm transition-all"
+                    className="p-2.5 rounded-lg bg-neon/5 hover:bg-neon/10 border border-neon/10 transition-colors"
                   >
-                    <div className="text-xs font-medium text-foreground">{n.title}</div>
-                    <div className="text-[11px] text-foreground/70 truncate mt-0.5">
+                    <div className="text-[12px] font-medium text-foreground">{n.title}</div>
+                    <div className="text-[11px] text-foreground/60 truncate mt-0.5">
                       {n.subtitle}
                     </div>
                   </div>

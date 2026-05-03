@@ -44,7 +44,7 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
     <>
       <header className="fixed top-0 inset-x-0 z-50 glass border-b border-neon/15">
         <div className="max-w-[1440px] mx-auto px-[15px] sm:px-8">
-          <div className="flex items-center justify-between gap-4 sm:gap-8 h-14 sm:h-16">
+          <div className="flex items-center justify-between gap-3 sm:gap-6 h-14 sm:h-16">
             <button
               onClick={handleClick}
               onMouseDown={startPress}
@@ -54,7 +54,7 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
               onTouchEnd={endPress}
               onTouchCancel={endPress}
               onContextMenu={(e) => e.preventDefault()}
-              className="logo-cyber text-base sm:text-2xl select-none transition-all duration-300 hover:scale-[1.04] shrink-0 mr-2 sm:mr-4"
+              className="logo-cyber text-base sm:text-2xl select-none transition-all duration-300 hover:scale-[1.04] shrink-0"
               style={{ WebkitUserSelect: "none", userSelect: "none", WebkitTouchCallout: "none" }}
             >
               ZEI DUBBING
@@ -88,7 +88,7 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
               ))}
             </nav>
 
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-2 sm:gap-2.5 relative">
               <div
                 className={`flex items-center transition-all duration-300 ease-out ${
                   expanded ? "w-40 sm:w-72" : "w-10"
