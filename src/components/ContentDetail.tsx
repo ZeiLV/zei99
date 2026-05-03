@@ -217,6 +217,8 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
             })}
           </div>
         )}
+
+        <Reviews contentId={content.id} />
       </div>
     </div>
   );
