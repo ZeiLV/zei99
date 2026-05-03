@@ -127,6 +127,7 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
 
               {user && (
                 <>
+                  <NotificationBell />
                   <VipStatusButton />
                   <button
                     onClick={async () => {
