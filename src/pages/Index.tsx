@@ -211,15 +211,7 @@ const Index = ({ category }: Props) => {
                 )}
               </main>
 
-              {/* Footer with persistent social links */}
-              <footer className="px-[15px] sm:px-8 max-w-[1440px] mx-auto pb-10 pt-4">
-                <div className="glass rounded-2xl px-5 py-5 flex flex-col items-center gap-3">
-                  <SocialLinks />
-                  <div className="text-[10px] tracking-widest text-foreground/40 font-display">
-                    © ZEI DUBBING
-                  </div>
-                </div>
-              </footer>
+              <Footer />
             </>
           )}
         </div>
