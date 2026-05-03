@@ -7,7 +7,7 @@ import { PosterCard } from "@/components/PosterCard";
 import { ContentDetail } from "@/components/ContentDetail";
 import { ContentRow } from "@/components/ContentRow";
 import { HeroSlider } from "@/components/HeroSlider";
-import { SocialLinks } from "@/components/SocialLinks";
+import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { Category, Content, CATEGORIES } from "@/lib/types";
 
@@ -99,18 +99,21 @@ const Index = ({ category }: Props) => {
           <Header search={search} onSearchChange={setSearch} />
 
           {selected ? (
-            <ContentDetail
-              content={selected}
-              initialEpisodeNumber={deepEp ? Number(deepEp) : null}
-              onBack={() => {
-                setSelected(null);
-                if (deepId || deepEp) {
-                  searchParams.delete("id");
-                  searchParams.delete("ep");
-                  setSearchParams(searchParams, { replace: true });
-                }
-              }}
-            />
+            <>
+              <ContentDetail
+                content={selected}
+                initialEpisodeNumber={deepEp ? Number(deepEp) : null}
+                onBack={() => {
+                  setSelected(null);
+                  if (deepId || deepEp) {
+                    searchParams.delete("id");
+                    searchParams.delete("ep");
+                    setSearchParams(searchParams, { replace: true });
+                  }
+                }}
+              />
+              <Footer />
+            </>
           ) : (
             <>
               <h1 className="sr-only">{pageTitle}</h1>
@@ -211,15 +214,7 @@ const Index = ({ category }: Props) => {
                 )}
               </main>
 
-              {/* Footer with persistent social links */}
-              <footer className="px-[15px] sm:px-8 max-w-[1440px] mx-auto pb-10 pt-4">
-                <div className="glass rounded-2xl px-5 py-5 flex flex-col items-center gap-3">
-                  <SocialLinks />
-                  <div className="text-[10px] tracking-widest text-foreground/40 font-display">
-                    © ZEI DUBBING
-                  </div>
-                </div>
-              </footer>
+              <Footer />
             </>
           )}
         </div>
