@@ -7,7 +7,7 @@ import { PosterCard } from "@/components/PosterCard";
 import { ContentDetail } from "@/components/ContentDetail";
 import { ContentRow } from "@/components/ContentRow";
 import { HeroSlider } from "@/components/HeroSlider";
-import { SocialLinks } from "@/components/SocialLinks";
+import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { Category, Content, CATEGORIES } from "@/lib/types";
 
