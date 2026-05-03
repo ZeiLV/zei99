@@ -4,6 +4,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { AdminLoginModal } from "./AdminLoginModal";
 import { CATEGORIES } from "@/lib/types";
 import { VipStatusButton } from "./VipStatusButton";
+import { NotificationBell } from "./NotificationBell";
 import { useAuth } from "@/hooks/useAuth";
 
 interface HeaderProps {
