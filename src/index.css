@@ -276,6 +276,71 @@
 }
 .animate-wordmark-coalesce { animation: wordmark-coalesce 1.6s var(--transition-smooth) forwards; }
 
+/* Glitch effect for the auth wordmark */
+@keyframes glitch-base {
+  0%, 100% { transform: translate(0,0); }
+  20% { transform: translate(-1px, 1px); }
+  40% { transform: translate(1px, -1px); }
+  60% { transform: translate(-1px, 0); }
+  80% { transform: translate(1px, 1px); }
+}
+@keyframes glitch-r {
+  0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0,0); }
+  20% { clip-path: inset(10% 0 70% 0); transform: translate(2px, 0); }
+  40% { clip-path: inset(60% 0 10% 0); transform: translate(-2px, 0); }
+  60% { clip-path: inset(30% 0 40% 0); transform: translate(2px, 0); }
+  80% { clip-path: inset(80% 0 5% 0); transform: translate(-1px, 0); }
+}
+@keyframes glitch-c {
+  0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0,0); }
+  20% { clip-path: inset(70% 0 10% 0); transform: translate(-2px, 0); }
+  40% { clip-path: inset(10% 0 60% 0); transform: translate(2px, 0); }
+  60% { clip-path: inset(40% 0 30% 0); transform: translate(-2px, 0); }
+  80% { clip-path: inset(5% 0 80% 0); transform: translate(1px, 0); }
+}
+.glitch { position: relative; display: inline-block; animation: glitch-base 3.6s steps(1, end) infinite; }
+.glitch::before, .glitch::after {
+  content: attr(data-text);
+  position: absolute; left: 0; top: 0; width: 100%; pointer-events: none;
+  background: transparent;
+}
+.glitch::before { color: hsl(var(--neon-pink)); mix-blend-mode: screen; animation: glitch-r 3.2s steps(1, end) infinite; opacity: 0.85; }
+.glitch::after  { color: hsl(var(--neon-cyan)); mix-blend-mode: screen; animation: glitch-c 2.8s steps(1, end) infinite; opacity: 0.85; }
+
+/* Breathing neon button */
+@keyframes breathing-btn {
+  0%, 100% {
+    box-shadow: 0 0 10px hsl(var(--neon) / 0.45), 0 0 28px hsl(var(--neon) / 0.25), inset 0 0 12px hsl(var(--neon) / 0.18);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 22px hsl(var(--neon) / 0.85), 0 0 60px hsl(var(--neon-purple) / 0.55), inset 0 0 18px hsl(var(--neon) / 0.3);
+    transform: scale(1.025);
+  }
+}
+.breathing-btn { animation: breathing-btn 2.6s ease-in-out infinite; }
+
+/* Smoke layer */
+@keyframes smoke-shift {
+  0%, 100% { transform: translate(0,0) scale(1); opacity: 0.5; }
+  50%      { transform: translate(2%, -1.5%) scale(1.08); opacity: 0.8; }
+}
+.animate-smoke { animation: smoke-shift 14s ease-in-out infinite; }
+
+/* Particle drift */
+@keyframes particle-drift {
+  0%   { transform: translate3d(0,0,0); opacity: 0; }
+  10%  { opacity: 1; }
+  100% { transform: translate3d(var(--dx, 80px), var(--dy, -120px), 0); opacity: 0; }
+}
+
+/* Page zoom-in transition */
+@keyframes zoom-in-page {
+  0% { transform: scale(0.92); opacity: 0; filter: blur(6px); }
+  100% { transform: scale(1); opacity: 1; filter: blur(0); }
+}
+.animate-zoom-in { animation: zoom-in-page 0.7s var(--transition-smooth) both; }
+
 /* Fullscreen player styles — strip ALL chrome, fill the screen */
 :fullscreen,
 :-webkit-full-screen,
