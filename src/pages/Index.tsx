@@ -218,8 +218,6 @@ const Index = ({ category }: Props) => {
             </>
           )}
 
-          <MobileBottomNav />
-          <div className="md:hidden h-20" aria-hidden />
         </div>
       )}
     </>
