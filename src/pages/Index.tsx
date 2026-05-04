@@ -8,7 +8,6 @@ import { ContentDetail } from "@/components/ContentDetail";
 import { ContentRow } from "@/components/ContentRow";
 import { HeroSlider } from "@/components/HeroSlider";
 import { Footer } from "@/components/Footer";
-import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { supabase } from "@/integrations/supabase/client";
 import { Category, Content, CATEGORIES } from "@/lib/types";
 
