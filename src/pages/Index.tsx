@@ -8,6 +8,7 @@ import { ContentDetail } from "@/components/ContentDetail";
 import { ContentRow } from "@/components/ContentRow";
 import { HeroSlider } from "@/components/HeroSlider";
 import { Footer } from "@/components/Footer";
+import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { supabase } from "@/integrations/supabase/client";
 import { Category, Content, CATEGORIES } from "@/lib/types";
 
@@ -93,7 +94,7 @@ const Index = ({ category }: Props) => {
       {showIntro && <Intro onDone={finishIntro} />}
 
       {!showIntro && (
-        <div className="min-h-screen relative">
+        <div className="min-h-screen relative animate-zoom-in">
           <div className="fixed inset-0 -z-10 animate-breathing pointer-events-none opacity-60" />
 
           <Header search={search} onSearchChange={setSearch} />
@@ -217,6 +218,9 @@ const Index = ({ category }: Props) => {
               <Footer />
             </>
           )}
+
+          <MobileBottomNav />
+          <div className="md:hidden h-20" aria-hidden />
         </div>
       )}
     </>
