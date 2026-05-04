@@ -97,8 +97,8 @@ export default function Auth() {
   return (
     <>
       <Helmet>
-        <title>Kirish — ZEI PROJECTION</title>
-        <meta name="description" content="ZEI PROJECTION — Premium VIP anime portaliga kirish." />
+        <title>Kirish — ZEI DUBBING</title>
+        <meta name="description" content="ZEI DUBBING — Premium streaming platformaga kirish." />
       </Helmet>
 
       <div
@@ -112,10 +112,10 @@ export default function Auth() {
           {stage === "intro" && (
             <div className="flex flex-col items-center gap-10 animate-fade-up">
               <h1
-                data-text="ZEI PROJECTION"
+                data-text="ZEI DUBBING"
                 className="glitch font-display text-4xl sm:text-6xl md:text-7xl font-black multineon-text tracking-[0.2em] text-center"
               >
-                ZEI PROJECTION
+                ZEI DUBBING
               </h1>
 
               <p className="text-xs sm:text-sm text-white/55 tracking-[0.3em] uppercase">
@@ -138,13 +138,13 @@ export default function Auth() {
             <div className="w-full flex flex-col items-center animate-zoom-in">
               <div className="text-center mb-8">
                 <h1
-                  data-text="ZEI PROJECTION"
+                  data-text="ZEI DUBBING"
                   className="glitch font-display text-2xl sm:text-3xl multineon-text tracking-[0.2em]"
                 >
-                  ZEI PROJECTION
+                  ZEI DUBBING
                 </h1>
                 <p className="text-[11px] text-white/50 mt-2 tracking-widest uppercase">
-                  Premium Anime Portal
+                  Premium Streaming Platforma
                 </p>
               </div>
 

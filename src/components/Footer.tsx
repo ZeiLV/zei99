@@ -5,8 +5,8 @@ export const Footer = () => (
     <div className="glass rounded-2xl px-5 py-6 flex flex-col items-center gap-5">
       <SocialLinks />
       <div className="text-center text-[11px] sm:text-xs leading-relaxed text-foreground/60 font-light max-w-md">
-        <p>© 2025 Zei Projection. Barcha huquqlar himoyalangan.</p>
-        <p className="mt-1">Xavfsizlik Zei Projection tomonidan kafolatlangan.</p>
+        <p>© 2025 Zei Dubbing. Barcha huquqlar himoyalangan.</p>
+        <p className="mt-1">Xavfsizlik Zei Dubbing tomonidan kafolatlangan.</p>
         <p className="mt-1">
           Ushbu streaming platforma{" "}
           <a

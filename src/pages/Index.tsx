@@ -8,7 +8,6 @@ import { ContentDetail } from "@/components/ContentDetail";
 import { ContentRow } from "@/components/ContentRow";
 import { HeroSlider } from "@/components/HeroSlider";
 import { Footer } from "@/components/Footer";
-import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { supabase } from "@/integrations/supabase/client";
 import { Category, Content, CATEGORIES } from "@/lib/types";
 
@@ -78,10 +77,10 @@ const Index = ({ category }: Props) => {
   const categoryMeta = category ? CATEGORIES.find((c) => c.value === category) : null;
   const pageTitle = categoryMeta
     ? `${categoryMeta.label} — ZEI DUBBING`
-    : "ZEI DUBBING — Premium VIP Anime Portal";
+    : "ZEI DUBBING — Premium Streaming Platforma";
   const pageDesc = categoryMeta
     ? `${categoryMeta.label} kategoriyasidagi eng yaxshi kontent — ZEI DUBBING o'zbek tilida.`
-    : "ZEI DUBBING — anime, drama, kino va multfilm uchun premium VIP portal. O'zbek tilida tarjima va yuqori sifatli kontent.";
+    : "ZEI DUBBING — anime, drama, kino va multfilm uchun premium streaming platforma. O'zbek tilida tarjima va yuqori sifatli kontent.";
 
   return (
     <>
@@ -219,8 +218,6 @@ const Index = ({ category }: Props) => {
             </>
           )}
 
-          <MobileBottomNav />
-          <div className="md:hidden h-20" aria-hidden />
         </div>
       )}
     </>
