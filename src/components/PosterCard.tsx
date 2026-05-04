@@ -22,7 +22,10 @@ export const PosterCard = ({ content, onClick }: Props) => {
       onClick={onClick}
       className="group flex flex-col text-left w-full focus:outline-none"
     >
-      <div className="relative w-full overflow-hidden rounded-xl bg-secondary" style={{ aspectRatio: "9 / 16" }}>
+      <div
+        className="relative w-full overflow-hidden rounded-xl bg-secondary transition-all duration-500 ease-out group-hover:scale-[1.04] group-hover:shadow-[0_0_22px_hsl(var(--neon)/0.55),0_0_55px_hsl(var(--neon-purple)/0.35)] group-hover:ring-1 group-hover:ring-neon/60"
+        style={{ aspectRatio: "9 / 16" }}
+      >
         {content.poster_url ? (
           <img
             src={content.poster_url}
