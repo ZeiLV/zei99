@@ -69,6 +69,7 @@ export type Database = {
         Row: {
           content_id: string
           created_at: string
+          early_access_until: string | null
           episode_number: number
           gdrive_url: string
           id: string
@@ -80,6 +81,7 @@ export type Database = {
         Insert: {
           content_id: string
           created_at?: string
+          early_access_until?: string | null
           episode_number: number
           gdrive_url: string
           id?: string
@@ -91,6 +93,7 @@ export type Database = {
         Update: {
           content_id?: string
           created_at?: string
+          early_access_until?: string | null
           episode_number?: number
           gdrive_url?: string
           id?: string
