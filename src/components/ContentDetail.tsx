@@ -166,10 +166,23 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
               videoType={selected.video_type}
               gdriveUrl={selected.gdrive_url}
               videoUrl={selected.video_url}
-              isVip={selected.is_vip}
+              isVip={isEpisodeLocked(selected, userIsVip)}
             />
-            <div className="mt-6 font-display text-sm tracking-widest text-foreground/90">
-              EP {selected.episode_number}: {selected.title}
+            <div className="mt-6 font-display text-sm tracking-widest text-foreground/90 flex items-center gap-2 flex-wrap">
+              <span>EP {selected.episode_number}: {selected.title}</span>
+              {isInEarlyAccess(selected) && !userIsVip && !selected.is_vip && (
+                <span
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-display tracking-widest"
+                  style={{
+                    background: "hsl(45 95% 55% / 0.15)",
+                    color: "hsl(45 95% 60%)",
+                    border: "1px solid hsl(45 95% 55% / 0.5)",
+                  }}
+                >
+                  <Clock3 className="h-3 w-3" />
+                  VIP ERTA — {formatCountdown(selected.early_access_until!)}
+                </span>
+              )}
             </div>
           </div>
         )}
