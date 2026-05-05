@@ -188,6 +188,7 @@ const AdminEpisodes = () => {
                     gdrive_url: ep.gdrive_url ?? "",
                     video_url: ep.video_url ?? "",
                     is_vip: ep.is_vip,
+                    early_access_until: ep.early_access_until,
                   })
                 }
               >
