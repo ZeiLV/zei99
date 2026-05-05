@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Plus, Pencil, Trash2, X, Lock, Lock as LockIcon, Link2 } from "lucide-react";
+import { ArrowLeft, Plus, Pencil, Trash2, X, Lock, Lock as LockIcon, Link2, Clock3 } from "lucide-react";
 import { toast } from "sonner";
 
 interface EpForm {
@@ -17,6 +17,7 @@ interface EpForm {
   gdrive_url: string;
   video_url: string;
   is_vip: boolean;
+  early_access_until: string | null;
 }
 
 const emptyEp = (next: number, vip: boolean): EpForm => ({
@@ -26,7 +27,15 @@ const emptyEp = (next: number, vip: boolean): EpForm => ({
   gdrive_url: "",
   video_url: "",
   is_vip: vip,
+  early_access_until: null,
 });
+
+const toLocalInput = (iso: string | null) => {
+  if (!iso) return "";
+  const d = new Date(iso);
+  const off = d.getTimezoneOffset();
+  return new Date(d.getTime() - off * 60000).toISOString().slice(0, 16);
+};
 
 const AdminEpisodes = () => {
   const { id } = useParams();
