@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Star, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import { VipBadge } from "./VipBadge";
 
 interface Review {
   id: string;
@@ -14,6 +15,7 @@ interface Review {
     display_name: string | null;
     avatar_url: string | null;
     public_id: string;
+    vip_until: string | null;
   } | null;
 }
 
@@ -39,7 +41,7 @@ export const Reviews = ({ contentId }: { contentId: string }) => {
       const ids = Array.from(new Set(list.map((r) => r.user_id)));
       const { data: profs } = await supabase
         .from("profiles")
-        .select("user_id, display_name, avatar_url, public_id")
+        .select("user_id, display_name, avatar_url, public_id, vip_until")
         .in("user_id", ids);
       const map = new Map((profs ?? []).map((p: any) => [p.user_id, p]));
       list.forEach((r) => (r.profile = map.get(r.user_id) ?? null));
@@ -193,6 +195,9 @@ export const Reviews = ({ contentId }: { contentId: string }) => {
                     <span className="text-sm font-medium truncate">
                       {r.profile?.display_name ?? "Foydalanuvchi"}
                     </span>
+                    {r.profile?.vip_until && new Date(r.profile.vip_until) > new Date() && (
+                      <VipBadge size="sm" />
+                    )}
                     <span className="flex items-center gap-1 text-xs text-neon">
                       <Star className="h-3 w-3 fill-neon" />
                       {r.rating}/10
