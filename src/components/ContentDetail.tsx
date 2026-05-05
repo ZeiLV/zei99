@@ -199,6 +199,7 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pb-16 animate-fade-up w-full">
             {episodes.map((ep) => {
               const active = selected?.id === ep.id;
+              const earlyLocked = isInEarlyAccess(ep) && !userIsVip && !ep.is_vip;
               return (
                 <button
                   key={ep.id}
@@ -213,7 +214,11 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-medium truncate">{ep.title}</div>
                     <div className="text-[11px] text-muted-foreground mt-0.5">
-                      {ep.is_vip ? "Premium epizod" : "Bepul tomosha"}
+                      {ep.is_vip
+                        ? "Premium epizod"
+                        : earlyLocked
+                        ? `VIP erta kirish — ${formatCountdown(ep.early_access_until!)}`
+                        : "Bepul tomosha"}
                     </div>
                   </div>
                   {ep.is_vip ? (
@@ -232,6 +237,17 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
                     >
                       OBUNA
                     </a>
+                  ) : earlyLocked ? (
+                    <span
+                      className="shrink-0 px-3 py-1.5 rounded-full font-display text-[10px] tracking-widest"
+                      style={{
+                        background: "hsl(45 95% 55% / 0.15)",
+                        color: "hsl(45 95% 60%)",
+                        border: "1px solid hsl(45 95% 55% / 0.5)",
+                      }}
+                    >
+                      VIP ERTA
+                    </span>
                   ) : (
                     <span className="shrink-0 px-3 py-1.5 rounded-full font-display text-[10px] tracking-widest text-neon border border-neon/40 bg-neon/10">
                       KO'RISH
