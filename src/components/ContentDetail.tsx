@@ -75,12 +75,12 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
     })();
   }, [content.id, initialEpisodeNumber]);
 
-  // Increment view once per content open (when a non-vip episode actually plays)
+  // Increment view once per content open (when an unlocked episode actually plays)
   useEffect(() => {
-    if (!selected || selected.is_vip || viewLogged.current) return;
+    if (!selected || isEpisodeLocked(selected, userIsVip) || viewLogged.current) return;
     viewLogged.current = true;
     supabase.rpc("increment_views", { _content_id: content.id });
-  }, [selected, content.id]);
+  }, [selected, content.id, userIsVip]);
 
   return (
     <div className="min-h-screen pt-20 sm:pt-24 animate-fade-up">
