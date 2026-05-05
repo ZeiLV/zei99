@@ -404,3 +404,25 @@ iframe:-webkit-full-screen {
   border: 0 !important;
 }
 
+
+/* VIP Badge — pulsing glow */
+.vip-badge {
+  box-shadow: 0 0 8px hsl(45 95% 60% / 0.55), 0 0 16px hsl(45 95% 60% / 0.25);
+  animation: vip-pulse 2.4s ease-in-out infinite;
+  white-space: nowrap;
+}
+@keyframes vip-pulse {
+  0%, 100% { box-shadow: 0 0 6px hsl(45 95% 60% / 0.45), 0 0 14px hsl(45 95% 60% / 0.2); }
+  50%      { box-shadow: 0 0 14px hsl(45 95% 65% / 0.85), 0 0 26px hsl(35 100% 55% / 0.5); }
+}
+
+/* VIP progress bar (profile dialog) */
+.vip-progress {
+  background: linear-gradient(90deg, hsl(45 95% 55%), hsl(35 100% 50%));
+  box-shadow: 0 0 10px hsl(45 95% 55% / 0.6) inset, 0 0 8px hsl(45 95% 55% / 0.4);
+}
+
+/* PWA standalone polish — extra safe-area padding */
+@media (display-mode: standalone) {
+  body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+}
