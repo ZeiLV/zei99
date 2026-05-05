@@ -284,6 +284,72 @@ const AdminEpisodes = () => {
               />
             </div>
 
+            {!editing.is_vip && (
+              <div className="p-3 glass rounded-lg space-y-2">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-display text-sm tracking-widest flex items-center gap-2">
+                      <Clock3 className="h-3.5 w-3.5" /> VIP ERTA KIRISH
+                    </div>
+                    <div className="text-[11px] text-muted-foreground">
+                      Belgilangan vaqtgacha faqat VIP ko'radi, keyin hammaga ochiladi
+                    </div>
+                  </div>
+                  <Switch
+                    checked={!!editing.early_access_until}
+                    onCheckedChange={(v) =>
+                      setEditing({
+                        ...editing,
+                        early_access_until: v
+                          ? new Date(Date.now() + 24 * 3600 * 1000).toISOString()
+                          : null,
+                      })
+                    }
+                  />
+                </div>
+                {editing.early_access_until && (
+                  <>
+                    <Input
+                      type="datetime-local"
+                      value={toLocalInput(editing.early_access_until)}
+                      onChange={(e) =>
+                        setEditing({
+                          ...editing,
+                          early_access_until: e.target.value
+                            ? new Date(e.target.value).toISOString()
+                            : null,
+                        })
+                      }
+                    />
+                    <div className="flex flex-wrap gap-1">
+                      {[
+                        { label: "+6 soat", h: 6 },
+                        { label: "+24 soat", h: 24 },
+                        { label: "+3 kun", h: 72 },
+                        { label: "+7 kun", h: 168 },
+                      ].map((p) => (
+                        <button
+                          key={p.h}
+                          type="button"
+                          onClick={() =>
+                            setEditing({
+                              ...editing,
+                              early_access_until: new Date(
+                                Date.now() + p.h * 3600 * 1000
+                              ).toISOString(),
+                            })
+                          }
+                          className="px-2 py-1 rounded text-[10px] font-display tracking-widest glass text-foreground/70 hover:text-neon"
+                        >
+                          {p.label}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+
             <div className="flex justify-end gap-2 pt-2">
               <Button variant="ghost" onClick={() => setEditing(null)}>Bekor</Button>
               <Button onClick={save} className="bg-neon text-primary-foreground hover:bg-neon/90">
