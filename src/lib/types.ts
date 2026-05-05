@@ -28,6 +28,7 @@ export interface Episode {
   video_url: string | null;
   video_type: VideoType;
   is_vip: boolean;
+  early_access_until: string | null;
   created_at: string;
 }
 

@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Content, Episode } from "@/lib/types";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft, Star, Eye, Calendar, Clock } from "lucide-react";
+import { ArrowLeft, Star, Eye, Calendar, Clock, Clock3 } from "lucide-react";
 import { VideoPlayer } from "./VideoPlayer";
 import { Reviews } from "./Reviews";
+import { isEpisodeLocked, isInEarlyAccess, formatCountdown } from "@/lib/earlyAccess";
+import { useAuth } from "@/hooks/useAuth";
 
 interface Props {
   content: Content;
@@ -18,11 +20,21 @@ const formatViews = (n: number) => {
 };
 
 export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) => {
+  const { isVip: userIsVip } = useAuth();
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [selected, setSelected] = useState<Episode | null>(null);
   const [loading, setLoading] = useState(true);
+  const [, setTick] = useState(0);
   const viewLogged = useRef(false);
   const playerRef = useRef<HTMLDivElement>(null);
+
+  // Re-render every second so countdowns update
+  useEffect(() => {
+    const hasCountdown = episodes.some((e) => isInEarlyAccess(e));
+    if (!hasCountdown) return;
+    const t = setInterval(() => setTick((x) => x + 1), 1000);
+    return () => clearInterval(t);
+  }, [episodes]);
 
   // Force desktop viewport on the watch page (mobile responsiveness preserved elsewhere)
   useEffect(() => {
@@ -63,12 +75,12 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
     })();
   }, [content.id, initialEpisodeNumber]);
 
-  // Increment view once per content open (when a non-vip episode actually plays)
+  // Increment view once per content open (when an unlocked episode actually plays)
   useEffect(() => {
-    if (!selected || selected.is_vip || viewLogged.current) return;
+    if (!selected || isEpisodeLocked(selected, userIsVip) || viewLogged.current) return;
     viewLogged.current = true;
     supabase.rpc("increment_views", { _content_id: content.id });
-  }, [selected, content.id]);
+  }, [selected, content.id, userIsVip]);
 
   return (
     <div className="min-h-screen pt-20 sm:pt-24 animate-fade-up">
@@ -154,10 +166,23 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
               videoType={selected.video_type}
               gdriveUrl={selected.gdrive_url}
               videoUrl={selected.video_url}
-              isVip={selected.is_vip}
+              isVip={isEpisodeLocked(selected, userIsVip)}
             />
-            <div className="mt-6 font-display text-sm tracking-widest text-foreground/90">
-              EP {selected.episode_number}: {selected.title}
+            <div className="mt-6 font-display text-sm tracking-widest text-foreground/90 flex items-center gap-2 flex-wrap">
+              <span>EP {selected.episode_number}: {selected.title}</span>
+              {isInEarlyAccess(selected) && !userIsVip && !selected.is_vip && (
+                <span
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-display tracking-widest"
+                  style={{
+                    background: "hsl(45 95% 55% / 0.15)",
+                    color: "hsl(45 95% 60%)",
+                    border: "1px solid hsl(45 95% 55% / 0.5)",
+                  }}
+                >
+                  <Clock3 className="h-3 w-3" />
+                  VIP ERTA — {formatCountdown(selected.early_access_until!)}
+                </span>
+              )}
             </div>
           </div>
         )}
@@ -174,6 +199,7 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pb-16 animate-fade-up w-full">
             {episodes.map((ep) => {
               const active = selected?.id === ep.id;
+              const earlyLocked = isInEarlyAccess(ep) && !userIsVip && !ep.is_vip;
               return (
                 <button
                   key={ep.id}
@@ -188,7 +214,11 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-medium truncate">{ep.title}</div>
                     <div className="text-[11px] text-muted-foreground mt-0.5">
-                      {ep.is_vip ? "Premium epizod" : "Bepul tomosha"}
+                      {ep.is_vip
+                        ? "Premium epizod"
+                        : earlyLocked
+                        ? `VIP erta kirish — ${formatCountdown(ep.early_access_until!)}`
+                        : "Bepul tomosha"}
                     </div>
                   </div>
                   {ep.is_vip ? (
@@ -207,6 +237,17 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
                     >
                       OBUNA
                     </a>
+                  ) : earlyLocked ? (
+                    <span
+                      className="shrink-0 px-3 py-1.5 rounded-full font-display text-[10px] tracking-widest"
+                      style={{
+                        background: "hsl(45 95% 55% / 0.15)",
+                        color: "hsl(45 95% 60%)",
+                        border: "1px solid hsl(45 95% 55% / 0.5)",
+                      }}
+                    >
+                      VIP ERTA
+                    </span>
                   ) : (
                     <span className="shrink-0 px-3 py-1.5 rounded-full font-display text-[10px] tracking-widest text-neon border border-neon/40 bg-neon/10">
                       KO'RISH
