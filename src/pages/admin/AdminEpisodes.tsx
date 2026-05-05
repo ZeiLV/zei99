@@ -74,6 +74,7 @@ const AdminEpisodes = () => {
       gdrive_url: editing.video_type === "gdrive" ? editing.gdrive_url.trim() : "",
       video_url: editing.video_type === "direct" ? editing.video_url.trim() : null,
       is_vip: editing.is_vip,
+      early_access_until: editing.early_access_until,
     };
 
     const { error } = editing.id
