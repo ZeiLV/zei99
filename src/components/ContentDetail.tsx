@@ -20,11 +20,21 @@ const formatViews = (n: number) => {
 };
 
 export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) => {
+  const { isVip: userIsVip } = useAuth();
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [selected, setSelected] = useState<Episode | null>(null);
   const [loading, setLoading] = useState(true);
+  const [, setTick] = useState(0);
   const viewLogged = useRef(false);
   const playerRef = useRef<HTMLDivElement>(null);
+
+  // Re-render every second so countdowns update
+  useEffect(() => {
+    const hasCountdown = episodes.some((e) => isInEarlyAccess(e));
+    if (!hasCountdown) return;
+    const t = setInterval(() => setTick((x) => x + 1), 1000);
+    return () => clearInterval(t);
+  }, [episodes]);
 
   // Force desktop viewport on the watch page (mobile responsiveness preserved elsewhere)
   useEffect(() => {
