@@ -160,32 +160,98 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
         )}
 
         {/* Player */}
-        {selected && (
-          <div ref={playerRef} className="mt-10 sm:mt-12 scroll-mt-24" style={{ marginBottom: "2.5rem" }}>
-            <VideoPlayer
-              videoType={selected.video_type}
-              gdriveUrl={selected.gdrive_url}
-              videoUrl={selected.video_url}
-              isVip={isEpisodeLocked(selected, userIsVip)}
-            />
-            <div className="mt-6 font-display text-sm tracking-widest text-foreground/90 flex items-center gap-2 flex-wrap">
-              <span>EP {selected.episode_number}: {selected.title}</span>
-              {isInEarlyAccess(selected) && !userIsVip && !selected.is_vip && (
-                <span
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-display tracking-widest"
-                  style={{
-                    background: "hsl(45 95% 55% / 0.15)",
-                    color: "hsl(45 95% 60%)",
-                    border: "1px solid hsl(45 95% 55% / 0.5)",
-                  }}
-                >
-                  <Clock3 className="h-3 w-3" />
-                  VIP ERTA — {formatCountdown(selected.early_access_until!)}
-                </span>
+        {selected && (() => {
+          const has4K = !!selected.quality_4k_url;
+          const hasServer2 = !!selected.server2_url;
+          return (
+            <div ref={playerRef} className="mt-10 sm:mt-12 scroll-mt-24" style={{ marginBottom: "2.5rem" }}>
+              {/* Server / Quality controls */}
+              {(hasServer2 || has4K) && (
+                <div className="mb-3 flex flex-wrap items-center gap-2">
+                  {hasServer2 && (
+                    <div className="flex items-center gap-1 glass rounded-full p-1">
+                      <span className="text-[10px] font-display tracking-widest text-foreground/60 px-2">SERVER</span>
+                      {[1, 2].map((s) => (
+                        <button
+                          key={s}
+                          onClick={() => setServer(s as 1 | 2)}
+                          className={`px-3 py-1 rounded-full text-[10px] font-display tracking-widest transition-all ${
+                            server === s ? "bg-neon/20 text-neon neon-glow-sm" : "text-foreground/60 hover:text-neon"
+                          }`}
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  {has4K && (
+                    <div className="flex items-center gap-1 glass rounded-full p-1">
+                      <span className="text-[10px] font-display tracking-widest text-foreground/60 px-2">SIFAT</span>
+                      {(["hd", "4k"] as const).map((q) => (
+                        <button
+                          key={q}
+                          onClick={() => {
+                            if (q === "4k" && !userIsVip) return;
+                            setQuality(q);
+                          }}
+                          className={`px-3 py-1 rounded-full text-[10px] font-display tracking-widest transition-all ${
+                            quality === q
+                              ? "bg-neon/20 text-neon neon-glow-sm"
+                              : q === "4k" && !userIsVip
+                              ? "text-amber-400/70"
+                              : "text-foreground/60 hover:text-neon"
+                          }`}
+                          title={q === "4k" && !userIsVip ? "Faqat VIP" : undefined}
+                        >
+                          {q === "4k" ? "4K 👑" : "HD"}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  {userIsVip && (
+                    <span className="text-[10px] font-display tracking-widest text-neon-pink ml-auto">
+                      ⚡ VIP PRIORITY
+                    </span>
+                  )}
+                </div>
               )}
+              <VideoPlayer
+                videoType={selected.video_type}
+                gdriveUrl={
+                  quality === "4k" && selected.quality_4k_url
+                    ? selected.quality_4k_url
+                    : server === 2 && selected.server2_url
+                    ? selected.server2_url
+                    : selected.gdrive_url
+                }
+                videoUrl={
+                  quality === "4k" && selected.quality_4k_url
+                    ? selected.quality_4k_url
+                    : server === 2 && selected.server2_url
+                    ? selected.server2_url
+                    : selected.video_url
+                }
+                isVip={isEpisodeLocked(selected, userIsVip)}
+              />
+              <div className="mt-6 font-display text-sm tracking-widest text-foreground/90 flex items-center gap-2 flex-wrap">
+                <span>EP {selected.episode_number}: {selected.title}</span>
+                {isInEarlyAccess(selected) && !userIsVip && !selected.is_vip && (
+                  <span
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-display tracking-widest"
+                    style={{
+                      background: "hsl(45 95% 55% / 0.15)",
+                      color: "hsl(45 95% 60%)",
+                      border: "1px solid hsl(45 95% 55% / 0.5)",
+                    }}
+                  >
+                    <Clock3 className="h-3 w-3" />
+                    VIP ERTA — {formatCountdown(selected.early_access_until!)}
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* Episodes */}
         <h2 className="font-display text-lg tracking-widest mb-6 text-foreground/90" style={{ marginTop: "2.5rem" }}>
