@@ -16,6 +16,8 @@ interface EpForm {
   video_type: VideoType;
   gdrive_url: string;
   video_url: string;
+  server2_url: string;
+  quality_4k_url: string;
   is_vip: boolean;
   early_access_until: string | null;
 }
@@ -26,6 +28,8 @@ const emptyEp = (next: number, vip: boolean): EpForm => ({
   video_type: "gdrive",
   gdrive_url: "",
   video_url: "",
+  server2_url: "",
+  quality_4k_url: "",
   is_vip: vip,
   early_access_until: null,
 });
