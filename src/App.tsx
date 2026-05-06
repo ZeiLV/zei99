@@ -35,6 +35,7 @@ const App = () => (
               <Route path="/drama" element={<AuthGuard><Index category="drama" /></AuthGuard>} />
               <Route path="/kino" element={<AuthGuard><Index category="kino" /></AuthGuard>} />
               <Route path="/multfilm" element={<AuthGuard><Index category="multfilm" /></AuthGuard>} />
+              <Route path="/voting" element={<AuthGuard><Voting /></AuthGuard>} />
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<AdminDashboard />} />
                 <Route path="content" element={<AdminContentList />} />
