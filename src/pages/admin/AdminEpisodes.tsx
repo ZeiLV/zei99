@@ -279,6 +279,22 @@ const AdminEpisodes = () => {
               </Field>
             )}
 
+            <Field label="Server 2 (zaxira) — ixtiyoriy">
+              <Input
+                value={editing.server2_url}
+                onChange={(e) => setEditing({ ...editing, server2_url: e.target.value })}
+                placeholder="Boshqa server URL"
+              />
+            </Field>
+
+            <Field label="4K sifat (faqat VIP) — ixtiyoriy">
+              <Input
+                value={editing.quality_4k_url}
+                onChange={(e) => setEditing({ ...editing, quality_4k_url: e.target.value })}
+                placeholder="4K video URL"
+              />
+            </Field>
+
             <div className="flex items-center justify-between p-3 glass rounded-lg">
               <div>
                 <div className="font-display text-sm tracking-widest flex items-center gap-2">
