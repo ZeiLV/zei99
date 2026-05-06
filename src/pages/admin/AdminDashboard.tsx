@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Film, Tv, Eye, TrendingUp, Plus } from "lucide-react";
+import { Film, Tv, Eye, TrendingUp, Plus, Vote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CATEGORIES } from "@/lib/types";
 
