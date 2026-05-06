@@ -1,4 +1,4 @@
-import { LogOut, Search, X } from "lucide-react";
+import { LogOut, Search, Vote, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { AdminLoginModal } from "./AdminLoginModal";
@@ -85,6 +85,16 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
                   {c.label.toUpperCase()}
                 </NavLink>
               ))}
+              <NavLink
+                to="/voting"
+                className={({ isActive }) =>
+                  `px-3 py-1.5 rounded-full text-xs font-display tracking-widest transition-all inline-flex items-center gap-1 ${
+                    isActive ? "bg-amber-400/15 text-amber-400" : "text-amber-400/80 hover:text-amber-400"
+                  }`
+                }
+              >
+                <Vote className="h-3 w-3" /> OVOZ
+              </NavLink>
             </nav>
 
             <div className="flex items-center gap-2 sm:gap-2.5 relative">
@@ -169,6 +179,16 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
                 {c.label.toUpperCase()}
               </NavLink>
             ))}
+            <NavLink
+              to="/voting"
+              className={({ isActive }) =>
+                `shrink-0 px-3 py-1 rounded-full text-[11px] font-display tracking-widest transition-all inline-flex items-center gap-1 ${
+                  isActive ? "bg-amber-400/15 text-amber-400" : "text-amber-400/80"
+                }`
+              }
+            >
+              <Vote className="h-3 w-3" /> OVOZ
+            </NavLink>
           </nav>
         </div>
       </header>

@@ -15,6 +15,8 @@ import AdminContentList from "./pages/admin/AdminContentList.tsx";
 import AdminContentEdit from "./pages/admin/AdminContentEdit.tsx";
 import AdminEpisodes from "./pages/admin/AdminEpisodes.tsx";
 import AdminVip from "./pages/admin/AdminVip.tsx";
+import AdminVoting from "./pages/admin/AdminVoting.tsx";
+import Voting from "./pages/Voting.tsx";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +35,7 @@ const App = () => (
               <Route path="/drama" element={<AuthGuard><Index category="drama" /></AuthGuard>} />
               <Route path="/kino" element={<AuthGuard><Index category="kino" /></AuthGuard>} />
               <Route path="/multfilm" element={<AuthGuard><Index category="multfilm" /></AuthGuard>} />
+              <Route path="/voting" element={<AuthGuard><Voting /></AuthGuard>} />
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<AdminDashboard />} />
                 <Route path="content" element={<AdminContentList />} />
@@ -40,6 +43,7 @@ const App = () => (
                 <Route path="content/:id" element={<AdminContentEdit />} />
                 <Route path="content/:id/episodes" element={<AdminEpisodes />} />
                 <Route path="vip" element={<AdminVip />} />
+                <Route path="voting" element={<AdminVoting />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>

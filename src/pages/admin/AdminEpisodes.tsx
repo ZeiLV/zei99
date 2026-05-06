@@ -16,6 +16,8 @@ interface EpForm {
   video_type: VideoType;
   gdrive_url: string;
   video_url: string;
+  server2_url: string;
+  quality_4k_url: string;
   is_vip: boolean;
   early_access_until: string | null;
 }
@@ -26,6 +28,8 @@ const emptyEp = (next: number, vip: boolean): EpForm => ({
   video_type: "gdrive",
   gdrive_url: "",
   video_url: "",
+  server2_url: "",
+  quality_4k_url: "",
   is_vip: vip,
   early_access_until: null,
 });
@@ -73,6 +77,8 @@ const AdminEpisodes = () => {
       video_type: editing.video_type,
       gdrive_url: editing.video_type === "gdrive" ? editing.gdrive_url.trim() : "",
       video_url: editing.video_type === "direct" ? editing.video_url.trim() : null,
+      server2_url: editing.server2_url.trim() || null,
+      quality_4k_url: editing.quality_4k_url.trim() || null,
       is_vip: editing.is_vip,
       early_access_until: editing.early_access_until,
     };
@@ -187,6 +193,8 @@ const AdminEpisodes = () => {
                     video_type: ep.video_type,
                     gdrive_url: ep.gdrive_url ?? "",
                     video_url: ep.video_url ?? "",
+                    server2_url: ep.server2_url ?? "",
+                    quality_4k_url: ep.quality_4k_url ?? "",
                     is_vip: ep.is_vip,
                     early_access_until: ep.early_access_until,
                   })
@@ -270,6 +278,22 @@ const AdminEpisodes = () => {
                 />
               </Field>
             )}
+
+            <Field label="Server 2 (zaxira) — ixtiyoriy">
+              <Input
+                value={editing.server2_url}
+                onChange={(e) => setEditing({ ...editing, server2_url: e.target.value })}
+                placeholder="Boshqa server URL"
+              />
+            </Field>
+
+            <Field label="4K sifat (faqat VIP) — ixtiyoriy">
+              <Input
+                value={editing.quality_4k_url}
+                onChange={(e) => setEditing({ ...editing, quality_4k_url: e.target.value })}
+                placeholder="4K video URL"
+              />
+            </Field>
 
             <div className="flex items-center justify-between p-3 glass rounded-lg">
               <div>
