@@ -74,6 +74,8 @@ export type Database = {
           gdrive_url: string
           id: string
           is_vip: boolean
+          quality_4k_url: string | null
+          server2_url: string | null
           title: string
           video_type: string
           video_url: string | null
@@ -86,6 +88,8 @@ export type Database = {
           gdrive_url: string
           id?: string
           is_vip?: boolean
+          quality_4k_url?: string | null
+          server2_url?: string | null
           title: string
           video_type?: string
           video_url?: string | null
@@ -98,6 +102,8 @@ export type Database = {
           gdrive_url?: string
           id?: string
           is_vip?: boolean
+          quality_4k_url?: string | null
+          server2_url?: string | null
           title?: string
           video_type?: string
           video_url?: string | null
@@ -198,6 +204,65 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      voting_projects: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          poster_url: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          poster_url?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          poster_url?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      voting_votes: {
+        Row: {
+          created_at: string
+          id: string
+          project_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          project_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          project_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "voting_votes_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "voting_projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
