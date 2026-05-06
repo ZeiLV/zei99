@@ -1,4 +1,4 @@
-import { LogOut, Search, X } from "lucide-react";
+import { LogOut, Search, Vote, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { AdminLoginModal } from "./AdminLoginModal";
