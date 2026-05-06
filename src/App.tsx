@@ -15,6 +15,8 @@ import AdminContentList from "./pages/admin/AdminContentList.tsx";
 import AdminContentEdit from "./pages/admin/AdminContentEdit.tsx";
 import AdminEpisodes from "./pages/admin/AdminEpisodes.tsx";
 import AdminVip from "./pages/admin/AdminVip.tsx";
+import AdminVoting from "./pages/admin/AdminVoting.tsx";
+import Voting from "./pages/Voting.tsx";
 
 const queryClient = new QueryClient();
 
