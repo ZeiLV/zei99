@@ -85,6 +85,16 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
                   {c.label.toUpperCase()}
                 </NavLink>
               ))}
+              <NavLink
+                to="/voting"
+                className={({ isActive }) =>
+                  `px-3 py-1.5 rounded-full text-xs font-display tracking-widest transition-all inline-flex items-center gap-1 ${
+                    isActive ? "bg-amber-400/15 text-amber-400" : "text-amber-400/80 hover:text-amber-400"
+                  }`
+                }
+              >
+                <Vote className="h-3 w-3" /> OVOZ
+              </NavLink>
             </nav>
 
             <div className="flex items-center gap-2 sm:gap-2.5 relative">
