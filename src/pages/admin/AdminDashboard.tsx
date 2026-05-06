@@ -55,11 +55,18 @@ const AdminDashboard = () => {
           <h1 className="font-display text-2xl tracking-widest multineon-text">BOSHQARUV</h1>
           <p className="text-xs text-muted-foreground mt-1">Sayt holati va tezkor harakatlar</p>
         </div>
-        <Link to="/admin/content/new">
-          <Button className="bg-neon text-primary-foreground hover:bg-neon/90 neon-glow-sm">
-            <Plus className="h-4 w-4 mr-1" /> Yangi kontent
-          </Button>
-        </Link>
+        <div className="flex gap-2">
+          <Link to="/admin/voting">
+            <Button variant="ghost" className="border border-amber-400/30 text-amber-400">
+              <Vote className="h-4 w-4 mr-1" /> Ovoz berish
+            </Button>
+          </Link>
+          <Link to="/admin/content/new">
+            <Button className="bg-neon text-primary-foreground hover:bg-neon/90 neon-glow-sm">
+              <Plus className="h-4 w-4 mr-1" /> Yangi kontent
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
