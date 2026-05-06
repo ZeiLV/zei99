@@ -193,6 +193,8 @@ const AdminEpisodes = () => {
                     video_type: ep.video_type,
                     gdrive_url: ep.gdrive_url ?? "",
                     video_url: ep.video_url ?? "",
+                    server2_url: ep.server2_url ?? "",
+                    quality_4k_url: ep.quality_4k_url ?? "",
                     is_vip: ep.is_vip,
                     early_access_until: ep.early_access_until,
                   })
