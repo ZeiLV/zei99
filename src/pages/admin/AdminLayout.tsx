@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { LayoutDashboard, Film, LogOut, Home, Menu, X, Crown } from "lucide-react";
+import { LayoutDashboard, Film, LogOut, Home, Menu, X, Crown, Vote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const NAV = [
   { to: "/admin", end: true, label: "Boshqaruv", icon: LayoutDashboard },
   { to: "/admin/content", end: false, label: "Kontent", icon: Film },
   { to: "/admin/vip", end: false, label: "VIP", icon: Crown },
+  { to: "/admin/voting", end: false, label: "Ovoz berish", icon: Vote },
 ];
 
 const AdminLayout = () => {
