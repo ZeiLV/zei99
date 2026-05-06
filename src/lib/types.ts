@@ -29,7 +29,19 @@ export interface Episode {
   video_type: VideoType;
   is_vip: boolean;
   early_access_until: string | null;
+  server2_url: string | null;
+  quality_4k_url: string | null;
   created_at: string;
+}
+
+export interface VotingProject {
+  id: string;
+  title: string;
+  description: string | null;
+  poster_url: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 export const CATEGORIES: { value: Category; label: string; path: string }[] = [
