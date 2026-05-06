@@ -25,6 +25,8 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
   const [selected, setSelected] = useState<Episode | null>(null);
   const [loading, setLoading] = useState(true);
   const [, setTick] = useState(0);
+  const [server, setServer] = useState<1 | 2>(1);
+  const [quality, setQuality] = useState<"hd" | "4k">("hd");
   const viewLogged = useRef(false);
   const playerRef = useRef<HTMLDivElement>(null);
 
