@@ -234,6 +234,7 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
                     : selected.video_url
                 }
                 isVip={isEpisodeLocked(selected, userIsVip)}
+                earlyAccessUntil={selected.early_access_until}
               />
               <div className="mt-6 font-display text-sm tracking-widest text-foreground/90 flex items-center gap-2 flex-wrap">
                 <span>EP {selected.episode_number}: {selected.title}</span>
