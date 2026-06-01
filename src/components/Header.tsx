@@ -1,7 +1,6 @@
 import { LogOut, Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AdminLoginModal } from "./AdminLoginModal";
 import { VipStatusButton } from "./VipStatusButton";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -12,7 +11,6 @@ interface HeaderProps {
 
 export const Header = ({ search, onSearchChange }: HeaderProps) => {
   const [expanded, setExpanded] = useState(false);
-  const [adminOpen, setAdminOpen] = useState(false);
   const pressTimer = useRef<number | null>(null);
   const longPressed = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -27,7 +25,7 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
     longPressed.current = false;
     pressTimer.current = window.setTimeout(() => {
       longPressed.current = true;
-      setAdminOpen(true);
+      navigate("/admin");
     }, 3000);
   };
   const endPress = () => {
@@ -114,8 +112,7 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
           </div>
         </div>
       </header>
-
-      <AdminLoginModal open={adminOpen} onOpenChange={setAdminOpen} />
     </>
+
   );
 };

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { LayoutDashboard, Film, LogOut, Home, Menu, X, Crown, Vote } from "lucide-react";
+import { LayoutDashboard, Film, LogOut, Home, Menu, X, Crown, Vote, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const NAV = [
@@ -11,47 +10,110 @@ const NAV = [
   { to: "/admin/voting", end: false, label: "Ovoz berish", icon: Vote },
 ];
 
+const ADMIN_CODE = "ZEI99";
+const STORAGE_KEY = "zei-admin-unlocked";
+
+const PasscodeGate = ({ onUnlock }: { onUnlock: () => void }) => {
+  const [code, setCode] = useState("");
+  const [error, setError] = useState(false);
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (code.trim().toUpperCase() === ADMIN_CODE) {
+      sessionStorage.setItem(STORAGE_KEY, "1");
+      onUnlock();
+    } else {
+      setError(true);
+      setCode("");
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center px-5 bg-background">
+      <div className="fixed inset-0 -z-10 animate-breathing pointer-events-none opacity-50" />
+      <form
+        onSubmit={submit}
+        className="glass-strong rounded-2xl p-8 w-full max-w-sm space-y-6 border border-neon/30 neon-glow-md"
+      >
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-12 w-12 rounded-full flex items-center justify-center bg-neon/10 border border-neon/40 neon-glow-sm">
+            <Lock className="h-5 w-5 text-neon" />
+          </div>
+          <div className="font-display tracking-widest neon-text text-lg">ADMIN ACCESS</div>
+          <div className="text-[11px] text-foreground/60 text-center">
+            Davom etish uchun maxfiy kodni kiriting
+          </div>
+        </div>
+
+        <input
+          autoFocus
+          type="password"
+          inputMode="text"
+          autoComplete="off"
+          value={code}
+          onChange={(e) => {
+            setCode(e.target.value);
+            if (error) setError(false);
+          }}
+          placeholder="Kodni kiriting"
+          className={`w-full h-12 rounded-lg bg-transparent border text-center tracking-[0.4em] font-display text-lg outline-none transition-all ${
+            error
+              ? "border-destructive text-destructive placeholder:text-destructive/40"
+              : "border-neon/40 text-foreground focus:border-neon focus:neon-glow-sm placeholder:text-foreground/30"
+          }`}
+        />
+
+        {error && (
+          <div
+            className="text-center text-sm font-display tracking-widest animate-fade-up"
+            style={{
+              color: "hsl(0 90% 65%)",
+              textShadow: "0 0 8px hsl(0 90% 60% / 0.8), 0 0 18px hsl(0 90% 55% / 0.5)",
+            }}
+          >
+            KOD NOTO'G'RI!
+          </div>
+        )}
+
+        <button
+          type="submit"
+          disabled={!code}
+          className="w-full h-11 rounded-lg bg-neon text-primary-foreground font-display text-sm tracking-widest neon-glow-md disabled:opacity-40 transition-all hover:neon-glow-lg breathing-btn"
+        >
+          KIRISH
+        </button>
+      </form>
+    </div>
+  );
+};
+
 const AdminLayout = () => {
   const navigate = useNavigate();
-  const [authChecked, setAuthChecked] = useState(false);
+  const [unlocked, setUnlocked] = useState<boolean>(
+    () => sessionStorage.getItem(STORAGE_KEY) === "1"
+  );
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate("/", { replace: true });
-        return;
-      }
-      const { data: roles } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", session.user.id)
-        .eq("role", "admin")
-        .maybeSingle();
-      if (cancelled) return;
-      if (!roles) {
-        await supabase.auth.signOut();
-        navigate("/", { replace: true });
-        return;
-      }
-      setAuthChecked(true);
-    })();
-    return () => { cancelled = true; };
-  }, [navigate]);
+    if (unlocked) localStorage.setItem(STORAGE_KEY, "1");
+  }, [unlocked]);
 
-  const logout = async () => {
-    await supabase.auth.signOut();
-    navigate("/", { replace: true });
+  // Persist across tabs/refresh via localStorage too
+  useEffect(() => {
+    if (!unlocked && localStorage.getItem(STORAGE_KEY) === "1") {
+      sessionStorage.setItem(STORAGE_KEY, "1");
+      setUnlocked(true);
+    }
+  }, [unlocked]);
+
+  const logout = () => {
+    sessionStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STORAGE_KEY);
+    setUnlocked(false);
   };
 
-  if (!authChecked) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="h-10 w-10 rounded-full border-2 border-neon/20 border-t-neon animate-spin-neon" />
-      </div>
-    );
+  if (!unlocked) {
+    return <PasscodeGate onUnlock={() => setUnlocked(true)} />;
   }
 
   return (
