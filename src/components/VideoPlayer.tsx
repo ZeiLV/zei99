@@ -392,26 +392,37 @@ export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip, earlyAccess
           </div>
         )}
 
-        {/* VIP overlay */}
+        {/* VIP / Early-access lock overlay */}
         {isVip && (
           <div
-            className="w-full flex flex-col items-center justify-center gap-4 z-10 bg-background/60 backdrop-blur-sm"
+            className="w-full flex flex-col items-center justify-center gap-4 z-10 bg-background/70 backdrop-blur-md px-6 text-center"
             style={{ aspectRatio: "16 / 9" }}
           >
-            <div className="font-display text-lg sm:text-2xl multineon-text tracking-widest text-center px-6">
-              VIP Obuna Bo'ling
+            <div className="h-12 w-12 rounded-full flex items-center justify-center bg-neon/10 border border-neon/40 neon-glow-sm">
+              <Lock className="h-5 w-5 text-neon" />
             </div>
+            <div className="font-display text-sm sm:text-base text-foreground/90 max-w-md leading-relaxed">
+              Ushbu qism hozircha faqat VIP foydalanuvchilar uchun ochiq.
+            </div>
+            {earlyAccessUntil && new Date(earlyAccessUntil).getTime() > Date.now() && (
+              <div className="font-mono text-2xl sm:text-3xl multineon-text tracking-widest tabular-nums">
+                {formatCountdown(earlyAccessUntil)}
+              </div>
+            )}
             <a
-              href="https://t.me/m/QoYHq2A0Nzgy"
+              href="https://t.me/ZeiContactBot"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 py-3 rounded-full bg-neon text-primary-foreground font-display text-sm tracking-widest neon-glow-lg hover:scale-105 transition-transform"
+              className="px-6 py-3 rounded-full bg-neon text-primary-foreground font-display text-xs sm:text-sm tracking-widest neon-glow-lg hover:scale-105 transition-transform inline-flex items-center gap-2"
             >
-              OBUNA BO'LISH
+              <Crown className="h-4 w-4" />
+              VIP SOTIB OLISH
             </a>
           </div>
         )}
       </div>
+
+
 
       {/* Download button — under player, right-aligned */}
       {!isVip && hasSource && downloadUrl && (
