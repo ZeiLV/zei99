@@ -27,7 +27,7 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
     longPressed.current = false;
     pressTimer.current = window.setTimeout(() => {
       longPressed.current = true;
-      setAdminOpen(true);
+      navigate("/admin");
     }, 3000);
   };
   const endPress = () => {
