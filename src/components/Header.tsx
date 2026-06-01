@@ -1,8 +1,7 @@
-import { LogOut, Search, Vote, X } from "lucide-react";
+import { LogOut, Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AdminLoginModal } from "./AdminLoginModal";
-import { CATEGORIES } from "@/lib/types";
 import { VipStatusButton } from "./VipStatusButton";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -17,7 +16,6 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
   const pressTimer = useRef<number | null>(null);
   const longPressed = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
 
@@ -58,44 +56,6 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
             >
               ZEI DUBBING
             </button>
-
-            {/* Desktop nav */}
-            <nav className="hidden md:flex items-center gap-1">
-              <NavLink
-                to="/"
-                end
-                className={({ isActive }) =>
-                  `px-3 py-1.5 rounded-full text-xs font-display tracking-widest transition-all ${
-                    isActive ? "bg-neon/15 text-neon neon-glow-sm" : "text-foreground/70 hover:text-neon"
-                  }`
-                }
-              >
-                BOSH
-              </NavLink>
-              {CATEGORIES.map((c) => (
-                <NavLink
-                  key={c.value}
-                  to={c.path}
-                  className={({ isActive }) =>
-                    `px-3 py-1.5 rounded-full text-xs font-display tracking-widest transition-all ${
-                      isActive ? "bg-neon/15 text-neon neon-glow-sm" : "text-foreground/70 hover:text-neon"
-                    }`
-                  }
-                >
-                  {c.label.toUpperCase()}
-                </NavLink>
-              ))}
-              <NavLink
-                to="/voting"
-                className={({ isActive }) =>
-                  `px-3 py-1.5 rounded-full text-xs font-display tracking-widest transition-all inline-flex items-center gap-1 ${
-                    isActive ? "bg-amber-400/15 text-amber-400" : "text-amber-400/80 hover:text-amber-400"
-                  }`
-                }
-              >
-                <Vote className="h-3 w-3" /> OVOZ
-              </NavLink>
-            </nav>
 
             <div className="flex items-center gap-2 sm:gap-2.5 relative">
               <div
@@ -152,44 +112,6 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
               )}
             </div>
           </div>
-
-          {/* Mobile nav — horizontal scroll */}
-          <nav className="md:hidden flex items-center gap-1 pb-2 overflow-x-auto scrollbar-hide">
-            <NavLink
-              to="/"
-              end
-              className={({ isActive }) =>
-                `shrink-0 px-3 py-1 rounded-full text-[11px] font-display tracking-widest transition-all ${
-                  isActive ? "bg-neon/15 text-neon neon-glow-sm" : "text-foreground/70"
-                }`
-              }
-            >
-              BOSH
-            </NavLink>
-            {CATEGORIES.map((c) => (
-              <NavLink
-                key={c.value}
-                to={c.path}
-                className={({ isActive }) =>
-                  `shrink-0 px-3 py-1 rounded-full text-[11px] font-display tracking-widest transition-all ${
-                    isActive ? "bg-neon/15 text-neon neon-glow-sm" : "text-foreground/70"
-                  }`
-                }
-              >
-                {c.label.toUpperCase()}
-              </NavLink>
-            ))}
-            <NavLink
-              to="/voting"
-              className={({ isActive }) =>
-                `shrink-0 px-3 py-1 rounded-full text-[11px] font-display tracking-widest transition-all inline-flex items-center gap-1 ${
-                  isActive ? "bg-amber-400/15 text-amber-400" : "text-amber-400/80"
-                }`
-              }
-            >
-              <Vote className="h-3 w-3" /> OVOZ
-            </NavLink>
-          </nav>
         </div>
       </header>
 
