@@ -1,19 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 import { gdriveToStream } from "@/lib/gdrive";
-import { Maximize, Pause, Play, RotateCcw, RotateCw, Volume2, VolumeX, Gauge, Download, Crown } from "lucide-react";
+import { Maximize, Pause, Play, RotateCcw, RotateCw, Volume2, VolumeX, Gauge, Download, Crown, Lock } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { VipModal } from "./VipModal";
+import { formatCountdown } from "@/lib/earlyAccess";
 
 interface Props {
   videoType: "gdrive" | "direct";
   gdriveUrl: string | null;
   videoUrl: string | null;
   isVip: boolean;
+  earlyAccessUntil?: string | null;
 }
 
 const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
 
-export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip }: Props) => {
+export const VideoPlayer = ({ videoType, gdriveUrl, videoUrl, isVip, earlyAccessUntil }: Props) => {
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    if (!isVip || !earlyAccessUntil) return;
+    const id = setInterval(() => setTick((n) => n + 1), 1000);
+    return () => clearInterval(id);
+  }, [isVip, earlyAccessUntil]);
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
