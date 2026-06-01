@@ -112,8 +112,7 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
           </div>
         </div>
       </header>
-
-      <AdminLoginModal open={adminOpen} onOpenChange={setAdminOpen} />
     </>
+
   );
 };
