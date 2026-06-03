@@ -25,7 +25,7 @@ interface EpForm {
 const emptyEp = (next: number, vip: boolean): EpForm => ({
   episode_number: next,
   title: "",
-  video_type: "gdrive",
+  video_type: "direct",
   gdrive_url: "",
   video_url: "",
   server2_url: "",
@@ -65,18 +65,15 @@ const AdminEpisodes = () => {
   const save = async () => {
     if (!editing || !id) return;
     if (!editing.title.trim()) return toast.error("Sarlavha kerak");
-    if (editing.video_type === "gdrive" && !editing.gdrive_url.trim())
-      return toast.error("Google Drive havolasi kerak");
-    if (editing.video_type === "direct" && !editing.video_url.trim())
-      return toast.error("Video URL kerak");
+    if (!editing.video_url.trim()) return toast.error("Video URL kerak");
 
     const payload = {
       content_id: id,
       episode_number: Number(editing.episode_number),
       title: editing.title.trim(),
-      video_type: editing.video_type,
-      gdrive_url: editing.video_type === "gdrive" ? editing.gdrive_url.trim() : "",
-      video_url: editing.video_type === "direct" ? editing.video_url.trim() : null,
+      video_type: "direct" as VideoType,
+      gdrive_url: "",
+      video_url: editing.video_url.trim(),
       server2_url: editing.server2_url.trim() || null,
       quality_4k_url: editing.quality_4k_url.trim() || null,
       is_vip: editing.is_vip,
@@ -165,9 +162,9 @@ const AdminEpisodes = () => {
                 </div>
                 <div className="text-[10px] text-muted-foreground truncate flex items-center gap-1">
                   <span className="px-1.5 py-0.5 rounded bg-neon/10 text-neon font-display tracking-widest">
-                    {ep.video_type === "direct" ? "MP4" : "GDRIVE"}
+                    VIDEO
                   </span>
-                  <span className="truncate">{ep.video_type === "direct" ? ep.video_url : ep.gdrive_url}</span>
+                  <span className="truncate">{ep.video_url || ep.gdrive_url}</span>
                 </div>
               </div>
               <div className="flex items-center gap-1.5 shrink-0">
@@ -190,9 +187,9 @@ const AdminEpisodes = () => {
                     id: ep.id,
                     episode_number: ep.episode_number,
                     title: ep.title,
-                    video_type: ep.video_type,
+                    video_type: "direct",
                     gdrive_url: ep.gdrive_url ?? "",
-                    video_url: ep.video_url ?? "",
+                    video_url: ep.video_url ?? ep.gdrive_url ?? "",
                     server2_url: ep.server2_url ?? "",
                     quality_4k_url: ep.quality_4k_url ?? "",
                     is_vip: ep.is_vip,
@@ -238,46 +235,13 @@ const AdminEpisodes = () => {
               </div>
             </div>
 
-            <Field label="Video turi">
-              <div className="grid grid-cols-2 gap-1">
-                <button
-                  type="button"
-                  onClick={() => setEditing({ ...editing, video_type: "gdrive" })}
-                  className={`px-3 py-2 rounded-lg text-[11px] font-display tracking-widest transition-all ${
-                    editing.video_type === "gdrive" ? "bg-neon/15 text-neon neon-glow-sm" : "glass text-foreground/70"
-                  }`}
-                >
-                  GOOGLE DRIVE
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setEditing({ ...editing, video_type: "direct" })}
-                  className={`px-3 py-2 rounded-lg text-[11px] font-display tracking-widest transition-all ${
-                    editing.video_type === "direct" ? "bg-neon/15 text-neon neon-glow-sm" : "glass text-foreground/70"
-                  }`}
-                >
-                  TO'G'RIDAN MP4
-                </button>
-              </div>
+            <Field label="Video URL (MP4, HLS .m3u8, DoodStream yoki boshqa to'g'ridan-to'g'ri havola)">
+              <Input
+                value={editing.video_url}
+                onChange={(e) => setEditing({ ...editing, video_url: e.target.value })}
+                placeholder="https://example.com/video.mp4"
+              />
             </Field>
-
-            {editing.video_type === "gdrive" ? (
-              <Field label="Google Drive havolasi">
-                <Input
-                  value={editing.gdrive_url}
-                  onChange={(e) => setEditing({ ...editing, gdrive_url: e.target.value })}
-                  placeholder="https://drive.google.com/file/d/..../view"
-                />
-              </Field>
-            ) : (
-              <Field label="Video URL (MP4 yoki HLS)">
-                <Input
-                  value={editing.video_url}
-                  onChange={(e) => setEditing({ ...editing, video_url: e.target.value })}
-                  placeholder="https://example.com/video.mp4"
-                />
-              </Field>
-            )}
 
             <Field label="Server 2 (zaxira) — ixtiyoriy">
               <Input
