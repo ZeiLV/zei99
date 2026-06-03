@@ -65,18 +65,15 @@ const AdminEpisodes = () => {
   const save = async () => {
     if (!editing || !id) return;
     if (!editing.title.trim()) return toast.error("Sarlavha kerak");
-    if (editing.video_type === "gdrive" && !editing.gdrive_url.trim())
-      return toast.error("Google Drive havolasi kerak");
-    if (editing.video_type === "direct" && !editing.video_url.trim())
-      return toast.error("Video URL kerak");
+    if (!editing.video_url.trim()) return toast.error("Video URL kerak");
 
     const payload = {
       content_id: id,
       episode_number: Number(editing.episode_number),
       title: editing.title.trim(),
-      video_type: editing.video_type,
-      gdrive_url: editing.video_type === "gdrive" ? editing.gdrive_url.trim() : "",
-      video_url: editing.video_type === "direct" ? editing.video_url.trim() : null,
+      video_type: "direct" as VideoType,
+      gdrive_url: "",
+      video_url: editing.video_url.trim(),
       server2_url: editing.server2_url.trim() || null,
       quality_4k_url: editing.quality_4k_url.trim() || null,
       is_vip: editing.is_vip,
