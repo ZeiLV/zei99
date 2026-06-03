@@ -25,7 +25,7 @@ interface EpForm {
 const emptyEp = (next: number, vip: boolean): EpForm => ({
   episode_number: next,
   title: "",
-  video_type: "gdrive",
+  video_type: "direct",
   gdrive_url: "",
   video_url: "",
   server2_url: "",
