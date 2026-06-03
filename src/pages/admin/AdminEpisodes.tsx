@@ -235,46 +235,13 @@ const AdminEpisodes = () => {
               </div>
             </div>
 
-            <Field label="Video turi">
-              <div className="grid grid-cols-2 gap-1">
-                <button
-                  type="button"
-                  onClick={() => setEditing({ ...editing, video_type: "gdrive" })}
-                  className={`px-3 py-2 rounded-lg text-[11px] font-display tracking-widest transition-all ${
-                    editing.video_type === "gdrive" ? "bg-neon/15 text-neon neon-glow-sm" : "glass text-foreground/70"
-                  }`}
-                >
-                  GOOGLE DRIVE
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setEditing({ ...editing, video_type: "direct" })}
-                  className={`px-3 py-2 rounded-lg text-[11px] font-display tracking-widest transition-all ${
-                    editing.video_type === "direct" ? "bg-neon/15 text-neon neon-glow-sm" : "glass text-foreground/70"
-                  }`}
-                >
-                  TO'G'RIDAN MP4
-                </button>
-              </div>
+            <Field label="Video URL (MP4, HLS .m3u8, DoodStream yoki boshqa to'g'ridan-to'g'ri havola)">
+              <Input
+                value={editing.video_url}
+                onChange={(e) => setEditing({ ...editing, video_url: e.target.value })}
+                placeholder="https://example.com/video.mp4"
+              />
             </Field>
-
-            {editing.video_type === "gdrive" ? (
-              <Field label="Google Drive havolasi">
-                <Input
-                  value={editing.gdrive_url}
-                  onChange={(e) => setEditing({ ...editing, gdrive_url: e.target.value })}
-                  placeholder="https://drive.google.com/file/d/..../view"
-                />
-              </Field>
-            ) : (
-              <Field label="Video URL (MP4 yoki HLS)">
-                <Input
-                  value={editing.video_url}
-                  onChange={(e) => setEditing({ ...editing, video_url: e.target.value })}
-                  placeholder="https://example.com/video.mp4"
-                />
-              </Field>
-            )}
 
             <Field label="Server 2 (zaxira) — ixtiyoriy">
               <Input
