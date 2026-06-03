@@ -162,9 +162,9 @@ const AdminEpisodes = () => {
                 </div>
                 <div className="text-[10px] text-muted-foreground truncate flex items-center gap-1">
                   <span className="px-1.5 py-0.5 rounded bg-neon/10 text-neon font-display tracking-widest">
-                    {ep.video_type === "direct" ? "MP4" : "GDRIVE"}
+                    VIDEO
                   </span>
-                  <span className="truncate">{ep.video_type === "direct" ? ep.video_url : ep.gdrive_url}</span>
+                  <span className="truncate">{ep.video_url || ep.gdrive_url}</span>
                 </div>
               </div>
               <div className="flex items-center gap-1.5 shrink-0">
