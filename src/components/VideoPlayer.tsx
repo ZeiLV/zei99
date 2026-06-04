@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Hls from "hls.js";
 import { Maximize, Pause, Play, RotateCcw, RotateCw, Volume2, VolumeX, Gauge, Download, Crown, Lock } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { VipModal } from "./VipModal";
 import { formatCountdown } from "@/lib/earlyAccess";
+import { resolveSource } from "@/lib/videoSource";
 
 interface Props {
   videoType?: "gdrive" | "direct";
