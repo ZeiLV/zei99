@@ -44,11 +44,15 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
   const flashTimer = useRef<number | null>(null);
 
   // Resolve source: prefer explicit videoUrl, fall back to gdriveUrl (legacy data)
-  const src = (videoUrl?.trim() || gdriveUrl?.trim() || "").trim();
-  const hasSource = !!src;
+  const rawSrc = (videoUrl?.trim() || gdriveUrl?.trim() || "").trim();
+  const resolved = useMemo(() => resolveSource(rawSrc), [rawSrc]);
+  const isIframe = resolved.kind === "iframe";
+  const src = resolved.kind === "video" ? resolved.src : "";
+  const hasSource = resolved.kind !== "empty";
 
   // Wire up <video> with HLS.js when needed
   useEffect(() => {
+    if (isIframe) return;
     const v = videoRef.current;
     if (!v || !src) return;
 
