@@ -431,7 +431,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
       </div>
 
       {/* Download button */}
-      {!isVip && hasSource && (
+      {!isVip && hasSource && !isIframe && (
         <div className="mt-3 flex justify-end">
           <button
             onClick={handleDownload}
