@@ -89,7 +89,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
         hlsRef.current = null;
       }
     };
-  }, [src]);
+  }, [src, isIframe]);
 
   const armHide = () => {
     setShowControls(true);
