@@ -236,11 +236,10 @@ const AdminEpisodes = () => {
               </div>
             </div>
 
-            <Field label="Video URL (MP4, HLS .m3u8, DoodStream yoki boshqa to'g'ridan-to'g'ri havola)">
-              <Input
+            <Field label="Video (faylni yuklang yoki URL kiriting — MP4, HLS .m3u8, DoodStream)">
+              <VideoUpload
                 value={editing.video_url}
-                onChange={(e) => setEditing({ ...editing, video_url: e.target.value })}
-                placeholder="https://example.com/video.mp4"
+                onChange={(v) => setEditing({ ...editing, video_url: v })}
               />
             </Field>
 
