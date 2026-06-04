@@ -236,7 +236,7 @@ const AdminEpisodes = () => {
               </div>
             </div>
 
-            <Field label="Video (faylni yuklang yoki URL kiriting — MP4, HLS .m3u8, DoodStream)">
+            <Field label="Video manbasi — A) faylni yuklash  yoki  B) link / embed kodi">
               <VideoUpload
                 value={editing.video_url}
                 onChange={(v) => setEditing({ ...editing, video_url: v })}

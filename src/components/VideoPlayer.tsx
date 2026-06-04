@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Hls from "hls.js";
 import { Maximize, Pause, Play, RotateCcw, RotateCw, Volume2, VolumeX, Gauge, Download, Crown, Lock } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { VipModal } from "./VipModal";
 import { formatCountdown } from "@/lib/earlyAccess";
+import { resolveSource } from "@/lib/videoSource";
 
 interface Props {
   videoType?: "gdrive" | "direct";
@@ -43,11 +44,15 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
   const flashTimer = useRef<number | null>(null);
 
   // Resolve source: prefer explicit videoUrl, fall back to gdriveUrl (legacy data)
-  const src = (videoUrl?.trim() || gdriveUrl?.trim() || "").trim();
-  const hasSource = !!src;
+  const rawSrc = (videoUrl?.trim() || gdriveUrl?.trim() || "").trim();
+  const resolved = useMemo(() => resolveSource(rawSrc), [rawSrc]);
+  const isIframe = resolved.kind === "iframe";
+  const src = resolved.kind === "video" ? resolved.src : "";
+  const hasSource = resolved.kind !== "empty";
 
   // Wire up <video> with HLS.js when needed
   useEffect(() => {
+    if (isIframe) return;
     const v = videoRef.current;
     if (!v || !src) return;
 
@@ -84,7 +89,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
         hlsRef.current = null;
       }
     };
-  }, [src]);
+  }, [src, isIframe]);
 
   const armHide = () => {
     setShowControls(true);
@@ -192,14 +197,33 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
         className="relative w-full overflow-hidden bg-[#0A0F1E] player-frame fullscreen-target rounded-xl border border-neon/20"
         style={{ zIndex: 9999 }}
       >
-        {!isVip && hasSource ? (
+        {!isVip && hasSource && isIframe ? (
+          <div className="relative w-full bg-black" style={{ aspectRatio: "16 / 9" }}>
+            <iframe
+              key={resolved.kind === "iframe" ? resolved.src : "empty"}
+              src={resolved.kind === "iframe" ? resolved.src : ""}
+              className="absolute inset-0 w-full h-full"
+              frameBorder={0}
+              allow="autoplay; encrypted-media; picture-in-picture; fullscreen; accelerometer; gyroscope"
+              allowFullScreen
+              referrerPolicy="no-referrer"
+            />
+            <button
+              onClick={goFullscreen}
+              className="absolute bottom-2 right-2 z-[3] h-9 w-9 rounded-md bg-[#0A0F1E]/70 backdrop-blur-sm border border-neon/30 text-neon hover:bg-neon/15 transition-colors flex items-center justify-center"
+              aria-label="To'liq ekran"
+              title="To'liq ekran"
+            >
+              <Maximize className="h-4 w-4" />
+            </button>
+          </div>
+        ) : !isVip && hasSource ? (
           <>
             <video
               ref={videoRef}
               key={src}
               playsInline
               preload="metadata"
-              crossOrigin="anonymous"
               className="block w-full h-auto max-h-[85vh] object-contain bg-[#0A0F1E]"
               onClick={() => { armHide(); togglePlay(); }}
               onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
@@ -407,7 +431,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
       </div>
 
       {/* Download button */}
-      {!isVip && hasSource && (
+      {!isVip && hasSource && !isIframe && (
         <div className="mt-3 flex justify-end">
           <button
             onClick={handleDownload}
