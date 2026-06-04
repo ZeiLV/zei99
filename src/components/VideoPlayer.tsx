@@ -197,14 +197,33 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
         className="relative w-full overflow-hidden bg-[#0A0F1E] player-frame fullscreen-target rounded-xl border border-neon/20"
         style={{ zIndex: 9999 }}
       >
-        {!isVip && hasSource ? (
+        {!isVip && hasSource && isIframe ? (
+          <div className="relative w-full bg-black" style={{ aspectRatio: "16 / 9" }}>
+            <iframe
+              key={resolved.kind === "iframe" ? resolved.src : "empty"}
+              src={resolved.kind === "iframe" ? resolved.src : ""}
+              className="absolute inset-0 w-full h-full"
+              frameBorder={0}
+              allow="autoplay; encrypted-media; picture-in-picture; fullscreen; accelerometer; gyroscope"
+              allowFullScreen
+              referrerPolicy="no-referrer"
+            />
+            <button
+              onClick={goFullscreen}
+              className="absolute bottom-2 right-2 z-[3] h-9 w-9 rounded-md bg-[#0A0F1E]/70 backdrop-blur-sm border border-neon/30 text-neon hover:bg-neon/15 transition-colors flex items-center justify-center"
+              aria-label="To'liq ekran"
+              title="To'liq ekran"
+            >
+              <Maximize className="h-4 w-4" />
+            </button>
+          </div>
+        ) : !isVip && hasSource ? (
           <>
             <video
               ref={videoRef}
               key={src}
               playsInline
               preload="metadata"
-              crossOrigin="anonymous"
               className="block w-full h-auto max-h-[85vh] object-contain bg-[#0A0F1E]"
               onClick={() => { armHide(); togglePlay(); }}
               onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
