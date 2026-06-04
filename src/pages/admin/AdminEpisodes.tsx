@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Plus, Pencil, Trash2, X, Lock, Lock as LockIcon, Link2, Clock3 } from "lucide-react";
 import { toast } from "sonner";
+import { VideoUpload } from "@/components/VideoUpload";
 
 interface EpForm {
   id?: string;
