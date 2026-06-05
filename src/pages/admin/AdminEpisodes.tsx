@@ -210,137 +210,209 @@ const AdminEpisodes = () => {
 
       {/* Edit modal */}
       {editing && (
-        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="glass-strong rounded-xl w-full max-w-md p-5 space-y-3 my-8">
-            <div className="flex items-center justify-between">
-              <h3 className="font-display tracking-widest neon-text">
-                {editing.id ? "Tahrirlash" : "Yangi epizod"}
+        <div className="fixed inset-0 z-50 bg-background/85 backdrop-blur-sm flex items-start justify-center p-3 sm:p-6 overflow-y-auto">
+          <div className="glass-strong rounded-2xl w-full max-w-5xl p-5 sm:p-6 space-y-5 my-4 sm:my-8 border border-neon/30">
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="font-display tracking-widest neon-text text-base sm:text-lg">
+                {editing.id ? "EPIZODNI TAHRIRLASH" : "YANGI EPIZOD"}
               </h3>
               <button onClick={() => setEditing(null)} className="text-muted-foreground hover:text-neon">
-                <X className="h-4 w-4" />
+                <X className="h-5 w-5" />
               </button>
             </div>
 
-            <div className="grid grid-cols-3 gap-2">
-              <Field label="Epizod #">
+            {/* Header row: number + title */}
+            <div className="grid grid-cols-1 sm:grid-cols-[120px_1fr] gap-3">
+              <Field label="Epizod №">
                 <Input
                   type="number"
                   value={editing.episode_number}
                   onChange={(e) => setEditing({ ...editing, episode_number: Number(e.target.value) })}
                 />
               </Field>
-              <div className="col-span-2">
-                <Field label="Sarlavha">
-                  <Input value={editing.title} onChange={(e) => setEditing({ ...editing, title: e.target.value })} />
+              <Field label="Sarlavha">
+                <Input value={editing.title} onChange={(e) => setEditing({ ...editing, title: e.target.value })} />
+              </Field>
+            </div>
+
+            {/* HLS optimization badge */}
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-neon/[0.06] border border-neon/30">
+              <Sparkles className="h-3.5 w-3.5 text-neon shrink-0" />
+              <div className="text-[11px] text-foreground/80 leading-snug">
+                <span className="font-display tracking-widest text-neon">HLS AUTO-OPT FAOL</span>
+                <span className="text-foreground/60"> · barcha yuklangan videolar avtomatik adaptive streaming, smart buffering va bitrate upscale rejimida uzatiladi.</span>
+              </div>
+            </div>
+
+            {/* TWO COLUMN LAYOUT */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {/* LEFT — Local Upload Hub */}
+              <div className="space-y-4 rounded-xl border border-neon/25 bg-neon/[0.02] p-4">
+                <div className="flex items-center gap-2">
+                  <div className="h-8 w-8 rounded-lg bg-neon/15 border border-neon/40 flex items-center justify-center">
+                    <HardDrive className="h-4 w-4 text-neon" />
+                  </div>
+                  <div>
+                    <div className="font-display tracking-widest text-xs text-neon">LOCAL UPLOAD HUB</div>
+                    <div className="text-[10px] text-muted-foreground">To'g'ridan-to'g'ri sayt xotirasiga · 4K · 2GB gacha</div>
+                  </div>
+                </div>
+
+                <Field label="Asosiy video · HD/FullHD">
+                  <VideoUpload
+                    value={editing.video_url}
+                    onChange={(v) => setEditing({ ...editing, video_url: v })}
+                    uploadOnly
+                    compact
+                  />
+                </Field>
+
+                <Field label={(
+                  <span className="flex items-center gap-1.5"><Server className="h-3 w-3 text-neon/80" /> Server 2 · zaxira (upload)</span>
+                ) as any}>
+                  <VideoUpload
+                    value={editing.server2_url}
+                    onChange={(v) => setEditing({ ...editing, server2_url: v })}
+                    uploadOnly
+                    compact
+                  />
+                </Field>
+
+                <Field label={(
+                  <span className="flex items-center gap-1.5"><Crown className="h-3 w-3 text-neon-pink" /> 4K manba · faqat VIP (upload)</span>
+                ) as any}>
+                  <VideoUpload
+                    value={editing.quality_4k_url}
+                    onChange={(v) => setEditing({ ...editing, quality_4k_url: v })}
+                    uploadOnly
+                    compact
+                  />
                 </Field>
               </div>
-            </div>
 
-            <Field label="Video manbasi — A) faylni yuklash  yoki  B) link / embed kodi">
-              <VideoUpload
-                value={editing.video_url}
-                onChange={(v) => setEditing({ ...editing, video_url: v })}
-              />
-            </Field>
-
-            <Field label="Server 2 (zaxira) — ixtiyoriy">
-              <Input
-                value={editing.server2_url}
-                onChange={(e) => setEditing({ ...editing, server2_url: e.target.value })}
-                placeholder="Boshqa server URL"
-              />
-            </Field>
-
-            <Field label="4K sifat (faqat VIP) — ixtiyoriy">
-              <Input
-                value={editing.quality_4k_url}
-                onChange={(e) => setEditing({ ...editing, quality_4k_url: e.target.value })}
-                placeholder="4K video URL"
-              />
-            </Field>
-
-            <div className="flex items-center justify-between p-3 glass rounded-lg">
-              <div>
-                <div className="font-display text-sm tracking-widest flex items-center gap-2">
-                  <LockIcon className="h-3.5 w-3.5" /> VIP
-                </div>
-                <div className="text-[11px] text-muted-foreground">Faqat obunachilar uchun</div>
-              </div>
-              <Switch
-                checked={editing.is_vip}
-                onCheckedChange={(v) => setEditing({ ...editing, is_vip: v })}
-              />
-            </div>
-
-            {!editing.is_vip && (
-              <div className="p-3 glass rounded-lg space-y-2">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-display text-sm tracking-widest flex items-center gap-2">
-                      <Clock3 className="h-3.5 w-3.5" /> VIP ERTA KIRISH
-                    </div>
-                    <div className="text-[11px] text-muted-foreground">
-                      Belgilangan vaqtgacha faqat VIP ko'radi, keyin hammaga ochiladi
-                    </div>
+              {/* RIGHT — External Links Hub */}
+              <div className="space-y-4 rounded-xl border border-neon-pink/25 bg-neon-pink/[0.02] p-4">
+                <div className="flex items-center gap-2">
+                  <div className="h-8 w-8 rounded-lg bg-neon-pink/15 border border-neon-pink/40 flex items-center justify-center">
+                    <Globe className="h-4 w-4 text-neon-pink" />
                   </div>
-                  <Switch
-                    checked={!!editing.early_access_until}
-                    onCheckedChange={(v) =>
-                      setEditing({
-                        ...editing,
-                        early_access_until: v
-                          ? new Date(Date.now() + 24 * 3600 * 1000).toISOString()
-                          : null,
-                      })
-                    }
-                  />
+                  <div>
+                    <div className="font-display tracking-widest text-xs text-neon-pink">EXTERNAL LINKS HUB</div>
+                    <div className="text-[10px] text-muted-foreground">URL · embed · iframe — bir zumda parse qilinadi</div>
+                  </div>
                 </div>
-                {editing.early_access_until && (
-                  <>
-                    <Input
-                      type="datetime-local"
-                      value={toLocalInput(editing.early_access_until)}
-                      onChange={(e) =>
+
+                <Field label="Tashqi video URL / Embed kodi">
+                  <textarea
+                    value={editing.video_url}
+                    onChange={(e) => setEditing({ ...editing, video_url: e.target.value })}
+                    placeholder='https://... yoki <iframe src="..."></iframe>'
+                    rows={5}
+                    className="w-full text-xs rounded-md border border-neon-pink/30 bg-[#0A0F1E] px-3 py-2 font-mono text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-neon-pink focus:ring-1 focus:ring-neon-pink/50 resize-none"
+                  />
+                </Field>
+
+                <div className="text-[10px] text-muted-foreground leading-relaxed space-y-1">
+                  <div className="font-display tracking-widest text-foreground/70">QO'LLAB-QUVVATLANADI:</div>
+                  <div>• MP4 · M3U8 (HLS) · WEBM to'g'ridan-to'g'ri linklar</div>
+                  <div>• Google Drive (share / preview)</div>
+                  <div>• YouTube · Vimeo · DoodStream · Vidoza · Streamtape · Filemoon · Mixdrop · OK.ru · Rutube · Dailymotion · Telegram</div>
+                  <div>• To'liq <code className="text-neon">&lt;iframe src="..."&gt;</code> embed kodlari</div>
+                </div>
+
+                <div className="rounded-lg border border-amber-400/30 bg-amber-400/[0.04] px-3 py-2 text-[10px] text-amber-200/90 leading-snug">
+                  Eslatma: tashqi link kiritilsa, asosiy video sifatida o'sha ishlatiladi. Local upload zonasi ham asosiy videoni boshqaradi — birini tanlang.
+                </div>
+              </div>
+            </div>
+
+            {/* VIP + Early access */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="flex items-center justify-between p-3 glass rounded-lg">
+                <div>
+                  <div className="font-display text-sm tracking-widest flex items-center gap-2">
+                    <LockIcon className="h-3.5 w-3.5" /> VIP
+                  </div>
+                  <div className="text-[11px] text-muted-foreground">Faqat obunachilar uchun</div>
+                </div>
+                <Switch
+                  checked={editing.is_vip}
+                  onCheckedChange={(v) => setEditing({ ...editing, is_vip: v })}
+                />
+              </div>
+
+              {!editing.is_vip ? (
+                <div className="p-3 glass rounded-lg space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-display text-sm tracking-widest flex items-center gap-2">
+                        <Clock3 className="h-3.5 w-3.5" /> VIP ERTA KIRISH
+                      </div>
+                      <div className="text-[11px] text-muted-foreground">Vaqt tugaguncha faqat VIP</div>
+                    </div>
+                    <Switch
+                      checked={!!editing.early_access_until}
+                      onCheckedChange={(v) =>
                         setEditing({
                           ...editing,
-                          early_access_until: e.target.value
-                            ? new Date(e.target.value).toISOString()
+                          early_access_until: v
+                            ? new Date(Date.now() + 24 * 3600 * 1000).toISOString()
                             : null,
                         })
                       }
                     />
-                    <div className="flex flex-wrap gap-1">
-                      {[
-                        { label: "+6 soat", h: 6 },
-                        { label: "+24 soat", h: 24 },
-                        { label: "+3 kun", h: 72 },
-                        { label: "+7 kun", h: 168 },
-                      ].map((p) => (
-                        <button
-                          key={p.h}
-                          type="button"
-                          onClick={() =>
-                            setEditing({
-                              ...editing,
-                              early_access_until: new Date(
-                                Date.now() + p.h * 3600 * 1000
-                              ).toISOString(),
-                            })
-                          }
-                          className="px-2 py-1 rounded text-[10px] font-display tracking-widest glass text-foreground/70 hover:text-neon"
-                        >
-                          {p.label}
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
-            )}
+                  </div>
+                  {editing.early_access_until && (
+                    <>
+                      <Input
+                        type="datetime-local"
+                        value={toLocalInput(editing.early_access_until)}
+                        onChange={(e) =>
+                          setEditing({
+                            ...editing,
+                            early_access_until: e.target.value
+                              ? new Date(e.target.value).toISOString()
+                              : null,
+                          })
+                        }
+                      />
+                      <div className="flex flex-wrap gap-1">
+                        {[
+                          { label: "+6 soat", h: 6 },
+                          { label: "+24 soat", h: 24 },
+                          { label: "+3 kun", h: 72 },
+                          { label: "+7 kun", h: 168 },
+                        ].map((p) => (
+                          <button
+                            key={p.h}
+                            type="button"
+                            onClick={() =>
+                              setEditing({
+                                ...editing,
+                                early_access_until: new Date(
+                                  Date.now() + p.h * 3600 * 1000
+                                ).toISOString(),
+                              })
+                            }
+                            className="px-2 py-1 rounded text-[10px] font-display tracking-widest glass text-foreground/70 hover:text-neon"
+                          >
+                            {p.label}
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              ) : (
+                <div className="p-3 glass rounded-lg text-[11px] text-muted-foreground">
+                  VIP rejim — erta kirish vaqti talab qilinmaydi.
+                </div>
+              )}
+            </div>
 
-            <div className="flex justify-end gap-2 pt-2">
+            <div className="flex justify-end gap-2 pt-2 border-t border-neon/15">
               <Button variant="ghost" onClick={() => setEditing(null)}>Bekor</Button>
-              <Button onClick={save} className="bg-neon text-primary-foreground hover:bg-neon/90">
+              <Button onClick={save} className="bg-neon text-primary-foreground hover:bg-neon/90 neon-glow-sm">
                 Saqlash
               </Button>
             </div>
