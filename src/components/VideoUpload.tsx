@@ -121,14 +121,16 @@ export const VideoUpload = ({ value, onChange, uploadOnly = false, compact = fal
             const f = e.dataTransfer.files?.[0];
             if (f) handleFile(f);
           }}
-          className="rounded-xl border border-dashed border-neon/40 bg-neon/[0.03] p-5 text-center space-y-3"
+          className={`rounded-xl border border-dashed border-neon/40 bg-neon/[0.03] text-center space-y-2 ${compact ? "p-3" : "p-5 space-y-3"}`}
         >
-          <div className="mx-auto h-12 w-12 rounded-full bg-neon/10 border border-neon/40 flex items-center justify-center neon-glow-sm">
-            <Upload className="h-5 w-5 text-neon" />
+          <div className={`mx-auto rounded-full bg-neon/10 border border-neon/40 flex items-center justify-center neon-glow-sm ${compact ? "h-9 w-9" : "h-12 w-12"}`}>
+            <Upload className={compact ? "h-4 w-4 text-neon" : "h-5 w-5 text-neon"} />
           </div>
-          <div className="text-xs text-foreground/80">
-            Video faylni shu yerga tashlang yoki tanlang
-          </div>
+          {!compact && (
+            <div className="text-xs text-foreground/80">
+              Video faylni shu yerga tashlang yoki tanlang
+            </div>
+          )}
           <div className="text-[10px] text-muted-foreground">
             MP4 · MKV · WEBM · MOV — 2GB gacha
           </div>
