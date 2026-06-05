@@ -86,30 +86,32 @@ export const VideoUpload = ({ value, onChange, uploadOnly = false, compact = fal
   return (
     <div className="space-y-3">
       {/* Tab toggles */}
-      <div className="grid grid-cols-2 gap-1 p-1 glass rounded-lg">
-        <button
-          type="button"
-          onClick={() => setTab("upload")}
-          className={`flex items-center justify-center gap-1.5 py-2 rounded-md text-[11px] font-display tracking-widest transition-all ${
-            tab === "upload"
-              ? "bg-neon/15 text-neon neon-glow-sm"
-              : "text-foreground/60 hover:text-neon"
-          }`}
-        >
-          <Upload className="h-3.5 w-3.5" /> A · FAYL YUKLASH
-        </button>
-        <button
-          type="button"
-          onClick={() => setTab("link")}
-          className={`flex items-center justify-center gap-1.5 py-2 rounded-md text-[11px] font-display tracking-widest transition-all ${
-            tab === "link"
-              ? "bg-neon/15 text-neon neon-glow-sm"
-              : "text-foreground/60 hover:text-neon"
-          }`}
-        >
-          <Link2 className="h-3.5 w-3.5" /> B · LINK / EMBED
-        </button>
-      </div>
+      {!uploadOnly && (
+        <div className="grid grid-cols-2 gap-1 p-1 glass rounded-lg">
+          <button
+            type="button"
+            onClick={() => setTab("upload")}
+            className={`flex items-center justify-center gap-1.5 py-2 rounded-md text-[11px] font-display tracking-widest transition-all ${
+              tab === "upload"
+                ? "bg-neon/15 text-neon neon-glow-sm"
+                : "text-foreground/60 hover:text-neon"
+            }`}
+          >
+            <Upload className="h-3.5 w-3.5" /> A · FAYL YUKLASH
+          </button>
+          <button
+            type="button"
+            onClick={() => setTab("link")}
+            className={`flex items-center justify-center gap-1.5 py-2 rounded-md text-[11px] font-display tracking-widest transition-all ${
+              tab === "link"
+                ? "bg-neon/15 text-neon neon-glow-sm"
+                : "text-foreground/60 hover:text-neon"
+            }`}
+          >
+            <Link2 className="h-3.5 w-3.5" /> B · LINK / EMBED
+          </button>
+        </div>
+      )}
 
       {tab === "upload" ? (
         <div
