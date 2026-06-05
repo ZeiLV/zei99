@@ -8,6 +8,8 @@ import { toast } from "sonner";
 interface Props {
   value: string;
   onChange: (url: string) => void;
+  uploadOnly?: boolean;
+  compact?: boolean;
 }
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
