@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Content, Episode } from "@/lib/types";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft, Star, Eye, Calendar, Clock, Clock3 } from "lucide-react";
+import { ArrowLeft, Star, Eye, Calendar, Clock, Clock3, Lock, Play } from "lucide-react";
 import { VideoPlayer } from "./VideoPlayer";
 import { Reviews } from "./Reviews";
 import { isEpisodeLocked, isInEarlyAccess, formatCountdown } from "@/lib/earlyAccess";
@@ -257,79 +257,137 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
         })()}
 
         {/* Episodes */}
-        <h2 className="font-display text-lg tracking-widest mb-6 text-foreground/90" style={{ marginTop: "2.5rem" }}>
-          EPIZODLAR
-        </h2>
-        {loading ? (
-          <div className="text-muted-foreground text-sm">Yuklanmoqda...</div>
-        ) : episodes.length === 0 ? (
-          <div className="text-muted-foreground text-sm">Epizodlar hali yo'q</div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pb-16 animate-fade-up w-full">
-            {episodes.map((ep) => {
-              const active = selected?.id === ep.id;
-              const earlyLocked = isInEarlyAccess(ep) && !userIsVip && !ep.is_vip;
-              return (
-                <button
-                  key={ep.id}
-                  onClick={() => setSelected(ep)}
-                  className={`group text-left glass rounded-xl p-4 flex items-center gap-4 transition-all duration-300 hover:scale-[1.015] hover:neon-glow-sm w-full min-h-[64px] ${
-                    active ? "neon-border" : ""
-                  }`}
-                >
-                  <div className={`font-display text-2xl w-12 text-center ${active ? "text-neon" : "text-foreground/70 group-hover:text-neon"} transition-colors`}>
-                    {ep.episode_number.toString().padStart(2, "0")}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium truncate">{ep.title}</div>
-                    <div className="text-[11px] text-muted-foreground mt-0.5">
-                      {ep.is_vip
-                        ? "Premium epizod"
-                        : earlyLocked
-                        ? `VIP erta kirish — ${formatCountdown(ep.early_access_until!)}`
-                        : "Bepul tomosha"}
-                    </div>
-                  </div>
-                  {ep.is_vip ? (
-                    <a
-                      href="https://t.me/m/QoYHq2A0Nzgy"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="shrink-0 px-3 py-1.5 rounded-full font-display text-[10px] tracking-widest transition-all hover:scale-105"
-                      style={{
-                        background: "hsl(var(--neon-pink) / 0.18)",
-                        color: "hsl(var(--neon-pink))",
-                        border: "1px solid hsl(var(--neon-pink) / 0.55)",
-                        boxShadow: "0 0 10px hsl(var(--neon-pink) / 0.45)",
-                      }}
-                    >
-                      OBUNA
-                    </a>
-                  ) : earlyLocked ? (
-                    <span
-                      className="shrink-0 px-3 py-1.5 rounded-full font-display text-[10px] tracking-widest"
-                      style={{
-                        background: "hsl(45 95% 55% / 0.15)",
-                        color: "hsl(45 95% 60%)",
-                        border: "1px solid hsl(45 95% 55% / 0.5)",
-                      }}
-                    >
-                      VIP ERTA
-                    </span>
-                  ) : (
-                    <span className="shrink-0 px-3 py-1.5 rounded-full font-display text-[10px] tracking-widest text-neon border border-neon/40 bg-neon/10">
-                      KO'RISH
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        )}
+        <EpisodesGrid
+          episodes={episodes}
+          loading={loading}
+          selectedId={selected?.id ?? null}
+          userIsVip={userIsVip}
+          onPick={(ep) => {
+            setSelected(ep);
+            setTimeout(() => playerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
+          }}
+        />
+
+
 
         <Reviews contentId={content.id} />
       </div>
     </div>
+  );
+};
+
+const PAGE_SIZE = 25;
+
+interface GridProps {
+  episodes: Episode[];
+  loading: boolean;
+  selectedId: string | null;
+  userIsVip: boolean;
+  onPick: (ep: Episode) => void;
+}
+
+const EpisodesGrid = ({ episodes, loading, selectedId, userIsVip, onPick }: GridProps) => {
+  const [page, setPage] = useState(0);
+
+  const pages = useMemo(() => {
+    if (episodes.length === 0) return [] as { label: string; items: Episode[] }[];
+    const chunks: { label: string; items: Episode[] }[] = [];
+    for (let i = 0; i < episodes.length; i += PAGE_SIZE) {
+      const slice = episodes.slice(i, i + PAGE_SIZE);
+      const from = slice[0].episode_number;
+      const to = slice[slice.length - 1].episode_number;
+      chunks.push({ label: `${from}–${to}`, items: slice });
+    }
+    return chunks;
+  }, [episodes]);
+
+  useEffect(() => {
+    if (selectedId) {
+      const idx = episodes.findIndex((e) => e.id === selectedId);
+      if (idx >= 0) setPage(Math.floor(idx / PAGE_SIZE));
+    }
+  }, [selectedId, episodes]);
+
+  const current = pages[page]?.items ?? [];
+
+  return (
+    <section className="mt-10 pb-16 animate-fade-up">
+      <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
+        <h2 className="font-display text-lg tracking-widest text-foreground/90">
+          EPIZODLAR
+          {episodes.length > 0 && (
+            <span className="ml-2 text-[11px] text-neon/80 tabular-nums">· {episodes.length}</span>
+          )}
+        </h2>
+        {pages.length > 1 && (
+          <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide max-w-full">
+            {pages.map((p, i) => (
+              <button
+                key={p.label}
+                onClick={() => setPage(i)}
+                className={`shrink-0 px-3 py-1.5 rounded-full text-[10px] font-display tracking-widest transition-all tabular-nums ${
+                  i === page
+                    ? "bg-neon/20 text-neon neon-glow-sm border border-neon/50"
+                    : "glass text-foreground/60 hover:text-neon"
+                }`}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {loading ? (
+        <div className="text-muted-foreground text-sm">Yuklanmoqda...</div>
+      ) : episodes.length === 0 ? (
+        <div className="text-muted-foreground text-sm">Epizodlar hali yo'q</div>
+      ) : (
+        <div className="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-2">
+          {current.map((ep) => {
+            const active = selectedId === ep.id;
+            const earlyLocked = isInEarlyAccess(ep) && !userIsVip && !ep.is_vip;
+            const locked = ep.is_vip || earlyLocked;
+            return (
+              <button
+                key={ep.id}
+                onClick={() => onPick(ep)}
+                title={`${ep.episode_number}. ${ep.title}${ep.is_vip ? " · VIP" : earlyLocked ? " · VIP erta" : ""}`}
+                className={`group relative aspect-square rounded-md font-display text-sm tabular-nums tracking-wider transition-all duration-200
+                  ${active
+                    ? "bg-neon/20 text-neon neon-border neon-glow-sm scale-105"
+                    : locked
+                    ? ep.is_vip
+                      ? "bg-[#0A0F1E] text-neon-pink/90 border border-neon-pink/40 hover:border-neon-pink hover:bg-neon-pink/10"
+                      : "bg-[#0A0F1E] text-amber-300/90 border border-amber-400/40 hover:border-amber-300"
+                    : "bg-[#0A0F1E] text-foreground/70 border border-neon/20 hover:text-neon hover:border-neon/60 hover:bg-neon/5"}
+                `}
+              >
+                {ep.episode_number}
+                {ep.is_vip && (
+                  <Lock className="absolute top-0.5 right-0.5 h-2.5 w-2.5 text-neon-pink" />
+                )}
+                {!ep.is_vip && earlyLocked && (
+                  <Clock3 className="absolute top-0.5 right-0.5 h-2.5 w-2.5 text-amber-400" />
+                )}
+                {active && (
+                  <Play className="absolute bottom-0.5 right-0.5 h-2.5 w-2.5 text-neon fill-neon" />
+                )}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Legend */}
+      {episodes.length > 0 && (
+        <div className="mt-4 flex flex-wrap items-center gap-3 text-[10px] font-display tracking-widest text-foreground/60">
+          <span className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-sm bg-neon/30 border border-neon/60" /> JORIY</span>
+          <span className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-sm bg-[#0A0F1E] border border-neon/30" /> BEPUL</span>
+          <span className="flex items-center gap-1"><Clock3 className="h-3 w-3 text-amber-400" /> VIP ERTA</span>
+          <span className="flex items-center gap-1"><Lock className="h-3 w-3 text-neon-pink" /> VIP</span>
+        </div>
+      )}
+    </section>
   );
 };
