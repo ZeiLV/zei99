@@ -15,8 +15,8 @@ interface Props {
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
 
-export const VideoUpload = ({ value, onChange }: Props) => {
-  const [tab, setTab] = useState<"upload" | "link">("upload");
+export const VideoUpload = ({ value, onChange, uploadOnly = false, compact = false }: Props) => {
+  const [tab, setTab] = useState<"upload" | "link">(uploadOnly ? "upload" : "upload");
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const fileRef = useRef<HTMLInputElement>(null);
