@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Content, Episode } from "@/lib/types";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft, Star, Eye, Calendar, Clock, Clock3 } from "lucide-react";
+import { ArrowLeft, Star, Eye, Calendar, Clock, Clock3, Lock, Play } from "lucide-react";
 import { VideoPlayer } from "./VideoPlayer";
 import { Reviews } from "./Reviews";
 import { isEpisodeLocked, isInEarlyAccess, formatCountdown } from "@/lib/earlyAccess";
