@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Plus, Pencil, Trash2, X, Lock, Lock as LockIcon, Link2, Clock3 } from "lucide-react";
+import { ArrowLeft, Plus, Pencil, Trash2, X, Lock, Lock as LockIcon, Link2, Clock3, HardDrive, Globe, Sparkles, Crown, Server } from "lucide-react";
 import { toast } from "sonner";
 import { VideoUpload } from "@/components/VideoUpload";
 
