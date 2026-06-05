@@ -257,76 +257,18 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
         })()}
 
         {/* Episodes */}
-        <h2 className="font-display text-lg tracking-widest mb-6 text-foreground/90" style={{ marginTop: "2.5rem" }}>
-          EPIZODLAR
-        </h2>
-        {loading ? (
-          <div className="text-muted-foreground text-sm">Yuklanmoqda...</div>
-        ) : episodes.length === 0 ? (
-          <div className="text-muted-foreground text-sm">Epizodlar hali yo'q</div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pb-16 animate-fade-up w-full">
-            {episodes.map((ep) => {
-              const active = selected?.id === ep.id;
-              const earlyLocked = isInEarlyAccess(ep) && !userIsVip && !ep.is_vip;
-              return (
-                <button
-                  key={ep.id}
-                  onClick={() => setSelected(ep)}
-                  className={`group text-left glass rounded-xl p-4 flex items-center gap-4 transition-all duration-300 hover:scale-[1.015] hover:neon-glow-sm w-full min-h-[64px] ${
-                    active ? "neon-border" : ""
-                  }`}
-                >
-                  <div className={`font-display text-2xl w-12 text-center ${active ? "text-neon" : "text-foreground/70 group-hover:text-neon"} transition-colors`}>
-                    {ep.episode_number.toString().padStart(2, "0")}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium truncate">{ep.title}</div>
-                    <div className="text-[11px] text-muted-foreground mt-0.5">
-                      {ep.is_vip
-                        ? "Premium epizod"
-                        : earlyLocked
-                        ? `VIP erta kirish — ${formatCountdown(ep.early_access_until!)}`
-                        : "Bepul tomosha"}
-                    </div>
-                  </div>
-                  {ep.is_vip ? (
-                    <a
-                      href="https://t.me/m/QoYHq2A0Nzgy"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="shrink-0 px-3 py-1.5 rounded-full font-display text-[10px] tracking-widest transition-all hover:scale-105"
-                      style={{
-                        background: "hsl(var(--neon-pink) / 0.18)",
-                        color: "hsl(var(--neon-pink))",
-                        border: "1px solid hsl(var(--neon-pink) / 0.55)",
-                        boxShadow: "0 0 10px hsl(var(--neon-pink) / 0.45)",
-                      }}
-                    >
-                      OBUNA
-                    </a>
-                  ) : earlyLocked ? (
-                    <span
-                      className="shrink-0 px-3 py-1.5 rounded-full font-display text-[10px] tracking-widest"
-                      style={{
-                        background: "hsl(45 95% 55% / 0.15)",
-                        color: "hsl(45 95% 60%)",
-                        border: "1px solid hsl(45 95% 55% / 0.5)",
-                      }}
-                    >
-                      VIP ERTA
-                    </span>
-                  ) : (
-                    <span className="shrink-0 px-3 py-1.5 rounded-full font-display text-[10px] tracking-widest text-neon border border-neon/40 bg-neon/10">
-                      KO'RISH
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        )}
+        <EpisodesGrid
+          episodes={episodes}
+          loading={loading}
+          selectedId={selected?.id ?? null}
+          userIsVip={userIsVip}
+          onPick={(ep) => {
+            setSelected(ep);
+            setTimeout(() => playerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
+          }}
+        />
+
+
 
         <Reviews contentId={content.id} />
       </div>
