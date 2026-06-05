@@ -423,7 +423,7 @@ const AdminEpisodes = () => {
   );
 };
 
-const Field = ({ label, children }: { label: string; children: React.ReactNode }) => (
+const Field = ({ label, children }: { label: React.ReactNode; children: React.ReactNode }) => (
   <div className="space-y-1.5">
     <Label className="text-[11px] font-display tracking-widest text-foreground/70">{label}</Label>
     {children}
