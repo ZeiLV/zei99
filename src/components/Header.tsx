@@ -1,6 +1,6 @@
-import { LogOut, Search, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { LogOut, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
 import { VipStatusButton } from "./VipStatusButton";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -9,17 +9,12 @@ interface HeaderProps {
   onSearchChange: (v: string) => void;
 }
 
-export const Header = ({ search, onSearchChange }: HeaderProps) => {
-  const [expanded, setExpanded] = useState(false);
+export const Header = ({ search: _s, onSearchChange: _o }: HeaderProps) => {
   const pressTimer = useRef<number | null>(null);
   const longPressed = useRef(false);
-  const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
 
-  useEffect(() => {
-    if (expanded) inputRef.current?.focus();
-  }, [expanded]);
 
   const startPress = () => {
     longPressed.current = false;
@@ -56,41 +51,16 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
             </button>
 
             <div className="flex items-center gap-2 sm:gap-2.5 relative">
-              <div
-                className={`flex items-center transition-all duration-300 ease-out ${
-                  expanded ? "w-40 sm:w-72" : "w-10"
-                }`}
+              <button
+                onClick={() => navigate("/search")}
+                className="h-10 w-10 rounded-full glass flex items-center justify-center text-neon hover:neon-glow-sm transition-all"
+                aria-label="Qidirish"
               >
-                {expanded ? (
-                  <div className="glass-strong rounded-full flex items-center w-full pl-4 pr-1 h-10">
-                    <input
-                      ref={inputRef}
-                      value={search}
-                      onChange={(e) => onSearchChange(e.target.value)}
-                      placeholder="Qidirish..."
-                      className="flex-1 bg-transparent outline-none text-sm placeholder:text-muted-foreground"
-                    />
-                    <button
-                      onClick={() => {
-                        onSearchChange("");
-                        setExpanded(false);
-                      }}
-                      className="p-1.5 text-neon/80 hover:text-neon"
-                      aria-label="Yopish"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => setExpanded(true)}
-                    className="h-10 w-10 rounded-full glass flex items-center justify-center text-neon hover:neon-glow-sm transition-all"
-                    aria-label="Qidirish"
-                  >
-                    <Search className="h-4 w-4" />
-                  </button>
-                )}
-              </div>
+                <Search className="h-4 w-4" />
+              </button>
+
+
+
 
               {user && (
                 <>
