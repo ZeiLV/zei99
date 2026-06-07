@@ -1,6 +1,6 @@
-import { LogOut, Search, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { LogOut, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
 import { VipStatusButton } from "./VipStatusButton";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -9,17 +9,12 @@ interface HeaderProps {
   onSearchChange: (v: string) => void;
 }
 
-export const Header = ({ search, onSearchChange }: HeaderProps) => {
-  const [expanded, setExpanded] = useState(false);
+export const Header = ({ search: _s, onSearchChange: _o }: HeaderProps) => {
   const pressTimer = useRef<number | null>(null);
   const longPressed = useRef(false);
-  const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
 
-  useEffect(() => {
-    if (expanded) inputRef.current?.focus();
-  }, [expanded]);
 
   const startPress = () => {
     longPressed.current = false;
