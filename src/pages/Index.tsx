@@ -163,7 +163,7 @@ const Index = ({ category }: Props) => {
                 }`}
               >
                 {loading ? (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-5">
                     {Array.from({ length: 12 }).map((_, i) => (
                       <div
                         key={i}
@@ -206,7 +206,7 @@ const Index = ({ category }: Props) => {
                     </div>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-5 animate-fade-up">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-5 animate-fade-up">
                     {filtered.map((c) => (
                       <PosterCard key={c.id} content={c} onClick={() => setSelected(c)} />
                     ))}
