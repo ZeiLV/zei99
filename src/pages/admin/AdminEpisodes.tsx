@@ -244,31 +244,89 @@ const AdminEpisodes = () => {
               </div>
             </div>
 
-            {/* TWO COLUMN LAYOUT */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {/* LEFT — Local Upload Hub */}
-              <div className="space-y-4 rounded-xl border border-neon/25 bg-neon/[0.02] p-4">
-                <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-neon/15 border border-neon/40 flex items-center justify-center">
-                    <HardDrive className="h-4 w-4 text-neon" />
+            {/* CLEAN TWO-SIDE SPLIT: Upload vs External link (mutually exclusive) */}
+            <div className="rounded-xl border border-neon/20 bg-[#070B16] overflow-hidden">
+              <div className="grid grid-cols-1 md:grid-cols-2 md:divide-x md:divide-neon/20">
+                {/* SIDE 1 — Direct upload */}
+                <div className="p-4 sm:p-5 space-y-3 bg-gradient-to-br from-neon/[0.04] to-transparent">
+                  <div className="flex items-center gap-2">
+                    <div className="h-8 w-8 rounded-lg bg-neon/15 border border-neon/40 flex items-center justify-center neon-glow-sm">
+                      <HardDrive className="h-4 w-4 text-neon" />
+                    </div>
+                    <div>
+                      <div className="font-display tracking-widest text-xs text-neon">
+                        SIDE 1 · SAYTGA YUKLASH
+                      </div>
+                      <div className="text-[10px] text-muted-foreground">
+                        Drag &amp; drop · MP4 / MKV / WEBM · 4K · 2GB gacha
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="font-display tracking-widest text-xs text-neon">LOCAL UPLOAD HUB</div>
-                    <div className="text-[10px] text-muted-foreground">To'g'ridan-to'g'ri sayt xotirasiga · 4K · 2GB gacha</div>
-                  </div>
-                </div>
-
-                <Field label="Asosiy video · HD/FullHD">
                   <VideoUpload
                     value={editing.video_url}
                     onChange={(v) => setEditing({ ...editing, video_url: v })}
                     uploadOnly
-                    compact
                   />
-                </Field>
+                  <div className="text-[10px] text-muted-foreground leading-relaxed">
+                    Fayl tanlangach to'g'ridan-to'g'ri xotiraga yuklanadi va shu epizodga bog'lanadi.
+                  </div>
+                </div>
 
+                {/* Divider for mobile */}
+                <div className="md:hidden flex items-center gap-3 px-5 py-2 bg-[#0A0F1E] border-y border-neon/15">
+                  <div className="flex-1 h-px bg-neon/20" />
+                  <span className="font-display text-[10px] tracking-[0.3em] text-neon/70">YOKI</span>
+                  <div className="flex-1 h-px bg-neon-pink/20" />
+                </div>
+
+                {/* SIDE 2 — External link / embed */}
+                <div className="p-4 sm:p-5 space-y-3 bg-gradient-to-br from-neon-pink/[0.04] to-transparent">
+                  <div className="flex items-center gap-2">
+                    <div className="h-8 w-8 rounded-lg bg-neon-pink/15 border border-neon-pink/40 flex items-center justify-center">
+                      <Globe className="h-4 w-4 text-neon-pink" />
+                    </div>
+                    <div>
+                      <div className="font-display tracking-widest text-xs text-neon-pink">
+                        SIDE 2 · TASHQI HAVOLA
+                      </div>
+                      <div className="text-[10px] text-muted-foreground">
+                        URL · embed · &lt;iframe&gt; — avtomatik aniqlanadi
+                      </div>
+                    </div>
+                  </div>
+
+                  <Field label="Video Linki yoki Embed Kodi">
+                    <textarea
+                      value={editing.video_url}
+                      onChange={(e) => setEditing({ ...editing, video_url: e.target.value })}
+                      placeholder='https://... yoki <iframe src="..."></iframe>'
+                      rows={5}
+                      className="w-full text-xs rounded-md border border-neon-pink/30 bg-[#0A0F1E] px-3 py-2 font-mono text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-neon-pink focus:ring-1 focus:ring-neon-pink/50 resize-none"
+                    />
+                  </Field>
+
+                  <div className="text-[10px] text-muted-foreground leading-relaxed">
+                    DoodStream · Vidoza · Google Drive · YouTube · Streamtape · Filemoon · Telegram · to'liq iframe — barchasi qo'llab-quvvatlanadi.
+                  </div>
+                </div>
+              </div>
+
+              <div className="px-4 py-2 bg-[#0A0F1E] border-t border-neon/15 text-[10px] text-amber-200/80 leading-snug">
+                Eslatma: ikkala maydon ham bitta «asosiy video» qiymatini boshqaradi — faqat <b>bittasini</b> ishlating.
+              </div>
+            </div>
+
+            {/* Optional extra sources — Server 2 & 4K (collapsed visual section) */}
+            <details className="rounded-xl border border-neon/15 bg-[#070B16] open:bg-[#070B16]">
+              <summary className="cursor-pointer list-none px-4 py-3 flex items-center justify-between">
+                <span className="font-display tracking-widest text-[11px] text-foreground/80">
+                  QO'SHIMCHA MANBALAR · SERVER 2 / 4K (ixtiyoriy)
+                </span>
+                <span className="text-[10px] text-muted-foreground">ochish ▾</span>
+              </summary>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border-t border-neon/15">
                 <Field label={(
-                  <span className="flex items-center gap-1.5"><Server className="h-3 w-3 text-neon/80" /> Server 2 · zaxira (upload)</span>
+                  <span className="flex items-center gap-1.5"><Server className="h-3 w-3 text-neon/80" /> Server 2 · zaxira</span>
                 ) as any}>
                   <VideoUpload
                     value={editing.server2_url}
@@ -277,9 +335,8 @@ const AdminEpisodes = () => {
                     compact
                   />
                 </Field>
-
                 <Field label={(
-                  <span className="flex items-center gap-1.5"><Crown className="h-3 w-3 text-neon-pink" /> 4K manba · faqat VIP (upload)</span>
+                  <span className="flex items-center gap-1.5"><Crown className="h-3 w-3 text-neon-pink" /> 4K manba · faqat VIP</span>
                 ) as any}>
                   <VideoUpload
                     value={editing.quality_4k_url}
@@ -289,42 +346,7 @@ const AdminEpisodes = () => {
                   />
                 </Field>
               </div>
-
-              {/* RIGHT — External Links Hub */}
-              <div className="space-y-4 rounded-xl border border-neon-pink/25 bg-neon-pink/[0.02] p-4">
-                <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-neon-pink/15 border border-neon-pink/40 flex items-center justify-center">
-                    <Globe className="h-4 w-4 text-neon-pink" />
-                  </div>
-                  <div>
-                    <div className="font-display tracking-widest text-xs text-neon-pink">EXTERNAL LINKS HUB</div>
-                    <div className="text-[10px] text-muted-foreground">URL · embed · iframe — bir zumda parse qilinadi</div>
-                  </div>
-                </div>
-
-                <Field label="Tashqi video URL / Embed kodi">
-                  <textarea
-                    value={editing.video_url}
-                    onChange={(e) => setEditing({ ...editing, video_url: e.target.value })}
-                    placeholder='https://... yoki <iframe src="..."></iframe>'
-                    rows={5}
-                    className="w-full text-xs rounded-md border border-neon-pink/30 bg-[#0A0F1E] px-3 py-2 font-mono text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-neon-pink focus:ring-1 focus:ring-neon-pink/50 resize-none"
-                  />
-                </Field>
-
-                <div className="text-[10px] text-muted-foreground leading-relaxed space-y-1">
-                  <div className="font-display tracking-widest text-foreground/70">QO'LLAB-QUVVATLANADI:</div>
-                  <div>• MP4 · M3U8 (HLS) · WEBM to'g'ridan-to'g'ri linklar</div>
-                  <div>• Google Drive (share / preview)</div>
-                  <div>• YouTube · Vimeo · DoodStream · Vidoza · Streamtape · Filemoon · Mixdrop · OK.ru · Rutube · Dailymotion · Telegram</div>
-                  <div>• To'liq <code className="text-neon">&lt;iframe src="..."&gt;</code> embed kodlari</div>
-                </div>
-
-                <div className="rounded-lg border border-amber-400/30 bg-amber-400/[0.04] px-3 py-2 text-[10px] text-amber-200/90 leading-snug">
-                  Eslatma: tashqi link kiritilsa, asosiy video sifatida o'sha ishlatiladi. Local upload zonasi ham asosiy videoni boshqaradi — birini tanlang.
-                </div>
-              </div>
-            </div>
+            </details>
 
             {/* VIP + Early access */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
