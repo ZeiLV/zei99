@@ -56,7 +56,6 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
             </button>
 
             <div className="flex items-center gap-2 sm:gap-2.5 relative">
-              <div
               <button
                 onClick={() => navigate("/search")}
                 className="h-10 w-10 rounded-full glass flex items-center justify-center text-neon hover:neon-glow-sm transition-all"
@@ -64,6 +63,8 @@ export const Header = ({ search, onSearchChange }: HeaderProps) => {
               >
                 <Search className="h-4 w-4" />
               </button>
+
+
 
 
               {user && (
