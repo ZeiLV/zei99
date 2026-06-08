@@ -185,20 +185,24 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
   };
 
   return (
-    <div className="relative w-full">
-      {/* Breathing glow halo */}
+    <div className="relative w-auto -mx-[15px] sm:mx-auto sm:w-full md:max-w-[1200px]">
+      {/* Ambient neon-blue theater glow */}
       <div
         aria-hidden
-        className="absolute -inset-3 sm:-inset-4 rounded-2xl pointer-events-none animate-player-glow opacity-70 blur-2xl"
+        className="absolute -inset-2 sm:-inset-6 rounded-2xl pointer-events-none animate-player-glow opacity-80 blur-3xl"
+        style={{
+          background:
+            "radial-gradient(60% 60% at 50% 50%, hsl(var(--neon-cyan) / 0.35), hsl(var(--neon) / 0.18) 60%, transparent 80%)",
+        }}
       />
 
       <div
         ref={containerRef}
-        className="relative w-full overflow-hidden bg-[#0A0F1E] player-frame fullscreen-target rounded-xl border border-neon/20"
+        className="relative w-full aspect-video overflow-hidden bg-[#0A0F1E] player-frame fullscreen-target sm:rounded-xl border border-neon/30 shadow-[0_0_40px_-10px_hsl(var(--neon)/0.55),0_0_120px_-30px_hsl(var(--neon-cyan)/0.55)]"
         style={{ zIndex: 9999 }}
       >
         {!isVip && hasSource && isIframe ? (
-          <div className="relative w-full bg-black" style={{ aspectRatio: "16 / 9" }}>
+          <>
             <iframe
               key={resolved.kind === "iframe" ? resolved.src : "empty"}
               src={resolved.kind === "iframe" ? resolved.src : ""}
@@ -210,21 +214,21 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
             />
             <button
               onClick={goFullscreen}
-              className="absolute bottom-2 right-2 z-[3] h-9 w-9 rounded-md bg-[#0A0F1E]/70 backdrop-blur-sm border border-neon/30 text-neon hover:bg-neon/15 transition-colors flex items-center justify-center"
+              className="absolute bottom-2 right-2 z-[3] h-10 w-10 sm:h-9 sm:w-9 rounded-md bg-[#0A0F1E]/70 backdrop-blur-sm border border-neon/30 text-neon hover:bg-neon/15 transition-colors flex items-center justify-center"
               aria-label="To'liq ekran"
               title="To'liq ekran"
             >
-              <Maximize className="h-4 w-4" />
+              <Maximize className="h-5 w-5 sm:h-4 sm:w-4" />
             </button>
-          </div>
+          </>
         ) : !isVip && hasSource ? (
           <>
             <video
               ref={videoRef}
               key={src}
               playsInline
-              preload="metadata"
-              className="block w-full h-auto max-h-[85vh] object-contain bg-[#0A0F1E]"
+              preload="auto"
+              className="absolute inset-0 w-full h-full object-contain bg-[#0A0F1E]"
               onClick={() => { armHide(); togglePlay(); }}
               onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
               onTimeUpdate={(e) => setTime(e.currentTarget.currentTime)}
@@ -294,35 +298,35 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 sm:gap-3 text-xs">
-                  <button onClick={togglePlay} className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-1.5 transition-colors" aria-label={playing ? "Pauza" : "O'ynatish"}>
-                    {playing ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+                <div className="flex items-center gap-1.5 sm:gap-3 text-xs flex-wrap">
+                  <button onClick={togglePlay} className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-2 sm:p-1.5 transition-colors" aria-label={playing ? "Pauza" : "O'ynatish"}>
+                    {playing ? <Pause className="h-6 w-6 sm:h-5 sm:w-5" /> : <Play className="h-6 w-6 sm:h-5 sm:w-5" />}
                   </button>
 
                   <button
                     onClick={() => skip(-10)}
-                    className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-1.5 transition-colors flex items-center gap-0.5"
+                    className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-2 sm:p-1.5 transition-colors flex items-center gap-0.5"
                     aria-label="10 soniya orqaga"
                   >
-                    <RotateCcw className="h-4 w-4" />
+                    <RotateCcw className="h-5 w-5 sm:h-4 sm:w-4" />
                     <span className="text-[10px] font-display tracking-wider">10</span>
                   </button>
 
                   <button
                     onClick={() => skip(10)}
-                    className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-1.5 transition-colors flex items-center gap-0.5"
+                    className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-2 sm:p-1.5 transition-colors flex items-center gap-0.5"
                     aria-label="10 soniya oldinga"
                   >
-                    <RotateCw className="h-4 w-4" />
+                    <RotateCw className="h-5 w-5 sm:h-4 sm:w-4" />
                     <span className="text-[10px] font-display tracking-wider">10</span>
                   </button>
 
                   <button
                     onClick={() => { const v = videoRef.current; if (v) v.muted = !v.muted; }}
-                    className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-1.5 transition-colors"
+                    className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-2 sm:p-1.5 transition-colors"
                     aria-label="Ovoz"
                   >
-                    {muted || volume === 0 ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                    {muted || volume === 0 ? <VolumeX className="h-5 w-5 sm:h-4 sm:w-4" /> : <Volume2 className="h-5 w-5 sm:h-4 sm:w-4" />}
                   </button>
 
                   <input
@@ -338,17 +342,17 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
                     className="hidden sm:block w-20 accent-[hsl(var(--neon))]"
                   />
 
-                  <span className="text-white/80 tabular-nums text-[11px]">
+                  <span className="text-white/80 tabular-nums text-[11px] whitespace-nowrap">
                     {fmt(time)} / {fmt(duration)}
                   </span>
 
                   <div className="ml-auto relative">
                     <button
                       onClick={() => setSpeedOpen((o) => !o)}
-                      className="text-white hover:text-neon hover:bg-neon/10 transition-colors flex items-center gap-1 px-2 py-1 rounded-md"
+                      className="text-white hover:text-neon hover:bg-neon/10 transition-colors flex items-center gap-1 px-2 py-1.5 sm:py-1 rounded-md"
                       aria-label="Tezlik"
                     >
-                      <Gauge className="h-4 w-4" />
+                      <Gauge className="h-5 w-5 sm:h-4 sm:w-4" />
                       <span className="text-[11px] font-display tracking-wider tabular-nums">{speed}x</span>
                     </button>
                     {speedOpen && (
@@ -370,10 +374,10 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
 
                   <button
                     onClick={goFullscreen}
-                    className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-1.5 transition-colors"
+                    className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-2 sm:p-1.5 transition-colors"
                     aria-label="To'liq ekran"
                   >
-                    <Maximize className="h-4 w-4" />
+                    <Maximize className="h-5 w-5 sm:h-4 sm:w-4" />
                   </button>
                 </div>
               </div>
@@ -388,7 +392,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
             />
           </>
         ) : !isVip ? (
-          <div className="w-full flex items-center justify-center text-muted-foreground text-sm bg-[#0A0F1E]" style={{ aspectRatio: "16 / 9" }}>
+          <div className="absolute inset-0 flex items-center justify-center text-muted-foreground text-sm bg-[#0A0F1E]">
             Video manbasi noto'g'ri
           </div>
         ) : null}
@@ -403,8 +407,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
         {/* VIP / Early-access lock overlay */}
         {isVip && (
           <div
-            className="w-full flex flex-col items-center justify-center gap-4 z-10 bg-[#0A0F1E]/80 backdrop-blur-md px-6 text-center"
-            style={{ aspectRatio: "16 / 9" }}
+            className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-10 bg-[#0A0F1E]/80 backdrop-blur-md px-6 text-center"
           >
             <div className="h-12 w-12 rounded-full flex items-center justify-center bg-neon/10 border border-neon/40 neon-glow-sm">
               <Lock className="h-5 w-5 text-neon" />
