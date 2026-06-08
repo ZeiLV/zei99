@@ -392,7 +392,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
             />
           </>
         ) : !isVip ? (
-          <div className="w-full flex items-center justify-center text-muted-foreground text-sm bg-[#0A0F1E]" style={{ aspectRatio: "16 / 9" }}>
+          <div className="absolute inset-0 flex items-center justify-center text-muted-foreground text-sm bg-[#0A0F1E]">
             Video manbasi noto'g'ri
           </div>
         ) : null}
