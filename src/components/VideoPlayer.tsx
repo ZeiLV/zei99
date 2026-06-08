@@ -407,8 +407,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
         {/* VIP / Early-access lock overlay */}
         {isVip && (
           <div
-            className="w-full flex flex-col items-center justify-center gap-4 z-10 bg-[#0A0F1E]/80 backdrop-blur-md px-6 text-center"
-            style={{ aspectRatio: "16 / 9" }}
+            className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-10 bg-[#0A0F1E]/80 backdrop-blur-md px-6 text-center"
           >
             <div className="h-12 w-12 rounded-full flex items-center justify-center bg-neon/10 border border-neon/40 neon-glow-sm">
               <Lock className="h-5 w-5 text-neon" />
