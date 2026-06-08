@@ -185,16 +185,20 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
   };
 
   return (
-    <div className="relative w-full">
-      {/* Breathing glow halo */}
+    <div className="relative w-auto -mx-[15px] sm:mx-auto sm:w-full md:max-w-[1200px]">
+      {/* Ambient neon-blue theater glow */}
       <div
         aria-hidden
-        className="absolute -inset-3 sm:-inset-4 rounded-2xl pointer-events-none animate-player-glow opacity-70 blur-2xl"
+        className="absolute -inset-2 sm:-inset-6 rounded-2xl pointer-events-none animate-player-glow opacity-80 blur-3xl"
+        style={{
+          background:
+            "radial-gradient(60% 60% at 50% 50%, hsl(var(--neon-cyan) / 0.35), hsl(var(--neon) / 0.18) 60%, transparent 80%)",
+        }}
       />
 
       <div
         ref={containerRef}
-        className="relative w-full overflow-hidden bg-[#0A0F1E] player-frame fullscreen-target rounded-xl border border-neon/20"
+        className="relative w-full aspect-video overflow-hidden bg-[#0A0F1E] player-frame fullscreen-target sm:rounded-xl border border-neon/30 shadow-[0_0_40px_-10px_hsl(var(--neon)/0.55),0_0_120px_-30px_hsl(var(--neon-cyan)/0.55)]"
         style={{ zIndex: 9999 }}
       >
         {!isVip && hasSource && isIframe ? (
