@@ -202,7 +202,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
         style={{ zIndex: 9999 }}
       >
         {!isVip && hasSource && isIframe ? (
-          <div className="relative w-full bg-black" style={{ aspectRatio: "16 / 9" }}>
+          <>
             <iframe
               key={resolved.kind === "iframe" ? resolved.src : "empty"}
               src={resolved.kind === "iframe" ? resolved.src : ""}
@@ -214,13 +214,13 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
             />
             <button
               onClick={goFullscreen}
-              className="absolute bottom-2 right-2 z-[3] h-9 w-9 rounded-md bg-[#0A0F1E]/70 backdrop-blur-sm border border-neon/30 text-neon hover:bg-neon/15 transition-colors flex items-center justify-center"
+              className="absolute bottom-2 right-2 z-[3] h-10 w-10 sm:h-9 sm:w-9 rounded-md bg-[#0A0F1E]/70 backdrop-blur-sm border border-neon/30 text-neon hover:bg-neon/15 transition-colors flex items-center justify-center"
               aria-label="To'liq ekran"
               title="To'liq ekran"
             >
-              <Maximize className="h-4 w-4" />
+              <Maximize className="h-5 w-5 sm:h-4 sm:w-4" />
             </button>
-          </div>
+          </>
         ) : !isVip && hasSource ? (
           <>
             <video
