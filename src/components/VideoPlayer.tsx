@@ -227,8 +227,8 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
               ref={videoRef}
               key={src}
               playsInline
-              preload="metadata"
-              className="block w-full h-auto max-h-[85vh] object-contain bg-[#0A0F1E]"
+              preload="auto"
+              className="absolute inset-0 w-full h-full object-contain bg-[#0A0F1E]"
               onClick={() => { armHide(); togglePlay(); }}
               onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
               onTimeUpdate={(e) => setTime(e.currentTarget.currentTime)}
