@@ -298,35 +298,35 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 sm:gap-3 text-xs">
-                  <button onClick={togglePlay} className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-1.5 transition-colors" aria-label={playing ? "Pauza" : "O'ynatish"}>
-                    {playing ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+                <div className="flex items-center gap-1.5 sm:gap-3 text-xs flex-wrap">
+                  <button onClick={togglePlay} className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-2 sm:p-1.5 transition-colors" aria-label={playing ? "Pauza" : "O'ynatish"}>
+                    {playing ? <Pause className="h-6 w-6 sm:h-5 sm:w-5" /> : <Play className="h-6 w-6 sm:h-5 sm:w-5" />}
                   </button>
 
                   <button
                     onClick={() => skip(-10)}
-                    className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-1.5 transition-colors flex items-center gap-0.5"
+                    className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-2 sm:p-1.5 transition-colors flex items-center gap-0.5"
                     aria-label="10 soniya orqaga"
                   >
-                    <RotateCcw className="h-4 w-4" />
+                    <RotateCcw className="h-5 w-5 sm:h-4 sm:w-4" />
                     <span className="text-[10px] font-display tracking-wider">10</span>
                   </button>
 
                   <button
                     onClick={() => skip(10)}
-                    className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-1.5 transition-colors flex items-center gap-0.5"
+                    className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-2 sm:p-1.5 transition-colors flex items-center gap-0.5"
                     aria-label="10 soniya oldinga"
                   >
-                    <RotateCw className="h-4 w-4" />
+                    <RotateCw className="h-5 w-5 sm:h-4 sm:w-4" />
                     <span className="text-[10px] font-display tracking-wider">10</span>
                   </button>
 
                   <button
                     onClick={() => { const v = videoRef.current; if (v) v.muted = !v.muted; }}
-                    className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-1.5 transition-colors"
+                    className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-2 sm:p-1.5 transition-colors"
                     aria-label="Ovoz"
                   >
-                    {muted || volume === 0 ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                    {muted || volume === 0 ? <VolumeX className="h-5 w-5 sm:h-4 sm:w-4" /> : <Volume2 className="h-5 w-5 sm:h-4 sm:w-4" />}
                   </button>
 
                   <input
@@ -342,17 +342,17 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
                     className="hidden sm:block w-20 accent-[hsl(var(--neon))]"
                   />
 
-                  <span className="text-white/80 tabular-nums text-[11px]">
+                  <span className="text-white/80 tabular-nums text-[11px] whitespace-nowrap">
                     {fmt(time)} / {fmt(duration)}
                   </span>
 
                   <div className="ml-auto relative">
                     <button
                       onClick={() => setSpeedOpen((o) => !o)}
-                      className="text-white hover:text-neon hover:bg-neon/10 transition-colors flex items-center gap-1 px-2 py-1 rounded-md"
+                      className="text-white hover:text-neon hover:bg-neon/10 transition-colors flex items-center gap-1 px-2 py-1.5 sm:py-1 rounded-md"
                       aria-label="Tezlik"
                     >
-                      <Gauge className="h-4 w-4" />
+                      <Gauge className="h-5 w-5 sm:h-4 sm:w-4" />
                       <span className="text-[11px] font-display tracking-wider tabular-nums">{speed}x</span>
                     </button>
                     {speedOpen && (
@@ -374,10 +374,10 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
 
                   <button
                     onClick={goFullscreen}
-                    className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-1.5 transition-colors"
+                    className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-2 sm:p-1.5 transition-colors"
                     aria-label="To'liq ekran"
                   >
-                    <Maximize className="h-4 w-4" />
+                    <Maximize className="h-5 w-5 sm:h-4 sm:w-4" />
                   </button>
                 </div>
               </div>
