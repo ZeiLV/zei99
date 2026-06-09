@@ -96,7 +96,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
   const armHide = () => {
     setShowControls(true);
     if (hideTimer.current) window.clearTimeout(hideTimer.current);
-    hideTimer.current = window.setTimeout(() => setShowControls(false), 2800);
+    hideTimer.current = window.setTimeout(() => setShowControls(false), 2000);
   };
 
   const triggerFlash = (kind: "back" | "fwd" | "play" | "pause") => {
