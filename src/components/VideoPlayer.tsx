@@ -298,7 +298,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
             {/* Controls */}
             <div
               className={`absolute inset-x-0 bottom-0 z-[7] transition-all duration-200 ${
-                showControls || !playing ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 pointer-events-none"
+                showControls ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 pointer-events-none"
               }`}
               onMouseMove={armHide}
             >
