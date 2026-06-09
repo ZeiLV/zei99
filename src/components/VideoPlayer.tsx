@@ -243,7 +243,13 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
               preload="auto"
               className="absolute inset-0 w-full h-full object-contain bg-[#0A0F1E]"
               onClick={() => { armHide(); togglePlay(); }}
-              onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
+              onLoadedMetadata={(e) => {
+                const el = e.currentTarget;
+                setDuration(el.duration);
+                if (el.videoWidth && el.videoHeight) {
+                  setVideoAspect(el.videoWidth / el.videoHeight);
+                }
+              }}
               onTimeUpdate={(e) => setTime(e.currentTarget.currentTime)}
               onPlay={() => setPlaying(true)}
               onPause={() => setPlaying(false)}
