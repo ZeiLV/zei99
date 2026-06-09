@@ -40,6 +40,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
   const [speed, setSpeed] = useState(1);
   const [speedOpen, setSpeedOpen] = useState(false);
   const [flash, setFlash] = useState<null | "back" | "fwd" | "play" | "pause">(null);
+  const [videoAspect, setVideoAspect] = useState<number | null>(null);
   const hideTimer = useRef<number | null>(null);
   const flashTimer = useRef<number | null>(null);
 
