@@ -185,6 +185,13 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
     window.open(src, "_blank", "noopener,noreferrer");
   };
 
+  // Aspect ratio strategy:
+  //  - iframes: fixed 16/9 (we cannot know the source's native ratio)
+  //  - <video>: start at 16/9, swap to the real ratio once metadata loads.
+  //  - vertical videos are capped at 85vh so they never overflow the viewport.
+  const isVertical = videoAspect != null && videoAspect < 1;
+  const frameAspect = isIframe ? 16 / 9 : videoAspect ?? 16 / 9;
+
   return (
     <div className="relative w-auto -mx-[15px] sm:mx-auto sm:w-full md:max-w-[1200px]">
       {/* Ambient neon-blue theater glow */}
@@ -199,8 +206,13 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
 
       <div
         ref={containerRef}
-        className="relative w-full aspect-video overflow-hidden bg-[#0A0F1E] player-frame fullscreen-target sm:rounded-xl border border-neon/30 shadow-[0_0_40px_-10px_hsl(var(--neon)/0.55),0_0_120px_-30px_hsl(var(--neon-cyan)/0.55)]"
-        style={{ zIndex: 9999 }}
+        className="relative mx-auto w-full overflow-hidden bg-[#0A0F1E] player-frame fullscreen-target sm:rounded-xl border border-neon/30 shadow-[0_0_40px_-10px_hsl(var(--neon)/0.55),0_0_120px_-30px_hsl(var(--neon-cyan)/0.55)]"
+        style={{
+          aspectRatio: `${frameAspect}`,
+          maxHeight: isVertical ? "85vh" : undefined,
+          width: isVertical ? "auto" : "100%",
+          zIndex: 9999,
+        }}
       >
         {!isVip && hasSource && isIframe ? (
           <>
