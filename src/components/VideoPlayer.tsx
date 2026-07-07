@@ -69,6 +69,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
     setPlaying(false);
     setSpeed(1);
     setVideoAspect(null);
+    setLoadError(false);
 
     if (isHls(src)) {
       if (v.canPlayType("application/vnd.apple.mpegurl")) {
