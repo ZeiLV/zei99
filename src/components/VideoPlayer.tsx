@@ -387,7 +387,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
         ) : null}
 
         {/* Buffering ring */}
-        {!isVip && buffering && hasSource && (
+        {!isVip && buffering && hasSource && !loadError && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[6]">
             <div className="h-12 w-12 rounded-full border-2 border-neon/20 border-t-neon animate-spin-neon" />
           </div>
