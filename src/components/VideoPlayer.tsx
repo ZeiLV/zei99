@@ -79,6 +79,12 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
         const hls = new Hls({ enableWorker: true, lowLatencyMode: false });
         hls.loadSource(src);
         hls.attachMedia(v);
+        hls.on(Hls.Events.ERROR, (_evt, data) => {
+          if (data.fatal) {
+            setLoadError(true);
+            setBuffering(false);
+          }
+        });
         hlsRef.current = hls;
       } else {
         v.src = src;
