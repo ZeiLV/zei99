@@ -271,7 +271,6 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
               }}
               onError={() => { setLoadError(true); setBuffering(false); }}
               onStalled={() => { /* keep buffering, no crash */ }}
-              crossOrigin="anonymous"
             />
             {loadError && (
               <div className="absolute inset-0 z-[8] flex items-center justify-center bg-[#0A0F1E]/95 px-6 text-center">
