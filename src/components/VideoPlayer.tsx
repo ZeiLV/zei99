@@ -41,6 +41,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
   const [speedOpen, setSpeedOpen] = useState(false);
   const [flash, setFlash] = useState<null | "back" | "fwd" | "play" | "pause">(null);
   const [videoAspect, setVideoAspect] = useState<number | null>(null);
+  const [loadError, setLoadError] = useState(false);
   const hideTimer = useRef<number | null>(null);
   const flashTimer = useRef<number | null>(null);
 
@@ -68,6 +69,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
     setPlaying(false);
     setSpeed(1);
     setVideoAspect(null);
+    setLoadError(false);
 
     if (isHls(src)) {
       if (v.canPlayType("application/vnd.apple.mpegurl")) {
@@ -77,6 +79,12 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
         const hls = new Hls({ enableWorker: true, lowLatencyMode: false });
         hls.loadSource(src);
         hls.attachMedia(v);
+        hls.on(Hls.Events.ERROR, (_evt, data) => {
+          if (data.fatal) {
+            setLoadError(true);
+            setBuffering(false);
+          }
+        });
         hlsRef.current = hls;
       } else {
         v.src = src;
@@ -261,7 +269,16 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
                 setVolume(e.currentTarget.volume);
                 setMuted(e.currentTarget.muted);
               }}
+              onError={() => { setLoadError(true); setBuffering(false); }}
+              onStalled={() => { /* keep buffering, no crash */ }}
             />
+            {loadError && (
+              <div className="absolute inset-0 z-[8] flex items-center justify-center bg-[#0A0F1E]/95 px-6 text-center">
+                <p className="font-display text-sm sm:text-base text-foreground/90 max-w-md leading-relaxed">
+                  Video yuklanishda xatolik yuz berdi. Havolani tekshiring.
+                </p>
+              </div>
+            )}
 
             {/* Center action flash */}
             {flash && (
@@ -370,7 +387,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
         ) : null}
 
         {/* Buffering ring */}
-        {!isVip && buffering && hasSource && (
+        {!isVip && buffering && hasSource && !loadError && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[6]">
             <div className="h-12 w-12 rounded-full border-2 border-neon/20 border-t-neon animate-spin-neon" />
           </div>
