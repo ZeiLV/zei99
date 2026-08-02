@@ -42,6 +42,10 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
   const [flash, setFlash] = useState<null | "back" | "fwd" | "play" | "pause">(null);
   const [videoAspect, setVideoAspect] = useState<number | null>(null);
   const [loadError, setLoadError] = useState(false);
+  // Pre-buffer gate: hold playback until ~18% (or 40s) of the video is cached
+  const [preparing, setPreparing] = useState(true);
+  const [bufferPct, setBufferPct] = useState(0);
+  const readyRef = useRef(false);
   const hideTimer = useRef<number | null>(null);
   const flashTimer = useRef<number | null>(null);
 
@@ -70,6 +74,9 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
     setSpeed(1);
     setVideoAspect(null);
     setLoadError(false);
+    setPreparing(true);
+    setBufferPct(0);
+    readyRef.current = false;
 
     if (isHls(src)) {
       if (v.canPlayType("application/vnd.apple.mpegurl")) {
@@ -100,6 +107,50 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
       }
     };
   }, [src, isIframe]);
+
+  const BUFFER_TARGET = 0.18; // 18% of the clip
+  const BUFFER_SECONDS = 40;  // ...or 40s, whichever comes first
+
+  const evaluateBuffer = () => {
+    const v = videoRef.current;
+    if (!v || readyRef.current) return;
+    const dur = v.duration;
+    let end = 0;
+    try {
+      if (v.buffered.length) end = v.buffered.end(v.buffered.length - 1);
+    } catch { /* buffered can throw on some sources */ }
+
+    let pct: number;
+    if (isFinite(dur) && dur > 0) {
+      const needed = Math.min(dur, Math.max(dur * BUFFER_TARGET, Math.min(BUFFER_SECONDS, dur)));
+      pct = Math.min(100, (end / needed) * 100);
+    } else {
+      pct = Math.min(100, (end / BUFFER_SECONDS) * 100);
+    }
+    setBufferPct((prev) => Math.max(prev, Math.round(pct)));
+
+    if (pct >= 99 || v.readyState >= 4) {
+      readyRef.current = true;
+      setBufferPct(100);
+      setPreparing(false);
+      setBuffering(false);
+      v.play().catch(() => { /* autoplay blocked — user taps play */ });
+    }
+  };
+
+  // Safety net: never hang forever on sources that don't report progress
+  useEffect(() => {
+    if (!preparing || !src) return;
+    const t = window.setTimeout(() => {
+      if (readyRef.current) return;
+      readyRef.current = true;
+      setBufferPct(100);
+      setPreparing(false);
+      setBuffering(false);
+      videoRef.current?.play().catch(() => {});
+    }, 15000);
+    return () => window.clearTimeout(t);
+  }, [preparing, src]);
 
   const armHide = () => {
     setShowControls(true);
@@ -260,6 +311,9 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
                 }
               }}
               onTimeUpdate={(e) => setTime(e.currentTarget.currentTime)}
+              onProgress={evaluateBuffer}
+              onCanPlayThrough={evaluateBuffer}
+              onDurationChange={evaluateBuffer}
               onPlay={() => setPlaying(true)}
               onPause={() => setPlaying(false)}
               onWaiting={() => setBuffering(true)}
@@ -269,7 +323,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
                 setVolume(e.currentTarget.volume);
                 setMuted(e.currentTarget.muted);
               }}
-              onError={() => { setLoadError(true); setBuffering(false); }}
+              onError={() => { setLoadError(true); setBuffering(false); setPreparing(false); }}
               onStalled={() => { /* keep buffering, no crash */ }}
             />
             {loadError && (
@@ -296,7 +350,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
             )}
 
             {/* Big center play overlay when paused */}
-            {!playing && !buffering && !flash && (
+            {!playing && !buffering && !flash && !preparing && (
               <button
                 onClick={togglePlay}
                 className="absolute inset-0 flex items-center justify-center z-[6] group"
@@ -386,8 +440,37 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
           </div>
         ) : null}
 
-        {/* Buffering ring */}
-        {!isVip && buffering && hasSource && !loadError && (
+        {/* Pre-buffer loader */}
+        {!isVip && hasSource && !isIframe && preparing && !loadError && (
+          <div className="absolute inset-0 z-[9] flex flex-col items-center justify-center gap-5 bg-[#0A0F1E]/92 backdrop-blur-sm px-8">
+            <div className="relative h-20 w-20">
+              <div className="absolute inset-0 rounded-full border-2 border-neon/15" />
+              <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-neon border-r-neon/60 animate-spin-neon" />
+              <div className="absolute inset-2 rounded-full bg-neon/10 blur-md animate-pulse" />
+              <div className="absolute inset-0 flex items-center justify-center font-display text-sm text-neon tabular-nums">
+                {bufferPct}%
+              </div>
+            </div>
+
+            <div className="w-full max-w-[280px]">
+              <div className="h-1 w-full rounded-full bg-white/10 overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-neon transition-all duration-300"
+                  style={{ width: `${bufferPct}%`, boxShadow: "0 0 10px hsl(var(--neon) / 0.8)" }}
+                />
+              </div>
+              <p className="mt-3 text-center font-display text-[11px] tracking-[0.25em] text-neon/80 animate-pulse">
+                YUKLANMOQDA
+              </p>
+              <p className="mt-1 text-center text-[10px] text-foreground/40">
+                Uzilishsiz tomosha uchun video oldindan yuklanmoqda
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Buffering ring (mid-playback) */}
+        {!isVip && buffering && !preparing && hasSource && !loadError && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[6]">
             <div className="h-12 w-12 rounded-full border-2 border-neon/20 border-t-neon animate-spin-neon" />
           </div>
