@@ -17,6 +17,9 @@ import AdminContentEdit from "./pages/admin/AdminContentEdit.tsx";
 import AdminEpisodes from "./pages/admin/AdminEpisodes.tsx";
 import AdminVip from "./pages/admin/AdminVip.tsx";
 import AdminVoting from "./pages/admin/AdminVoting.tsx";
+import AdminStats from "./pages/admin/AdminStats.tsx";
+import AdminSite from "./pages/admin/AdminSite.tsx";
+import AdminAdmins from "./pages/admin/AdminAdmins.tsx";
 import Voting from "./pages/Voting.tsx";
 import SearchPage from "./pages/Search.tsx";
 import Profile from "./pages/Profile.tsx";
@@ -54,6 +57,9 @@ const App = () => (
                 <Route path="content/:id/episodes" element={<AdminEpisodes />} />
                 <Route path="vip" element={<AdminVip />} />
                 <Route path="voting" element={<AdminVoting />} />
+                <Route path="stats" element={<AdminStats />} />
+                <Route path="site" element={<AdminSite />} />
+                <Route path="admins" element={<AdminAdmins />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
