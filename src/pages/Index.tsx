@@ -97,8 +97,6 @@ const Index = ({ category }: Props) => {
 
       {!showIntro && (
         <div className="min-h-screen relative animate-zoom-in">
-          <div className="fixed inset-0 -z-10 animate-breathing pointer-events-none opacity-60" />
-
           <Header search={search} onSearchChange={setSearch} />
 
           {selected ? (

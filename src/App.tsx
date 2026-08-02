@@ -5,6 +5,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
+import { ThemeProvider } from "@/hooks/useTheme";
 import { AuthGuard } from "@/components/AuthGuard";
 import Index from "./pages/Index.tsx";
 import Auth from "./pages/Auth.tsx";
@@ -25,6 +26,7 @@ import Profile from "./pages/Profile.tsx";
 const queryClient = new QueryClient();
 
 const App = () => (
+  <ThemeProvider>
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -60,6 +62,7 @@ const App = () => (
       </TooltipProvider>
     </QueryClientProvider>
   </HelmetProvider>
+  </ThemeProvider>
 );
 
 export default App;

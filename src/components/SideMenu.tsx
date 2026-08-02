@@ -93,7 +93,8 @@ export const SideMenu = ({ open, onClose }: Props) => {
 
           <button
             onClick={() => setVipOpen(true)}
-            className="w-full h-12 rounded-xl bg-neon text-primary-foreground font-display text-xs tracking-[0.2em] neon-glow-md hover:neon-glow-lg transition-all flex items-center justify-center gap-2"
+            className="mt-3 mb-1 mx-auto w-[180px] max-w-full h-11 rounded-full font-display text-[11px] tracking-[0.18em] text-[#1a0f00] flex items-center justify-center gap-2 transition-transform hover:scale-[1.03] active:scale-95 shadow-[0_0_16px_hsl(45_95%_55%/0.45)]"
+            style={{ background: "linear-gradient(135deg, hsl(45 95% 58%), hsl(35 100% 50%))" }}
           >
             <Crown className="h-4 w-4" /> VIP TARIFLAR
           </button>
