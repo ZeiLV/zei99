@@ -1,5 +1,14 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Crown, Download, CheckCircle2, Sparkles } from "lucide-react";
+import {
+  Crown,
+  Download,
+  Clock,
+  MonitorPlay,
+  ImagePlus,
+  Vote,
+  BadgeCheck,
+  Send,
+} from "lucide-react";
 
 interface Props {
   open: boolean;
@@ -7,49 +16,86 @@ interface Props {
 }
 
 const PERKS = [
-  { icon: Download, text: "Cheksiz yuklab olish" },
-  { icon: Sparkles, text: "Eng yangi epizodlar birinchi" },
-  { icon: CheckCircle2, text: "Reklamalarsiz ko'rish" },
+  { icon: Clock, title: "Erta kirish", desc: "Yangi epizodlarni hammadan oldin ko'ring" },
+  { icon: Download, title: "Yuklab olish", desc: "Cheksiz yuklab olish imkoniyati" },
+  { icon: MonitorPlay, title: "4K sifat", desc: "Eng yuqori sifatdagi video va 2-server" },
+  { icon: ImagePlus, title: "Profil rasmi", desc: "O'z rasmingizni profilga qo'ying" },
+  { icon: Vote, title: "Ovoz berish", desc: "Keyingi loyihani siz tanlaysiz" },
+  { icon: BadgeCheck, title: "VIP nishon", desc: "Ism yoningizda oltin VIP badge" },
 ];
 
 export const VipModal = ({ open, onOpenChange }: Props) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-sm bg-[#0A0F1E]/95 border-white/10 backdrop-blur-xl">
-        <div className="flex flex-col items-center text-center pt-2">
-          <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-amber-400/20 to-amber-600/10 border border-amber-400/30 flex items-center justify-center mb-4">
-            <Crown className="h-7 w-7 text-amber-400" />
-          </div>
-          <h2 className="font-display text-xl tracking-widest text-white">VIP OBUNA</h2>
-          <p className="text-sm text-white/60 mt-2 max-w-xs">
-            Yuklab olish faqat VIP foydalanuvchilar uchun. Quyidagi tugma orqali obuna bo'ling.
-          </p>
+      <DialogContent
+        className="max-w-sm border-0 p-0 overflow-hidden"
+        style={{
+          background: "linear-gradient(165deg, hsl(226 50% 9%) 0%, hsl(35 35% 11%) 100%)",
+          border: "1px solid hsl(45 95% 55% / 0.35)",
+          boxShadow: "0 0 40px -10px hsl(45 95% 55% / 0.45)",
+        }}
+      >
+        <div className="max-h-[80vh] overflow-y-auto scrollbar-hide px-5 pb-5 pt-6">
+          <div className="flex flex-col items-center text-center">
+            <div
+              className="h-14 w-14 rounded-2xl flex items-center justify-center mb-3 border border-amber-400/40"
+              style={{ background: "linear-gradient(135deg, hsl(45 95% 55% / 0.22), hsl(35 100% 50% / 0.12))" }}
+            >
+              <Crown className="h-7 w-7 text-amber-400 drop-shadow-[0_0_8px_hsl(45_95%_60%/0.7)]" />
+            </div>
 
-          <div className="w-full mt-5 space-y-2">
-            {PERKS.map(({ icon: Icon, text }) => (
+            <h2
+              className="font-display text-xl tracking-[0.2em]"
+              style={{
+                background: "linear-gradient(135deg, hsl(45 95% 62%), hsl(35 100% 52%))",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                color: "transparent",
+              }}
+            >
+              VIP OBUNA
+            </h2>
+            <p className="text-xs text-foreground/55 mt-2 max-w-[16rem] leading-relaxed">
+              VIP obuna sizga quyidagi barcha imkoniyatlarni ochib beradi:
+            </p>
+          </div>
+
+          <div className="mt-5 space-y-2">
+            {PERKS.map(({ icon: Icon, title, desc }) => (
               <div
-                key={text}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/5 border border-white/5"
+                key={title}
+                className="flex items-start gap-3 px-3 py-2.5 rounded-xl border border-amber-400/15 bg-amber-400/[0.04]"
               >
-                <Icon className="h-4 w-4 text-amber-400 shrink-0" />
-                <span className="text-sm text-white/85 text-left">{text}</span>
+                <span className="mt-0.5 h-7 w-7 shrink-0 rounded-lg bg-amber-400/12 border border-amber-400/25 flex items-center justify-center">
+                  <Icon className="h-3.5 w-3.5 text-amber-400" />
+                </span>
+                <div className="text-left min-w-0">
+                  <div className="font-display text-[11px] tracking-widest text-amber-300">
+                    {title.toUpperCase()}
+                  </div>
+                  <div className="text-[11px] text-foreground/60 leading-snug mt-0.5">{desc}</div>
+                </div>
               </div>
             ))}
           </div>
 
           <a
-            href="https://t.me/m/QoYHq2A0Nzgy"
+            href="https://t.me/ZeiContactBot"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-5 w-full inline-flex items-center justify-center gap-2 h-11 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 text-[#0A0F1E] font-display text-sm tracking-widest hover:scale-[1.02] active:scale-95 transition-transform shadow-lg shadow-amber-500/20"
+            className="mt-5 w-full inline-flex items-center justify-center gap-2 h-12 rounded-full text-[#1a0f00] font-display text-xs tracking-[0.18em] hover:scale-[1.02] active:scale-95 transition-transform"
+            style={{
+              background: "linear-gradient(135deg, hsl(45 95% 58%), hsl(35 100% 50%))",
+              boxShadow: "0 0 20px hsl(45 95% 55% / 0.45)",
+            }}
           >
-            <Crown className="h-4 w-4" />
-            VIP BO'LISH
+            <Send className="h-4 w-4" />
+            SOTIB OLISH — @ZeiContactBot
           </a>
 
           <button
             onClick={() => onOpenChange(false)}
-            className="mt-3 text-xs text-white/40 hover:text-white/70 tracking-widest font-display transition-colors"
+            className="mt-3 w-full text-[10px] text-foreground/35 hover:text-foreground/70 tracking-[0.2em] font-display transition-colors"
           >
             KEYINROQ
           </button>
