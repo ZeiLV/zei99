@@ -141,6 +141,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
   // Safety net: never hang forever on sources that don't report progress
   useEffect(() => {
     if (!preparing || !src) return;
+    const poll = window.setInterval(evaluateBuffer, 400);
     const t = window.setTimeout(() => {
       if (readyRef.current) return;
       readyRef.current = true;
@@ -149,7 +150,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
       setBuffering(false);
       videoRef.current?.play().catch(() => {});
     }, 15000);
-    return () => window.clearTimeout(t);
+    return () => { window.clearTimeout(t); window.clearInterval(poll); };
   }, [preparing, src]);
 
   const armHide = () => {
