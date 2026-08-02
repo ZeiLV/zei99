@@ -5,6 +5,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
+import { ThemeProvider } from "@/hooks/useTheme";
 import { AuthGuard } from "@/components/AuthGuard";
 import Index from "./pages/Index.tsx";
 import Auth from "./pages/Auth.tsx";
@@ -16,15 +17,26 @@ import AdminContentEdit from "./pages/admin/AdminContentEdit.tsx";
 import AdminEpisodes from "./pages/admin/AdminEpisodes.tsx";
 import AdminVip from "./pages/admin/AdminVip.tsx";
 import AdminVoting from "./pages/admin/AdminVoting.tsx";
+import AdminStats from "./pages/admin/AdminStats.tsx";
+import AdminSite from "./pages/admin/AdminSite.tsx";
+import AdminAdmins from "./pages/admin/AdminAdmins.tsx";
 import Voting from "./pages/Voting.tsx";
 import SearchPage from "./pages/Search.tsx";
 import Profile from "./pages/Profile.tsx";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
+
+/** Loads and applies the admin-configured accent colour on boot. */
+const SiteSettingsLoader = () => {
+  useSiteSettings();
+  return null;
+};
 
 
 
 const queryClient = new QueryClient();
 
 const App = () => (
+  <ThemeProvider>
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -32,6 +44,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <AuthProvider>
+            <SiteSettingsLoader />
             <Routes>
               <Route path="/auth" element={<Auth />} />
               <Route path="/" element={<AuthGuard><Index /></AuthGuard>} />
@@ -52,6 +65,9 @@ const App = () => (
                 <Route path="content/:id/episodes" element={<AdminEpisodes />} />
                 <Route path="vip" element={<AdminVip />} />
                 <Route path="voting" element={<AdminVoting />} />
+                <Route path="stats" element={<AdminStats />} />
+                <Route path="site" element={<AdminSite />} />
+                <Route path="admins" element={<AdminAdmins />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
@@ -60,6 +76,7 @@ const App = () => (
       </TooltipProvider>
     </QueryClientProvider>
   </HelmetProvider>
+  </ThemeProvider>
 );
 
 export default App;

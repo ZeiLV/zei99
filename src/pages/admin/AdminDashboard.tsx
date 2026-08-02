@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Film, Tv, Eye, TrendingUp, Plus, Vote } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Film, Tv, Eye, TrendingUp } from "lucide-react";
 import { CATEGORIES } from "@/lib/types";
 
 interface Stats {
@@ -53,19 +51,7 @@ const AdminDashboard = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display text-2xl tracking-widest multineon-text">BOSHQARUV</h1>
-          <p className="text-xs text-muted-foreground mt-1">Sayt holati va tezkor harakatlar</p>
-        </div>
-        <div className="flex gap-2">
-          <Link to="/admin/voting">
-            <Button variant="ghost" className="border border-amber-400/30 text-amber-400">
-              <Vote className="h-4 w-4 mr-1" /> Ovoz berish
-            </Button>
-          </Link>
-          <Link to="/admin/content/new">
-            <Button className="bg-neon text-primary-foreground hover:bg-neon/90 neon-glow-sm">
-              <Plus className="h-4 w-4 mr-1" /> Yangi kontent
-            </Button>
-          </Link>
+          <p className="text-xs text-muted-foreground mt-1">Umumiy holat — barcha amallar o'z bo'limlarida</p>
         </div>
       </div>
 

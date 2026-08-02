@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink, Outlet, useNavigate, Navigate } from "react-router-dom";
-import { LayoutDashboard, Film, LogOut, Home, Menu, X, Crown, Vote, ShieldAlert } from "lucide-react";
+import { LayoutDashboard, Film, LogOut, Home, Menu, X, Crown, Vote, ShieldAlert, BarChart3, Paintbrush, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
@@ -10,6 +10,9 @@ const NAV = [
   { to: "/admin/content", end: false, label: "Kontent", icon: Film },
   { to: "/admin/vip", end: false, label: "VIP", icon: Crown },
   { to: "/admin/voting", end: false, label: "Ovoz berish", icon: Vote },
+  { to: "/admin/stats", end: false, label: "Statistika", icon: BarChart3 },
+  { to: "/admin/site", end: false, label: "Sayt tahrirlash", icon: Paintbrush },
+  { to: "/admin/admins", end: false, label: "Adminlar", icon: Users },
 ];
 
 const AdminLayout = () => {
@@ -99,15 +102,6 @@ const AdminLayout = () => {
             <Home className="h-4 w-4" />
             Saytga qaytish
           </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={logout}
-            className="w-full justify-start gap-2 text-destructive hover:text-destructive"
-          >
-            <LogOut className="h-4 w-4" />
-            Chiqish
-          </Button>
         </div>
       </aside>
 
@@ -147,9 +141,6 @@ const AdminLayout = () => {
             <div className="pt-3 border-t border-neon/15 space-y-1">
               <Button variant="ghost" size="sm" onClick={() => navigate("/")} className="w-full justify-start gap-2">
                 <Home className="h-4 w-4" /> Saytga qaytish
-              </Button>
-              <Button variant="ghost" size="sm" onClick={logout} className="w-full justify-start gap-2 text-destructive">
-                <LogOut className="h-4 w-4" /> Chiqish
               </Button>
             </div>
           </aside>

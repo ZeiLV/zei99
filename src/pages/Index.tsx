@@ -97,8 +97,6 @@ const Index = ({ category }: Props) => {
 
       {!showIntro && (
         <div className="min-h-screen relative animate-zoom-in">
-          <div className="fixed inset-0 -z-10 animate-breathing pointer-events-none opacity-60" />
-
           <Header search={search} onSearchChange={setSearch} />
 
           {selected ? (
@@ -211,13 +209,13 @@ const Index = ({ category }: Props) => {
                   // Netflix-style rows on home
                   <div className="space-y-12 sm:space-y-16">
                     {trending.length > 0 && (
-                      <ContentRow title="TREND" icon="🔥" items={trending} onSelect={setSelected} />
+                      <ContentRow title="TREND" icon="flame" items={trending} onSelect={setSelected} />
                     )}
                     {newest.length > 0 && (
-                      <ContentRow title="YANGI QO'SHILGAN" icon="✨" items={newest} onSelect={setSelected} />
+                      <ContentRow title="YANGI QO'SHILGAN" icon="sparkles" items={newest} onSelect={setSelected} />
                     )}
                     {popular.length > 0 && (
-                      <ContentRow title="MASHHUR" icon="⭐" items={popular} onSelect={setSelected} />
+                      <ContentRow title="MASHHUR" icon="star" items={popular} onSelect={setSelected} />
                     )}
                     {CATEGORIES.map((cat) => {
                       const items = content.filter((c) => c.category === cat.value).slice(0, 12);
