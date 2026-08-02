@@ -121,6 +121,8 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          badge: string | null
+          bonus_likes: number
           created_at: string
           display_name: string | null
           email: string | null
@@ -132,6 +134,8 @@ export type Database = {
         }
         Insert: {
           avatar_url?: string | null
+          badge?: string | null
+          bonus_likes?: number
           created_at?: string
           display_name?: string | null
           email?: string | null
@@ -143,6 +147,8 @@ export type Database = {
         }
         Update: {
           avatar_url?: string | null
+          badge?: string | null
+          bonus_likes?: number
           created_at?: string
           display_name?: string | null
           email?: string | null
@@ -154,13 +160,43 @@ export type Database = {
         }
         Relationships: []
       }
+      review_likes: {
+        Row: {
+          created_at: string
+          id: string
+          review_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          review_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          review_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_likes_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "reviews"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reviews: {
         Row: {
           comment: string | null
           content_id: string
           created_at: string
           id: string
-          rating: number
+          parent_id: string | null
+          rating: number | null
           updated_at: string
           user_id: string
         }
@@ -169,7 +205,8 @@ export type Database = {
           content_id: string
           created_at?: string
           id?: string
-          rating: number
+          parent_id?: string | null
+          rating?: number | null
           updated_at?: string
           user_id: string
         }
@@ -178,9 +215,48 @@ export type Database = {
           content_id?: string
           created_at?: string
           id?: string
-          rating?: number
+          parent_id?: string | null
+          rating?: number | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "reviews"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_settings: {
+        Row: {
+          accent_hsl: string
+          created_at: string
+          footer_enabled: boolean
+          footer_links: Json
+          footer_text: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          accent_hsl?: string
+          created_at?: string
+          footer_enabled?: boolean
+          footer_links?: Json
+          footer_text?: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          accent_hsl?: string
+          created_at?: string
+          footer_enabled?: boolean
+          footer_links?: Json
+          footer_text?: string
+          id?: string
+          updated_at?: string
         }
         Relationships: []
       }
