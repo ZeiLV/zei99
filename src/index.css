@@ -54,7 +54,7 @@
     --gradient-glass: linear-gradient(135deg, hsl(220 40% 100% / 0.05), hsl(220 40% 100% / 0.015));
     --gradient-banner: linear-gradient(180deg, transparent 0%, hsl(226 50% 5% / 0.55) 60%, hsl(226 50% 5%) 100%);
     --gradient-multineon: linear-gradient(120deg, hsl(var(--neon-cyan)), hsl(var(--neon)) 40%, hsl(var(--neon-purple)) 75%, hsl(var(--neon-pink)));
-    --gradient-bg: radial-gradient(ellipse at top, hsl(226 55% 12%) 0%, hsl(226 55% 7%) 60%, hsl(226 60% 5%) 100%);
+    --gradient-bg: none;
 
     --transition-smooth: cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -72,8 +72,7 @@
 
   body {
     font-family: 'Inter', system-ui, sans-serif;
-    background: var(--gradient-bg);
-    background-attachment: fixed;
+    background: hsl(var(--background));
     color: hsl(var(--foreground));
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
