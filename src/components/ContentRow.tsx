@@ -1,17 +1,21 @@
 import { useRef } from "react";
 import { Content } from "@/lib/types";
 import { PosterCard } from "./PosterCard";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Flame, Sparkles, Star } from "lucide-react";
+
+const ICONS = { flame: Flame, sparkles: Sparkles, star: Star } as const;
+export type RowIcon = keyof typeof ICONS;
 
 interface Props {
   title: string;
-  icon?: string;
+  icon?: RowIcon;
   items: Content[];
   onSelect: (c: Content) => void;
 }
 
 export const ContentRow = ({ title, icon, items, onSelect }: Props) => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const Icon = icon ? ICONS[icon] : null;
 
   if (items.length === 0) return null;
 
@@ -26,7 +30,11 @@ export const ContentRow = ({ title, icon, items, onSelect }: Props) => {
     <section className="space-y-3 sm:space-y-4">
       <div className="flex items-center justify-between px-1 pb-2 relative">
         <h2 className="font-display text-base sm:text-base tracking-widest text-foreground/90 flex items-center gap-2">
-          {icon && <span className="text-lg">{icon}</span>}
+          {Icon && (
+            <span className="group/icon inline-flex text-neon">
+              <Icon className="h-4 w-4 transition-transform duration-300 group-hover/icon:scale-125 group-hover/icon:rotate-6" />
+            </span>
+          )}
           {title}
         </h2>
         <span
