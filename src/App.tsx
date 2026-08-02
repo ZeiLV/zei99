@@ -23,6 +23,13 @@ import AdminAdmins from "./pages/admin/AdminAdmins.tsx";
 import Voting from "./pages/Voting.tsx";
 import SearchPage from "./pages/Search.tsx";
 import Profile from "./pages/Profile.tsx";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
+
+/** Loads and applies the admin-configured accent colour on boot. */
+const SiteSettingsLoader = () => {
+  useSiteSettings();
+  return null;
+};
 
 
 
@@ -37,6 +44,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <AuthProvider>
+            <SiteSettingsLoader />
             <Routes>
               <Route path="/auth" element={<Auth />} />
               <Route path="/" element={<AuthGuard><Index /></AuthGuard>} />
