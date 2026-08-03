@@ -238,6 +238,7 @@ export type Database = {
           footer_links: Json
           footer_text: string
           id: string
+          social_links: Json
           updated_at: string
         }
         Insert: {
@@ -247,6 +248,7 @@ export type Database = {
           footer_links?: Json
           footer_text?: string
           id?: string
+          social_links?: Json
           updated_at?: string
         }
         Update: {
@@ -256,6 +258,7 @@ export type Database = {
           footer_links?: Json
           footer_text?: string
           id?: string
+          social_links?: Json
           updated_at?: string
         }
         Relationships: []
