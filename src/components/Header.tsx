@@ -20,10 +20,11 @@ export const Header = (_props: HeaderProps) => {
 
   return (
     <>
-      {/* Floating rounded header — fixed, never moves on scroll */}
-      <header className="fixed top-0 inset-x-0 z-50 pointer-events-none">
+      {/* Rounded floating header — scrolls together with the page */}
+      <header className="relative z-50">
         <div className="max-w-[1200px] mx-auto px-3 sm:px-6 pt-3 sm:pt-4">
-          <div className="pointer-events-auto glass rounded-full border border-neon/20 shadow-[0_6px_24px_-8px_hsl(var(--neon)/0.35)] h-14 sm:h-16 px-2.5 sm:px-4 flex items-center justify-between gap-2">
+          <div className="glass rounded-full border border-neon/20 shadow-[0_6px_24px_-8px_hsl(var(--neon)/0.35)] h-14 sm:h-16 px-2.5 sm:px-4 flex items-center justify-between gap-2">
+
             <div className="flex items-center gap-2 sm:gap-3 min-w-0">
               <button
                 onClick={() => setMenuOpen(true)}

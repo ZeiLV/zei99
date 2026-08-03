@@ -75,7 +75,7 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
   }, [selected, content.id, userIsVip]);
 
   return (
-    <div className="min-h-screen pt-20 sm:pt-24 animate-fade-up">
+    <div className="min-h-screen pt-6 animate-fade-up">
       {/* Banner */}
       <div className="relative h-48 sm:h-72 md:h-96 w-full overflow-hidden">
         {content.banner_url ? (

@@ -99,7 +99,7 @@ const SearchPage = () => {
         <div className="fixed inset-0 -z-10 animate-breathing pointer-events-none opacity-60" />
         <Header search="" onSearchChange={() => {}} />
 
-        <main className="pt-20 sm:pt-24 px-[15px] sm:px-8 max-w-[1440px] mx-auto pb-20">
+        <main className="pt-6 px-[15px] sm:px-8 max-w-[1440px] mx-auto pb-20">
           {/* Search bar */}
           <div className="flex items-center gap-3 mb-6">
             <button
