@@ -28,8 +28,7 @@ export const Footer = () => {
 
         <div className="text-center text-[11px] sm:text-xs leading-relaxed text-foreground/60 font-light max-w-md">
           <p>{settings.footer_text}</p>
-          <p className="mt-1">Xavfsizlik Zei Dubbing tomonidan kafolatlangan.</p>
-          <p className="mt-1">
+          <p className="mt-3">
             Ushbu streaming platforma{" "}
             <a
               href="https://t.me/ZeiContactBot"
