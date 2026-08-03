@@ -67,7 +67,7 @@ const Voting = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header search={search} onSearchChange={setSearch} />
-      <main className="flex-1 pt-24 sm:pt-28 pb-16 max-w-[1200px] mx-auto w-full px-[15px] sm:px-8 animate-fade-up">
+      <main className="flex-1 pt-6 pb-16 max-w-[1200px] mx-auto w-full px-[15px] sm:px-8 animate-fade-up">
         <button
           onClick={() => navigate("/")}
           className="inline-flex items-center gap-2 text-xs font-display tracking-widest text-foreground/60 hover:text-neon transition-colors mb-4"
