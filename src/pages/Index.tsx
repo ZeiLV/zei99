@@ -56,17 +56,12 @@ const Index = ({ category }: Props) => {
     if (found) setSelected(found);
   }, [deepId, content, selected?.id]);
 
-  const allGenres = Array.from(new Set(content.flatMap((c) => c.genre ?? []))).sort();
-
   const filtered = content.filter((c) => {
     if (activeGenre && !c.genre?.includes(activeGenre)) return false;
     if (!search.trim()) return true;
-    const q = search.toLowerCase();
-    return (
-      c.title.toLowerCase().includes(q) ||
-      c.genre?.some((g) => g.toLowerCase().includes(q))
-    );
+    return c.title.toLowerCase().includes(search.trim().toLowerCase());
   });
+
 
   const trending = content.filter((c) => c.is_trending).slice(0, 12);
   const popular = [...content].sort((a, b) => (b.views ?? 0) - (a.views ?? 0)).slice(0, 12);
