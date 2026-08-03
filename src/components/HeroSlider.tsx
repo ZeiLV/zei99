@@ -110,7 +110,7 @@ export const HeroSlider = ({ items, onSelect }: Props) => {
     : 0;
 
   return (
-    <section className="relative w-full max-w-[1440px] mx-auto px-[15px] sm:px-8 pt-24 sm:pt-28">
+    <section className="relative w-full max-w-[1440px] mx-auto px-[15px] sm:px-8 pt-6">
       {/* Ambient backlight matching active slide accent */}
       <div
         aria-hidden
