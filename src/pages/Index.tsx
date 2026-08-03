@@ -119,44 +119,18 @@ const Index = ({ category }: Props) => {
             <>
               <h1 className="sr-only">{pageTitle}</h1>
 
-              {!category && !search.trim() && content.length > 0 && (
-                <HeroSlider items={content} onSelect={setSelected} />
+              {!search.trim() && content.length > 0 && (
+                <HeroSlider items={newest} onSelect={setSelected} />
               )}
 
               {category && (
-                <div className="pt-24 sm:pt-28 px-[15px] sm:px-8 max-w-[1440px] mx-auto">
+                <div className="pt-6 px-[15px] sm:px-8 max-w-[1440px] mx-auto">
                   <h2 className="font-display text-2xl sm:text-3xl multineon-text tracking-wider">
                     {categoryMeta?.label.toUpperCase()}
                   </h2>
-                  {allGenres.length > 0 && (
-                    <div className="mt-6 flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1 flex-nowrap">
-                      <button
-                        onClick={() => setActiveGenre(null)}
-                        className={`shrink-0 px-3 py-1.5 rounded-full text-[11px] font-display tracking-widest transition-all ${
-                          !activeGenre
-                            ? "bg-neon/15 text-neon neon-glow-sm"
-                            : "glass text-foreground/70 hover:text-neon"
-                        }`}
-                      >
-                        HAMMASI
-                      </button>
-                      {allGenres.map((g) => (
-                        <button
-                          key={g}
-                          onClick={() => setActiveGenre(g)}
-                          className={`shrink-0 px-3 py-1.5 rounded-full text-[11px] font-display tracking-widest transition-all ${
-                            activeGenre === g
-                              ? "bg-neon/15 text-neon neon-glow-sm"
-                              : "glass text-foreground/70 hover:text-neon"
-                          }`}
-                        >
-                          {g.toUpperCase()}
-                        </button>
-                      ))}
-                    </div>
-                  )}
                 </div>
               )}
+
 
               {/* Dynamic category tabs — only categories that actually have content */}
               {availableCategories.length > 0 && (
