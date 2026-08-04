@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { SideMenu } from "./SideMenu";
-import { ThemeToggle } from "./ThemeToggle";
 
 interface HeaderProps {
   search?: string;
@@ -42,7 +41,6 @@ export const Header = (_props: HeaderProps) => {
             </div>
 
             <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-              <ThemeToggle />
 
               <button
                 onClick={() => navigate("/search")}
