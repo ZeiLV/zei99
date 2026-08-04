@@ -374,58 +374,106 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
               }`}
               onMouseMove={armHide}
             >
-              <div className="bg-gradient-to-t from-[#0A0F1E]/95 via-[#0A0F1E]/70 to-transparent px-3 py-3 sm:px-4 sm:py-4 flex flex-col gap-2">
-                <div
-                  className="h-1 hover:h-1.5 transition-all bg-white/15 rounded-full cursor-pointer relative group"
-                  onClick={(e) => {
-                    const r = e.currentTarget.getBoundingClientRect();
-                    seek((e.clientX - r.left) / r.width);
-                  }}
-                >
+              <div className="bg-gradient-to-t from-black/95 via-black/60 to-transparent px-3 pb-3 pt-8 sm:px-5 sm:pb-4 flex flex-col gap-2.5">
+                {/* Seek row */}
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-[11px] sm:text-xs text-white/70 tabular-nums shrink-0">
+                    {fmt(time)}
+                  </span>
                   <div
-                    className="h-full bg-neon rounded-full relative neon-glow-sm"
-                    style={{ width: `${duration ? (time / duration) * 100 : 0}%` }}
+                    className="flex-1 h-1.5 hover:h-2 transition-all bg-white/20 rounded-full cursor-pointer relative group"
+                    onClick={(e) => {
+                      const r = e.currentTarget.getBoundingClientRect();
+                      seek((e.clientX - r.left) / r.width);
+                    }}
                   >
-                    <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 h-3 w-3 rounded-full bg-neon opacity-0 group-hover:opacity-100 transition" />
+                    <div
+                      className="h-full bg-neon rounded-full relative"
+                      style={{ width: `${duration ? (time / duration) * 100 : 0}%` }}
+                    >
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 h-3.5 w-3.5 rounded-full bg-neon shadow-[0_0_10px_hsl(var(--neon)/0.9)]" />
+                    </div>
                   </div>
+                  <span className="font-mono text-[11px] sm:text-xs text-white/70 tabular-nums shrink-0">
+                    {fmt(duration)}
+                  </span>
                 </div>
 
-                <div className="flex items-center gap-1.5 sm:gap-3 text-xs">
-                  <button onClick={togglePlay} className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-2 sm:p-1.5 transition-colors" aria-label={playing ? "Pauza" : "O'ynatish"}>
+                {/* Button row */}
+                <div className="flex items-center gap-1 sm:gap-2">
+                  <button onClick={togglePlay} className="text-white hover:text-neon rounded-full p-2 hover:bg-white/10 transition-colors" aria-label={playing ? "Pauza" : "O'ynatish"}>
                     {playing ? <Pause className="h-6 w-6 sm:h-5 sm:w-5" /> : <Play className="h-6 w-6 sm:h-5 sm:w-5" />}
                   </button>
 
-                  <button
-                    onClick={() => { const v = videoRef.current; if (v) v.muted = !v.muted; }}
-                    className="text-white hover:text-neon hover:bg-neon/10 rounded-md p-2 sm:p-1.5 transition-colors"
-                    aria-label="Ovoz"
-                  >
-                    {muted || volume === 0 ? <VolumeX className="h-5 w-5 sm:h-4 sm:w-4" /> : <Volume2 className="h-5 w-5 sm:h-4 sm:w-4" />}
+                  <button onClick={() => skip(-10)} className="text-white hover:text-neon rounded-full p-2 hover:bg-white/10 transition-colors" aria-label="10s orqaga">
+                    <RotateCcw className="h-5 w-5" />
+                  </button>
+                  <button onClick={() => skip(10)} className="text-white hover:text-neon rounded-full p-2 hover:bg-white/10 transition-colors" aria-label="10s oldinga">
+                    <RotateCw className="h-5 w-5" />
                   </button>
 
-                  <input
-                    type="range"
-                    min={0}
-                    max={1}
-                    step={0.01}
-                    value={muted ? 0 : volume}
-                    onChange={(e) => {
-                      const v = videoRef.current;
-                      if (v) { v.volume = parseFloat(e.target.value); v.muted = false; }
-                    }}
-                    className="hidden sm:block w-20 accent-[hsl(var(--neon))]"
-                  />
+                  <div className="ml-auto flex items-center gap-1 sm:gap-2">
+                    {/* Speed */}
+                    <div className="relative">
+                      <button
+                        onClick={() => { setSpeedOpen((o) => !o); armHide(); }}
+                        className="px-2.5 py-1.5 rounded-lg border border-white/20 text-white text-xs font-display tracking-wider hover:bg-white/10 hover:text-neon transition-colors"
+                        aria-label="Tezlik"
+                      >
+                        {speed}x
+                      </button>
+                      {speedOpen && (
+                        <div className="absolute bottom-full right-0 mb-2 rounded-xl border border-white/15 bg-black/90 backdrop-blur-md p-1 flex flex-col min-w-[74px]">
+                          {SPEEDS.map((s) => (
+                            <button
+                              key={s}
+                              onClick={() => changeSpeed(s)}
+                              className={`px-3 py-1.5 rounded-lg text-xs text-left transition-colors ${
+                                s === speed ? "text-neon bg-neon/10" : "text-white/80 hover:bg-white/10"
+                              }`}
+                            >
+                              {s}x
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
 
-                  <button
-                    onClick={goFullscreen}
-                    className="ml-auto text-white hover:text-neon hover:bg-neon/10 rounded-md p-2 sm:p-1.5 transition-colors"
-                    aria-label="To'liq ekran"
-                  >
-                    <Maximize className="h-5 w-5 sm:h-4 sm:w-4" />
-                  </button>
+                    {/* Volume */}
+                    <div className="flex items-center gap-2 group/vol">
+                      <button
+                        onClick={() => { const v = videoRef.current; if (v) v.muted = !v.muted; }}
+                        className="text-white hover:text-neon rounded-full p-2 hover:bg-white/10 transition-colors"
+                        aria-label="Ovoz"
+                      >
+                        {muted || volume === 0 ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+                      </button>
+                      <input
+                        type="range"
+                        min={0}
+                        max={1}
+                        step={0.01}
+                        value={muted ? 0 : volume}
+                        onChange={(e) => {
+                          const v = videoRef.current;
+                          if (v) { v.volume = parseFloat(e.target.value); v.muted = false; }
+                        }}
+                        className="hidden sm:block w-20 accent-[hsl(var(--neon))]"
+                      />
+                    </div>
+
+                    <button
+                      onClick={goFullscreen}
+                      className="text-white hover:text-neon rounded-lg p-2 border border-white/20 hover:bg-white/10 transition-colors"
+                      aria-label="To'liq ekran"
+                    >
+                      <Maximize className="h-5 w-5 sm:h-4 sm:w-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
+
 
             {/* Hover catcher */}
             <div
