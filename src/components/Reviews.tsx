@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Star, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { VipBadge } from "./VipBadge";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 
 interface Review {
   id: string;
@@ -212,7 +213,7 @@ export const Reviews = ({ contentId }: { contentId: string }) => {
                     </p>
                   )}
                 </div>
-                {user?.id === r.user_id && (
+                {(user?.id === r.user_id || isAdmin) && (
                   <button
                     onClick={() => remove(r.id)}
                     className="text-foreground/40 hover:text-destructive transition-colors p-1"
