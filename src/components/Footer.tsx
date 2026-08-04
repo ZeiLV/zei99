@@ -27,21 +27,22 @@ export const Footer = () => {
           </div>
         )}
 
-        <div className="text-center text-[11px] sm:text-xs leading-relaxed text-foreground/60 font-light max-w-md">
+        <div className="text-center text-[11px] sm:text-xs leading-snug text-foreground/55 font-light max-w-[340px] sm:max-w-md text-balance space-y-1">
           <p>{settings.footer_text}</p>
-          <p className="mt-3">
+          <p>
             Ushbu streaming platforma{" "}
             <a
               href="https://t.me/ZeiContactBot"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-neon hover:text-neon-soft transition-colors font-medium"
+              className="text-neon hover:text-neon-soft transition-colors font-medium whitespace-nowrap"
             >
               @ZeiContactBot
             </a>{" "}
             tomonidan yaratildi.
           </p>
         </div>
+
       </div>
     </footer>
   );
