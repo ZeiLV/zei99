@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { Send, Instagram, Youtube, Music2, Globe } from "lucide-react";
 import { useSiteSettings, type SocialPlatform } from "@/hooks/useSiteSettings";
 
