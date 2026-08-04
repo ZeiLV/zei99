@@ -22,6 +22,7 @@ interface Review {
 
 export const Reviews = ({ contentId }: { contentId: string }) => {
   const { user, profile } = useAuth();
+  const { isAdmin } = useIsAdmin();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
