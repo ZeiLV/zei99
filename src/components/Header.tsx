@@ -19,8 +19,9 @@ export const Header = (_props: HeaderProps) => {
 
   return (
     <>
-      {/* Rounded floating header — scrolls together with the page */}
-      <header className="relative z-50">
+      {/* Rounded floating header — sticks to the top and follows the user */}
+      <header className="sticky top-0 z-50">
+
         <div className="max-w-[1200px] mx-auto px-3 sm:px-6 pt-3 sm:pt-4">
           <div className="glass rounded-full border border-neon/20 shadow-[0_6px_24px_-8px_hsl(var(--neon)/0.35)] h-14 sm:h-16 px-2.5 sm:px-4 flex items-center justify-between gap-2">
 
