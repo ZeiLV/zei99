@@ -10,13 +10,13 @@ const ICONS: Record<SocialPlatform, typeof Send> = {
   website: Globe,
 };
 
-export const SocialLinks = ({ className = "" }: { className?: string }) => {
+export const SocialLinks = forwardRef<HTMLDivElement, { className?: string }>(({ className = "" }, ref) => {
   const { settings } = useSiteSettings();
   const links = settings.social_links.filter((l) => l.url?.trim());
   if (links.length === 0) return null;
 
   return (
-    <div className={`flex items-center justify-center gap-4 ${className}`}>
+    <div ref={ref} className={`flex items-center justify-center gap-4 ${className}`}>
       {links.map((l, i) => {
         const Icon = ICONS[l.platform] ?? Globe;
         return (
