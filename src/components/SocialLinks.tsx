@@ -36,4 +36,6 @@ export const SocialLinks = forwardRef<HTMLDivElement, { className?: string }>(({
       })}
     </div>
   );
-};
+});
+
+SocialLinks.displayName = "SocialLinks";
