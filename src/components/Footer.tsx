@@ -6,8 +6,9 @@ export const Footer = () => {
   if (!settings.footer_enabled) return null;
 
   return (
-    <footer className="px-[15px] sm:px-8 max-w-[1440px] mx-auto pb-10 pt-4">
-      <div className="glass rounded-2xl px-5 py-6 flex flex-col items-center gap-5">
+    <footer className="px-[15px] sm:px-8 max-w-[1440px] mx-auto pb-8 pt-2">
+      <div className="glass rounded-2xl px-4 py-5 sm:px-6 sm:py-6 flex flex-col items-center gap-4 border border-neon/15 shadow-[0_0_40px_-24px_hsl(var(--neon)/0.7)]">
+
         <SocialLinks />
 
         {settings.footer_links.length > 0 && (
@@ -26,21 +27,22 @@ export const Footer = () => {
           </div>
         )}
 
-        <div className="text-center text-[11px] sm:text-xs leading-relaxed text-foreground/60 font-light max-w-md">
+        <div className="text-center text-[11px] sm:text-xs leading-snug text-foreground/55 font-light max-w-[340px] sm:max-w-md text-balance space-y-1">
           <p>{settings.footer_text}</p>
-          <p className="mt-3">
+          <p>
             Ushbu streaming platforma{" "}
             <a
               href="https://t.me/ZeiContactBot"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-neon hover:text-neon-soft transition-colors font-medium"
+              className="text-neon hover:text-neon-soft transition-colors font-medium whitespace-nowrap"
             >
               @ZeiContactBot
             </a>{" "}
             tomonidan yaratildi.
           </p>
         </div>
+
       </div>
     </footer>
   );

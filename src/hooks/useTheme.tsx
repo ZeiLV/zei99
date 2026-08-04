@@ -1,6 +1,6 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, ReactNode } from "react";
 
-type Theme = "dark" | "light";
+type Theme = "dark";
 
 interface ThemeContextValue {
   theme: Theme;
@@ -10,31 +10,22 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
-const STORAGE_KEY = "zei-theme";
-
-const apply = (t: Theme) => {
-  const root = document.documentElement;
-  root.classList.toggle("light", t === "light");
-  root.classList.toggle("dark", t === "dark");
-  root.style.colorScheme = t;
-};
-
+/** Light mode is intentionally removed — the app is dark-only. */
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    if (typeof window === "undefined") return "dark";
-    return (localStorage.getItem(STORAGE_KEY) as Theme) || "dark";
-  });
-
   useEffect(() => {
-    apply(theme);
-    localStorage.setItem(STORAGE_KEY, theme);
-  }, [theme]);
-
-  const setTheme = (t: Theme) => setThemeState(t);
-  const toggle = () => setThemeState((t) => (t === "dark" ? "light" : "dark"));
+    const root = document.documentElement;
+    root.classList.remove("light");
+    root.classList.add("dark");
+    root.style.colorScheme = "dark";
+    try {
+      localStorage.removeItem("zei-theme");
+    } catch {
+      /* ignore */
+    }
+  }, []);
 
   return (
-    <ThemeContext.Provider value={{ theme, toggle, setTheme }}>
+    <ThemeContext.Provider value={{ theme: "dark", toggle: () => {}, setTheme: () => {} }}>
       {children}
     </ThemeContext.Provider>
   );
