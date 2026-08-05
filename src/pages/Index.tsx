@@ -61,8 +61,23 @@ const Index = ({ category }: Props) => {
     if (found) setSelected(found);
   }, [deepId, content, selected?.id]);
 
+  const allGenres = useMemo(
+    () => Array.from(new Set(content.flatMap((c) => c.genre ?? []))).sort().slice(0, 20),
+    [content]
+  );
+  const allYears = useMemo(
+    () =>
+      Array.from(new Set(content.map((c) => c.year).filter(Boolean) as number[])).sort(
+        (a, b) => b - a
+      ),
+    [content]
+  );
+
+  const hasFilters = !!(activeGenre || activeYear);
+
   const filtered = content.filter((c) => {
     if (activeGenre && !c.genre?.includes(activeGenre)) return false;
+    if (activeYear && c.year !== activeYear) return false;
     if (!search.trim()) return true;
     return c.title.toLowerCase().includes(search.trim().toLowerCase());
   });
