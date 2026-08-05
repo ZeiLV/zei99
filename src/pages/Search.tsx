@@ -134,47 +134,6 @@ const SearchPage = () => {
             </div>
           </div>
 
-          {/* Filters */}
-          <div className="space-y-3 mb-8">
-            <FilterRow label="JANR">
-              {genres.map((g) => (
-                <Chip key={g} active={genre === g} onClick={() => setGenre(genre === g ? null : g)}>
-                  {g}
-                </Chip>
-              ))}
-            </FilterRow>
-            <FilterRow label="YIL">
-              {years.map((y) => (
-                <Chip
-                  key={y}
-                  active={year === String(y)}
-                  onClick={() => setYear(year === String(y) ? null : String(y))}
-                >
-                  {y}
-                </Chip>
-              ))}
-            </FilterRow>
-            <FilterRow label="SIFAT">
-              {QUALITIES.map((q) => (
-                <Chip key={q} active={quality === q} onClick={() => setQuality(quality === q ? null : q)}>
-                  {q}
-                </Chip>
-              ))}
-            </FilterRow>
-            {hasFilters && (
-              <button
-                onClick={() => {
-                  setGenre(null);
-                  setYear(null);
-                  setQuality(null);
-                }}
-                className="text-[11px] tracking-widest font-display text-neon/80 hover:text-neon"
-              >
-                ✕ FILTRLARNI TOZALASH
-              </button>
-            )}
-          </div>
-
           {/* Results */}
           {loading ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-5">
