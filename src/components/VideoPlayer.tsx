@@ -401,14 +401,14 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
 
                 {/* Button row */}
                 <div className="flex items-center gap-1 sm:gap-2">
-                  <button onClick={togglePlay} className="text-white hover:text-neon rounded-full p-2 hover:bg-white/10 transition-colors" aria-label={playing ? "Pauza" : "O'ynatish"}>
+                  <button onClick={togglePlay} className="text-white hover:text-neon rounded-full p-2 hover:bg-white/10 hover:shadow-[0_0_16px_-4px_hsl(var(--neon))] transition-all duration-300 hover:scale-110 active:scale-90" aria-label={playing ? "Pauza" : "O'ynatish"}>
                     {playing ? <Pause className="h-6 w-6 sm:h-5 sm:w-5" /> : <Play className="h-6 w-6 sm:h-5 sm:w-5" />}
                   </button>
 
-                  <button onClick={() => skip(-10)} className="text-white hover:text-neon rounded-full p-2 hover:bg-white/10 transition-colors" aria-label="10s orqaga">
+                  <button onClick={() => skip(-10)} className="text-white hover:text-neon rounded-full p-2 hover:bg-white/10 hover:shadow-[0_0_16px_-4px_hsl(var(--neon))] transition-all duration-300 hover:scale-110 active:scale-90" aria-label="10s orqaga">
                     <RotateCcw className="h-5 w-5" />
                   </button>
-                  <button onClick={() => skip(10)} className="text-white hover:text-neon rounded-full p-2 hover:bg-white/10 transition-colors" aria-label="10s oldinga">
+                  <button onClick={() => skip(10)} className="text-white hover:text-neon rounded-full p-2 hover:bg-white/10 hover:shadow-[0_0_16px_-4px_hsl(var(--neon))] transition-all duration-300 hover:scale-110 active:scale-90" aria-label="10s oldinga">
                     <RotateCw className="h-5 w-5" />
                   </button>
 
@@ -417,7 +417,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
                     <div className="relative">
                       <button
                         onClick={() => { setSpeedOpen((o) => !o); armHide(); }}
-                        className="px-2.5 py-1.5 rounded-lg border border-white/20 text-white text-xs font-display tracking-wider hover:bg-white/10 hover:text-neon transition-colors"
+                        className="px-2.5 py-1.5 rounded-lg border border-white/20 text-white text-xs font-display tracking-wider hover:bg-white/10 hover:text-neon hover:border-neon/50 hover:shadow-[0_0_14px_-5px_hsl(var(--neon))] transition-all duration-300 active:scale-95"
                         aria-label="Tezlik"
                       >
                         {speed}x
@@ -443,7 +443,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
                     <div className="flex items-center gap-2 group/vol">
                       <button
                         onClick={() => { const v = videoRef.current; if (v) v.muted = !v.muted; }}
-                        className="text-white hover:text-neon rounded-full p-2 hover:bg-white/10 transition-colors"
+                        className="text-white hover:text-neon rounded-full p-2 hover:bg-white/10 hover:shadow-[0_0_16px_-4px_hsl(var(--neon))] transition-all duration-300 hover:scale-110 active:scale-90"
                         aria-label="Ovoz"
                       >
                         {muted || volume === 0 ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
@@ -464,7 +464,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
 
                     <button
                       onClick={goFullscreen}
-                      className="text-white hover:text-neon rounded-lg p-2 border border-white/20 hover:bg-white/10 transition-colors"
+                      className="text-white hover:text-neon rounded-lg p-2 border border-white/20 hover:bg-white/10 hover:border-neon/50 hover:shadow-[0_0_16px_-5px_hsl(var(--neon))] transition-all duration-300 hover:scale-105 active:scale-95"
                       aria-label="To'liq ekran"
                     >
                       <Maximize className="h-5 w-5 sm:h-4 sm:w-4" />

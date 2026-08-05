@@ -8,6 +8,7 @@ import { PosterCard } from "@/components/PosterCard";
 import { ContentDetail } from "@/components/ContentDetail";
 import { ContentRow } from "@/components/ContentRow";
 import { HeroSlider } from "@/components/HeroSlider";
+import { FilterSheet } from "@/components/FilterSheet";
 import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { Category, Content, CATEGORIES } from "@/lib/types";
@@ -138,118 +139,71 @@ const Index = ({ category }: Props) => {
                 <HeroSlider items={newest} onSelect={setSelected} />
               )}
 
-              {category && (
-                <div className="pt-6 px-[15px] sm:px-8 max-w-[1440px] mx-auto">
-                  <h2 className="font-display text-2xl sm:text-3xl multineon-text tracking-wider">
-                    {categoryMeta?.label.toUpperCase()}
-                  </h2>
-                </div>
-              )}
+              {/* Title + filter trigger */}
+              <div className="pt-6 px-[15px] sm:px-8 max-w-[1440px] mx-auto flex items-center justify-between gap-3">
+                <h2 className="font-display text-2xl sm:text-3xl multineon-text tracking-wider">
+                  {(categoryMeta?.label ?? "Katalog").toUpperCase()}
+                </h2>
+                <button
+                  onClick={() => setFilterOpen(true)}
+                  className={`shrink-0 h-10 px-4 rounded-full flex items-center gap-2 text-[11px] font-display tracking-widest transition-all duration-300 hover:scale-105 active:scale-95 ${
+                    hasFilters
+                      ? "bg-neon/15 text-neon border border-neon/60 shadow-[0_0_18px_-4px_hsl(var(--neon))]"
+                      : "glass text-foreground/70 border border-neon/20 hover:text-neon hover:border-neon/50 hover:shadow-[0_0_18px_-6px_hsl(var(--neon))]"
+                  }`}
+                  aria-label="Filterlash"
+                >
+                  FILTERLASH
+                  <SlidersHorizontal className="h-4 w-4" />
+                </button>
+              </div>
 
-
-              {/* Dynamic category tabs + filter button */}
+              {/* Dynamic category tabs */}
               {availableCategories.length > 0 && (
-                <div className="px-[15px] sm:px-8 max-w-[1440px] mx-auto pt-6">
-                  <div className="flex items-center gap-2">
-                    <div className="flex-1 flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1 flex-nowrap">
+                <div className="px-[15px] sm:px-8 max-w-[1440px] mx-auto pt-4">
+                  <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1 flex-nowrap">
+                    <button
+                      onClick={() => navigate("/")}
+                      className={`shrink-0 px-4 py-2 rounded-full text-[11px] font-display tracking-widest transition-all duration-300 hover:scale-[1.06] active:scale-95 ${
+                        !category
+                          ? "bg-neon/15 text-neon border border-neon/50 neon-glow-sm"
+                          : "glass text-foreground/70 border border-transparent hover:text-neon hover:border-neon/40 hover:shadow-[0_0_16px_-6px_hsl(var(--neon))]"
+                      }`}
+                    >
+                      ASOSIY
+                    </button>
+                    {availableCategories.map((c) => (
                       <button
-                        onClick={() => navigate("/")}
-                        className={`shrink-0 px-4 py-2 rounded-full text-[11px] font-display tracking-widest transition-all duration-300 hover:scale-[1.05] active:scale-95 ${
-                          !category
+                        key={c.value}
+                        onClick={() => navigate(c.path)}
+                        className={`shrink-0 px-4 py-2 rounded-full text-[11px] font-display tracking-widest transition-all duration-300 hover:scale-[1.06] active:scale-95 ${
+                          category === c.value
                             ? "bg-neon/15 text-neon border border-neon/50 neon-glow-sm"
-                            : "glass text-foreground/70 hover:text-neon hover:border-neon/40 border border-transparent"
+                            : "glass text-foreground/70 border border-transparent hover:text-neon hover:border-neon/40 hover:shadow-[0_0_16px_-6px_hsl(var(--neon))]"
                         }`}
                       >
-                        ASOSIY
+                        {c.label.toUpperCase()}
                       </button>
-                      {availableCategories.map((c) => (
-                        <button
-                          key={c.value}
-                          onClick={() => navigate(c.path)}
-                          className={`shrink-0 px-4 py-2 rounded-full text-[11px] font-display tracking-widest transition-all duration-300 hover:scale-[1.05] active:scale-95 ${
-                            category === c.value
-                              ? "bg-neon/15 text-neon border border-neon/50 neon-glow-sm"
-                              : "glass text-foreground/70 hover:text-neon hover:border-neon/40 border border-transparent"
-                          }`}
-                        >
-                          {c.label.toUpperCase()}
-                        </button>
-                      ))}
-                    </div>
-
-                    <button
-                      onClick={() => setFilterOpen((v) => !v)}
-                      className={`shrink-0 h-9 px-3 rounded-full flex items-center gap-1.5 text-[11px] font-display tracking-widest transition-all duration-300 hover:scale-[1.05] active:scale-95 ${
-                        filterOpen || activeGenre || activeYear
-                          ? "bg-neon/15 text-neon border border-neon/50 neon-glow-sm"
-                          : "glass text-foreground/70 hover:text-neon border border-transparent"
-                      }`}
-                      aria-label="Filtr"
-                    >
-                      <SlidersHorizontal className="h-4 w-4" />
-                      <span className="hidden sm:inline">FILTR</span>
-                    </button>
+                    ))}
                   </div>
-
-                  {filterOpen && (
-                    <div className="mt-3 rounded-2xl glass-strong border border-neon/25 p-4 space-y-4 animate-fade-in">
-                      {allGenres.length > 0 && (
-                        <div>
-                          <div className="text-[10px] tracking-widest font-display text-foreground/50 mb-2">JANR</div>
-                          <div className="flex flex-wrap gap-2">
-                            {allGenres.map((g) => (
-                              <button
-                                key={g}
-                                onClick={() => setActiveGenre(activeGenre === g ? null : g)}
-                                className={`px-3 py-1.5 rounded-full text-[11px] font-display tracking-widest transition-all duration-300 hover:scale-105 ${
-                                  activeGenre === g
-                                    ? "bg-neon/15 text-neon border border-neon/50 neon-glow-sm"
-                                    : "glass text-foreground/70 hover:text-neon border border-transparent"
-                                }`}
-                              >
-                                {g}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {allYears.length > 0 && (
-                        <div>
-                          <div className="text-[10px] tracking-widest font-display text-foreground/50 mb-2">YIL</div>
-                          <div className="flex flex-wrap gap-2">
-                            {allYears.map((y) => (
-                              <button
-                                key={y}
-                                onClick={() => setActiveYear(activeYear === y ? null : y)}
-                                className={`px-3 py-1.5 rounded-full text-[11px] font-display tracking-widest transition-all duration-300 hover:scale-105 ${
-                                  activeYear === y
-                                    ? "bg-neon/15 text-neon border border-neon/50 neon-glow-sm"
-                                    : "glass text-foreground/70 hover:text-neon border border-transparent"
-                                }`}
-                              >
-                                {y}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {(activeGenre || activeYear) && (
-                        <button
-                          onClick={() => {
-                            setActiveGenre(null);
-                            setActiveYear(null);
-                          }}
-                          className="text-[11px] tracking-widest font-display text-neon/80 hover:text-neon transition-colors"
-                        >
-                          ✕ FILTRLARNI TOZALASH
-                        </button>
-                      )}
-                    </div>
-                  )}
                 </div>
               )}
+
+              <FilterSheet
+                open={filterOpen}
+                onClose={() => setFilterOpen(false)}
+                genres={allGenres}
+                years={allYears}
+                activeGenre={activeGenre}
+                activeYear={activeYear}
+                onGenre={setActiveGenre}
+                onYear={setActiveYear}
+                onClear={() => {
+                  setActiveGenre(null);
+                  setActiveYear(null);
+                }}
+                resultCount={filtered.length}
+              />
 
 
 
