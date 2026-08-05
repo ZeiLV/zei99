@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { SlidersHorizontal } from "lucide-react";
 import { Intro } from "@/components/Intro";
 import { Header } from "@/components/Header";
 import { PosterCard } from "@/components/PosterCard";
