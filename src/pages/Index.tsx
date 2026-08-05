@@ -267,7 +267,7 @@ const Index = ({ category }: Props) => {
                       />
                     ))}
                   </div>
-                ) : !category && !search.trim() ? (
+                ) : !category && !search.trim() && !hasFilters ? (
                   // Netflix-style rows on home
                   <div className="space-y-12 sm:space-y-16">
                     {trending.length > 0 && (
