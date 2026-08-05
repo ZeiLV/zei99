@@ -19,7 +19,7 @@ export const Footer = () => {
                 href={l.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-3.5 py-1.5 rounded-full text-[11px] font-display tracking-widest border border-neon/30 text-neon/85 hover:bg-neon/10 hover:text-neon transition-colors"
+                className="px-3.5 py-1.5 rounded-full text-[11px] font-display tracking-widest border border-neon/30 text-neon/85 transition-all duration-300 hover:bg-neon/10 hover:text-neon hover:-translate-y-0.5 hover:border-neon/60 hover:shadow-[0_0_18px_-5px_hsl(var(--neon))] active:scale-95"
               >
                 {l.label}
               </a>
