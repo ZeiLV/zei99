@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { SlidersHorizontal } from "lucide-react";
 import { Intro } from "@/components/Intro";
 import { Header } from "@/components/Header";
 import { PosterCard } from "@/components/PosterCard";
@@ -30,11 +31,15 @@ const Index = ({ category }: Props) => {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Content | null>(null);
   const [activeGenre, setActiveGenre] = useState<string | null>(null);
+  const [activeYear, setActiveYear] = useState<number | null>(null);
+  const [filterOpen, setFilterOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setSelected(null);
     setActiveGenre(null);
+    setActiveYear(null);
+    setFilterOpen(false);
   }, [category]);
 
   useEffect(() => {
@@ -56,8 +61,23 @@ const Index = ({ category }: Props) => {
     if (found) setSelected(found);
   }, [deepId, content, selected?.id]);
 
+  const allGenres = useMemo(
+    () => Array.from(new Set(content.flatMap((c) => c.genre ?? []))).sort().slice(0, 20),
+    [content]
+  );
+  const allYears = useMemo(
+    () =>
+      Array.from(new Set(content.map((c) => c.year).filter(Boolean) as number[])).sort(
+        (a, b) => b - a
+      ),
+    [content]
+  );
+
+  const hasFilters = !!(activeGenre || activeYear);
+
   const filtered = content.filter((c) => {
     if (activeGenre && !c.genre?.includes(activeGenre)) return false;
+    if (activeYear && c.year !== activeYear) return false;
     if (!search.trim()) return true;
     return c.title.toLowerCase().includes(search.trim().toLowerCase());
   });
@@ -127,34 +147,107 @@ const Index = ({ category }: Props) => {
               )}
 
 
-              {/* Dynamic category tabs — only categories that actually have content */}
+              {/* Dynamic category tabs + filter button */}
               {availableCategories.length > 0 && (
                 <div className="px-[15px] sm:px-8 max-w-[1440px] mx-auto pt-6">
-                  <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1 flex-nowrap">
-                    <button
-                      onClick={() => navigate("/")}
-                      className={`shrink-0 px-4 py-2 rounded-full text-[11px] font-display tracking-widest transition-all ${
-                        !category
-                          ? "bg-neon/15 text-neon border border-neon/50 neon-glow-sm"
-                          : "glass text-foreground/70 hover:text-neon"
-                      }`}
-                    >
-                      ASOSIY
-                    </button>
-                    {availableCategories.map((c) => (
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1 flex-nowrap">
                       <button
-                        key={c.value}
-                        onClick={() => navigate(c.path)}
-                        className={`shrink-0 px-4 py-2 rounded-full text-[11px] font-display tracking-widest transition-all ${
-                          category === c.value
+                        onClick={() => navigate("/")}
+                        className={`shrink-0 px-4 py-2 rounded-full text-[11px] font-display tracking-widest transition-all duration-300 hover:scale-[1.05] active:scale-95 ${
+                          !category
                             ? "bg-neon/15 text-neon border border-neon/50 neon-glow-sm"
-                            : "glass text-foreground/70 hover:text-neon"
+                            : "glass text-foreground/70 hover:text-neon hover:border-neon/40 border border-transparent"
                         }`}
                       >
-                        {c.label.toUpperCase()}
+                        ASOSIY
                       </button>
-                    ))}
+                      {availableCategories.map((c) => (
+                        <button
+                          key={c.value}
+                          onClick={() => navigate(c.path)}
+                          className={`shrink-0 px-4 py-2 rounded-full text-[11px] font-display tracking-widest transition-all duration-300 hover:scale-[1.05] active:scale-95 ${
+                            category === c.value
+                              ? "bg-neon/15 text-neon border border-neon/50 neon-glow-sm"
+                              : "glass text-foreground/70 hover:text-neon hover:border-neon/40 border border-transparent"
+                          }`}
+                        >
+                          {c.label.toUpperCase()}
+                        </button>
+                      ))}
+                    </div>
+
+                    <button
+                      onClick={() => setFilterOpen((v) => !v)}
+                      className={`shrink-0 h-9 px-3 rounded-full flex items-center gap-1.5 text-[11px] font-display tracking-widest transition-all duration-300 hover:scale-[1.05] active:scale-95 ${
+                        filterOpen || activeGenre || activeYear
+                          ? "bg-neon/15 text-neon border border-neon/50 neon-glow-sm"
+                          : "glass text-foreground/70 hover:text-neon border border-transparent"
+                      }`}
+                      aria-label="Filtr"
+                    >
+                      <SlidersHorizontal className="h-4 w-4" />
+                      <span className="hidden sm:inline">FILTR</span>
+                    </button>
                   </div>
+
+                  {filterOpen && (
+                    <div className="mt-3 rounded-2xl glass-strong border border-neon/25 p-4 space-y-4 animate-fade-in">
+                      {allGenres.length > 0 && (
+                        <div>
+                          <div className="text-[10px] tracking-widest font-display text-foreground/50 mb-2">JANR</div>
+                          <div className="flex flex-wrap gap-2">
+                            {allGenres.map((g) => (
+                              <button
+                                key={g}
+                                onClick={() => setActiveGenre(activeGenre === g ? null : g)}
+                                className={`px-3 py-1.5 rounded-full text-[11px] font-display tracking-widest transition-all duration-300 hover:scale-105 ${
+                                  activeGenre === g
+                                    ? "bg-neon/15 text-neon border border-neon/50 neon-glow-sm"
+                                    : "glass text-foreground/70 hover:text-neon border border-transparent"
+                                }`}
+                              >
+                                {g}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {allYears.length > 0 && (
+                        <div>
+                          <div className="text-[10px] tracking-widest font-display text-foreground/50 mb-2">YIL</div>
+                          <div className="flex flex-wrap gap-2">
+                            {allYears.map((y) => (
+                              <button
+                                key={y}
+                                onClick={() => setActiveYear(activeYear === y ? null : y)}
+                                className={`px-3 py-1.5 rounded-full text-[11px] font-display tracking-widest transition-all duration-300 hover:scale-105 ${
+                                  activeYear === y
+                                    ? "bg-neon/15 text-neon border border-neon/50 neon-glow-sm"
+                                    : "glass text-foreground/70 hover:text-neon border border-transparent"
+                                }`}
+                              >
+                                {y}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {(activeGenre || activeYear) && (
+                        <button
+                          onClick={() => {
+                            setActiveGenre(null);
+                            setActiveYear(null);
+                          }}
+                          className="text-[11px] tracking-widest font-display text-neon/80 hover:text-neon transition-colors"
+                        >
+                          ✕ FILTRLARNI TOZALASH
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -174,7 +267,7 @@ const Index = ({ category }: Props) => {
                       />
                     ))}
                   </div>
-                ) : !category && !search.trim() ? (
+                ) : !category && !search.trim() && !hasFilters ? (
                   // Netflix-style rows on home
                   <div className="space-y-12 sm:space-y-16">
                     {trending.length > 0 && (
