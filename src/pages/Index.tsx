@@ -31,11 +31,15 @@ const Index = ({ category }: Props) => {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Content | null>(null);
   const [activeGenre, setActiveGenre] = useState<string | null>(null);
+  const [activeYear, setActiveYear] = useState<number | null>(null);
+  const [filterOpen, setFilterOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setSelected(null);
     setActiveGenre(null);
+    setActiveYear(null);
+    setFilterOpen(false);
   }, [category]);
 
   useEffect(() => {
