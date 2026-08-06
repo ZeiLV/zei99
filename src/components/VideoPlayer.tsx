@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Hls from "hls.js";
-import { Maximize, Pause, Play, RotateCcw, RotateCw, Volume2, VolumeX, Gauge, Download, Crown, Lock } from "lucide-react";
+import { Maximize, Pause, Play, RotateCcw, RotateCw, Volume2, VolumeX, Download, Crown, Lock } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { VipModal } from "./VipModal";
 import { formatCountdown } from "@/lib/earlyAccess";
@@ -14,8 +14,6 @@ interface Props {
   earlyAccessUntil?: string | null;
 }
 
-const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
-
 const isHls = (url: string) => /\.m3u8(\?|$)/i.test(url);
 
 export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Props) => {
@@ -28,6 +26,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
 
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   const hlsRef = useRef<Hls | null>(null);
 
   const [playing, setPlaying] = useState(false);
@@ -37,8 +36,6 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
   const [time, setTime] = useState(0);
   const [buffering, setBuffering] = useState(true);
   const [showControls, setShowControls] = useState(false);
-  const [speed, setSpeed] = useState(1);
-  const [speedOpen, setSpeedOpen] = useState(false);
   const [flash, setFlash] = useState<null | "back" | "fwd" | "play" | "pause">(null);
   const [videoAspect, setVideoAspect] = useState<number | null>(null);
   const [loadError, setLoadError] = useState(false);
@@ -71,7 +68,6 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
     setBuffering(true);
     setTime(0);
     setPlaying(false);
-    setSpeed(1);
     setVideoAspect(null);
     setLoadError(false);
     setPreparing(true);
@@ -180,37 +176,48 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
     armHide();
   };
 
-  const changeSpeed = (s: number) => {
-    const v = videoRef.current;
-    if (v) v.playbackRate = s;
-    setSpeed(s);
-    setSpeedOpen(false);
-    armHide();
-  };
-
   const seek = (pct: number) => {
     const v = videoRef.current;
     if (!v || !v.duration) return;
     v.currentTime = pct * v.duration;
   };
 
-  const goFullscreen = () => {
-    const doc: any = document;
-    const isFs = doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement;
+  const goFullscreen = async () => {
+    const doc = document as Document & {
+      webkitFullscreenElement?: Element;
+      webkitExitFullscreen?: () => Promise<void> | void;
+    };
+    const isFs = doc.fullscreenElement || doc.webkitFullscreenElement;
     if (isFs) {
-      (doc.exitFullscreen || doc.webkitExitFullscreen || doc.mozCancelFullScreen || doc.msExitFullscreen)?.call(doc);
+      const exit = doc.exitFullscreen || doc.webkitExitFullscreen;
+      if (exit) await exit.call(doc);
       return;
     }
-    const v: any = videoRef.current;
-    // iOS Safari: only the <video> element supports webkitEnterFullscreen
-    if (v?.webkitEnterFullscreen) { try { v.webkitEnterFullscreen(); return; } catch {} }
-    const target: any = containerRef.current ?? v;
-    const req =
-      target?.requestFullscreen ||
-      target?.webkitRequestFullscreen ||
-      target?.mozRequestFullScreen ||
-      target?.msRequestFullscreen;
-    if (req) { try { req.call(target); } catch {} }
+
+    const video = videoRef.current as (HTMLVideoElement & {
+      webkitEnterFullscreen?: () => void;
+      webkitRequestFullscreen?: () => Promise<void> | void;
+    }) | null;
+    const iframe = iframeRef.current as (HTMLIFrameElement & {
+      webkitRequestFullscreen?: () => Promise<void> | void;
+    }) | null;
+    const target = isIframe ? iframe : video;
+
+    try {
+      if (target?.requestFullscreen) {
+        await target.requestFullscreen();
+        return;
+      }
+      if (target?.webkitRequestFullscreen) {
+        await target.webkitRequestFullscreen();
+        return;
+      }
+      if (!isIframe && video?.webkitEnterFullscreen) {
+        video.webkitEnterFullscreen();
+      }
+    } catch {
+      if (!isIframe && video?.webkitEnterFullscreen) video.webkitEnterFullscreen();
+    }
   };
 
   // Keyboard shortcuts
@@ -272,12 +279,12 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
           aspectRatio: `${frameAspect}`,
           maxHeight: isVertical ? "85vh" : undefined,
           width: isVertical ? "auto" : "100%",
-          zIndex: 9999,
         }}
       >
         {!isVip && hasSource && isIframe ? (
           <>
             <iframe
+              ref={iframeRef}
               key={resolved.kind === "iframe" ? resolved.src : "empty"}
               src={resolved.kind === "iframe" ? resolved.src : ""}
               className="absolute inset-0 w-full h-full"
@@ -413,32 +420,6 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
                   </button>
 
                   <div className="ml-auto flex items-center gap-1 sm:gap-2">
-                    {/* Speed */}
-                    <div className="relative">
-                      <button
-                        onClick={() => { setSpeedOpen((o) => !o); armHide(); }}
-                        className="px-2.5 py-1.5 rounded-lg border border-white/20 text-white text-xs font-display tracking-wider hover:bg-white/10 hover:text-neon hover:border-neon/50 hover:shadow-[0_0_14px_-5px_hsl(var(--neon))] transition-all duration-300 active:scale-95"
-                        aria-label="Tezlik"
-                      >
-                        {speed}x
-                      </button>
-                      {speedOpen && (
-                        <div className="absolute bottom-full right-0 mb-2 rounded-xl border border-white/15 bg-black/90 backdrop-blur-md p-1 flex flex-col min-w-[74px]">
-                          {SPEEDS.map((s) => (
-                            <button
-                              key={s}
-                              onClick={() => changeSpeed(s)}
-                              className={`px-3 py-1.5 rounded-lg text-xs text-left transition-colors ${
-                                s === speed ? "text-neon bg-neon/10" : "text-white/80 hover:bg-white/10"
-                              }`}
-                            >
-                              {s}x
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-
                     {/* Volume */}
                     <div className="flex items-center gap-2 group/vol">
                       <button
