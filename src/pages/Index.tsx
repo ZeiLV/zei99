@@ -113,8 +113,6 @@ const Index = ({ category }: Props) => {
 
       {!showIntro && (
         <div className="min-h-screen relative animate-zoom-in">
-          <Header search={search} onSearchChange={setSearch} />
-
           {selected ? (
             <>
               <ContentDetail
@@ -133,6 +131,7 @@ const Index = ({ category }: Props) => {
             </>
           ) : (
             <>
+              <Header search={search} onSearchChange={setSearch} />
               <h1 className="sr-only">{pageTitle}</h1>
 
               {!search.trim() && content.length > 0 && (

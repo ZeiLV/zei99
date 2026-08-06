@@ -201,11 +201,20 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
     const iframe = iframeRef.current as (HTMLIFrameElement & {
       webkitRequestFullscreen?: () => Promise<void> | void;
     }) | null;
+    const container = containerRef.current as (HTMLDivElement & {
+      webkitRequestFullscreen?: () => Promise<void> | void;
+    }) | null;
     const target = isIframe ? iframe : video;
+
+    // iPhone/iPad only expose the native video fullscreen method.
+    if (!isIframe && video?.webkitEnterFullscreen && !video.requestFullscreen) {
+      video.webkitEnterFullscreen();
+      return;
+    }
 
     try {
       if (target?.requestFullscreen) {
-        await target.requestFullscreen();
+        await target.requestFullscreen({ navigationUI: "hide" });
         return;
       }
       if (target?.webkitRequestFullscreen) {
@@ -214,9 +223,28 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
       }
       if (!isIframe && video?.webkitEnterFullscreen) {
         video.webkitEnterFullscreen();
+        return;
+      }
+      // Embedded browsers may reject element fullscreen but allow its wrapper.
+      if (container?.requestFullscreen) {
+        await container.requestFullscreen({ navigationUI: "hide" });
+        return;
+      }
+      if (container?.webkitRequestFullscreen) {
+        await container.webkitRequestFullscreen();
       }
     } catch {
-      if (!isIframe && video?.webkitEnterFullscreen) video.webkitEnterFullscreen();
+      try {
+        if (!isIframe && video?.webkitEnterFullscreen) {
+          video.webkitEnterFullscreen();
+        } else if (container?.requestFullscreen) {
+          await container.requestFullscreen({ navigationUI: "hide" });
+        } else if (container?.webkitRequestFullscreen) {
+          await container.webkitRequestFullscreen();
+        }
+      } catch {
+        // Fullscreen can still be blocked by the host browser's permissions.
+      }
     }
   };
 
