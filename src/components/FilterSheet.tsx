@@ -1,4 +1,5 @@
 import { X } from "lucide-react";
+import { createPortal } from "react-dom";
 
 interface Props {
   open: boolean;
@@ -33,7 +34,7 @@ export const FilterSheet = ({
         : "glass text-foreground/75 border border-white/5 hover:text-neon hover:border-neon/40 hover:shadow-[0_0_14px_-6px_hsl(var(--neon)/0.9)]"
     }`;
 
-  return (
+  return createPortal(
     <div
       className={`fixed inset-0 z-[70] transition-opacity duration-300 ${
         open ? "opacity-100" : "opacity-0 pointer-events-none"
@@ -121,6 +122,7 @@ export const FilterSheet = ({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
