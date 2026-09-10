@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { X, Check } from "lucide-react";
 import { createPortal } from "react-dom";
 
 interface Props {
@@ -6,33 +6,35 @@ interface Props {
   onClose: () => void;
   genres: string[];
   years: number[];
-  activeGenre: string | null;
-  activeYear: number | null;
-  onGenre: (g: string | null) => void;
-  onYear: (y: number | null) => void;
+  activeGenres: string[];
+  activeYears: number[];
+  onToggleGenre: (g: string) => void;
+  onToggleYear: (y: number) => void;
   onClear: () => void;
   resultCount: number;
 }
 
-/** Bottom-sheet filter (genre + year) used on home and every category page. */
+/** Bottom-sheet filter (multi-select genre + year) used on home and every category page. */
 export const FilterSheet = ({
   open,
   onClose,
   genres,
   years,
-  activeGenre,
-  activeYear,
-  onGenre,
-  onYear,
+  activeGenres,
+  activeYears,
+  onToggleGenre,
+  onToggleYear,
   onClear,
   resultCount,
 }: Props) => {
   const chipCls = (active: boolean) =>
-    `px-3.5 py-2 rounded-xl text-[12px] tracking-wide transition-all duration-300 active:scale-95 ${
+    `px-3.5 py-2 rounded-xl text-[12px] tracking-wide transition-all duration-300 active:scale-95 flex items-center gap-1.5 ${
       active
         ? "bg-neon/15 text-neon border border-neon/60 shadow-[0_0_16px_-4px_hsl(var(--neon)/0.8)]"
         : "glass text-foreground/75 border border-white/5 hover:text-neon hover:border-neon/40 hover:shadow-[0_0_14px_-6px_hsl(var(--neon)/0.9)]"
     }`;
+
+  const selectedCount = activeGenres.length + activeYears.length;
 
   return createPortal(
     <div
@@ -55,7 +57,9 @@ export const FilterSheet = ({
         </div>
 
         <div className="flex items-center justify-between px-5 pt-2 pb-3 shrink-0">
-          <span className="font-display text-lg tracking-widest neon-text">FILTRLASH</span>
+          <span className="font-display text-lg tracking-widest neon-text">
+            FILTRLASH{selectedCount > 0 ? ` (${selectedCount})` : ""}
+          </span>
           <div className="flex items-center gap-3">
             <button
               onClick={onClear}
@@ -76,17 +80,19 @@ export const FilterSheet = ({
         <div className="flex-1 overflow-y-auto px-5 pb-4 space-y-6">
           {genres.length > 0 && (
             <section>
-              <div className="text-[11px] tracking-[0.2em] font-display text-foreground/50 mb-3">JANR</div>
+              <div className="text-[11px] tracking-[0.2em] font-display text-foreground/50 mb-3">
+                JANR (bir nechtasini tanlash mumkin)
+              </div>
               <div className="flex flex-wrap gap-2">
-                {genres.map((g) => (
-                  <button
-                    key={g}
-                    onClick={() => onGenre(activeGenre === g ? null : g)}
-                    className={chipCls(activeGenre === g)}
-                  >
-                    {g}
-                  </button>
-                ))}
+                {genres.map((g) => {
+                  const active = activeGenres.includes(g);
+                  return (
+                    <button key={g} onClick={() => onToggleGenre(g)} className={chipCls(active)}>
+                      {active && <Check className="h-3 w-3" />}
+                      {g}
+                    </button>
+                  );
+                })}
               </div>
             </section>
           )}
@@ -95,15 +101,15 @@ export const FilterSheet = ({
             <section>
               <div className="text-[11px] tracking-[0.2em] font-display text-foreground/50 mb-3">YIL</div>
               <div className="flex flex-wrap gap-2">
-                {years.map((y) => (
-                  <button
-                    key={y}
-                    onClick={() => onYear(activeYear === y ? null : y)}
-                    className={chipCls(activeYear === y)}
-                  >
-                    {y}
-                  </button>
-                ))}
+                {years.map((y) => {
+                  const active = activeYears.includes(y);
+                  return (
+                    <button key={y} onClick={() => onToggleYear(y)} className={chipCls(active)}>
+                      {active && <Check className="h-3 w-3" />}
+                      {y}
+                    </button>
+                  );
+                })}
               </div>
             </section>
           )}

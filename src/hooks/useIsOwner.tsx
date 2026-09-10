@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 
-/** Checks the current user's admin role against the server-side user_roles table. */
-export const useIsAdmin = () => {
+/** True only for the site owner (bosh admin) who can grant/remove admin rights. */
+export const useIsOwner = () => {
   const { user, loading: authLoading } = useAuth();
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let active = true;
     if (authLoading) return;
     if (!user) {
-      setIsAdmin(false);
+      setIsOwner(false);
       setLoading(false);
       return;
     }
@@ -22,9 +22,10 @@ export const useIsAdmin = () => {
         .from("user_roles")
         .select("role")
         .eq("user_id", user.id)
-        .in("role", ["admin", "owner"]);
+        .eq("role", "owner")
+        .maybeSingle();
       if (!active) return;
-      setIsAdmin((data ?? []).length > 0);
+      setIsOwner(!!data);
       setLoading(false);
     })();
     return () => {
@@ -32,5 +33,5 @@ export const useIsAdmin = () => {
     };
   }, [user, authLoading]);
 
-  return { isAdmin, loading: loading || authLoading };
+  return { isOwner, loading: loading || authLoading };
 };
