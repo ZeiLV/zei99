@@ -31,15 +31,20 @@ const Index = ({ category }: Props) => {
   const [content, setContent] = useState<Content[]>([]);
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Content | null>(null);
-  const [activeGenre, setActiveGenre] = useState<string | null>(null);
-  const [activeYear, setActiveYear] = useState<number | null>(null);
+  const [activeGenres, setActiveGenres] = useState<string[]>([]);
+  const [activeYears, setActiveYears] = useState<number[]>([]);
   const [filterOpen, setFilterOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const toggleGenre = (g: string) =>
+    setActiveGenres((prev) => (prev.includes(g) ? prev.filter((x) => x !== g) : [...prev, g]));
+  const toggleYear = (y: number) =>
+    setActiveYears((prev) => (prev.includes(y) ? prev.filter((x) => x !== y) : [...prev, y]));
+
   useEffect(() => {
     setSelected(null);
-    setActiveGenre(null);
-    setActiveYear(null);
+    setActiveGenres([]);
+    setActiveYears([]);
     setFilterOpen(false);
   }, [category]);
 
