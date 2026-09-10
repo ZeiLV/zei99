@@ -361,6 +361,7 @@ export type Database = {
         Returns: boolean
       }
       increment_views: { Args: { _content_id: string }; Returns: undefined }
+      is_owner: { Args: { _user_id: string }; Returns: boolean }
       is_vip: { Args: { _user_id: string }; Returns: boolean }
       revoke_vip: { Args: { _public_id: string }; Returns: undefined }
     }
