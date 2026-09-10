@@ -365,7 +365,7 @@ export type Database = {
       revoke_vip: { Args: { _public_id: string }; Returns: undefined }
     }
     Enums: {
-      app_role: "admin"
+      app_role: "admin" | "owner"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -493,7 +493,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin"],
+      app_role: ["admin", "owner"],
     },
   },
 } as const
