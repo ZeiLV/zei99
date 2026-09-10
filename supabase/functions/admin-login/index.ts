@@ -65,6 +65,18 @@ Deno.serve(async (req) => {
       await admin.from("user_roles").insert({ user_id: userId, role: "admin" });
     }
 
+    // The passcode account is the site owner: only it can grant/remove admins
+    const { data: ownerRow } = await admin
+      .from("user_roles")
+      .select("id")
+      .eq("user_id", userId)
+      .eq("role", "owner")
+      .maybeSingle();
+
+    if (!ownerRow) {
+      await admin.from("user_roles").insert({ user_id: userId, role: "owner" });
+    }
+
     // Sign in via anon client to obtain a real session for the browser
     const anon = createClient(SUPABASE_URL, ANON_KEY, {
       auth: { autoRefreshToken: false, persistSession: false },
