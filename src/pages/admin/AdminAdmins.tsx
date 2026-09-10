@@ -3,8 +3,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { ShieldCheck, UserPlus, Trash2, BadgeCheck } from "lucide-react";
+import { ShieldCheck, UserPlus, Trash2, BadgeCheck, Crown, Lock } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useIsOwner } from "@/hooks/useIsOwner";
 
 interface AdminRow {
   user_id: string;
@@ -12,10 +13,12 @@ interface AdminRow {
   email: string | null;
   public_id: string;
   badge: string | null;
+  is_owner?: boolean;
 }
 
 const AdminAdmins = () => {
   const { user } = useAuth();
+  const { isOwner, loading: ownerLoading } = useIsOwner();
   const [rows, setRows] = useState<AdminRow[]>([]);
   const [query, setQuery] = useState("");
   const [badgeQuery, setBadgeQuery] = useState("");
@@ -23,17 +26,24 @@ const AdminAdmins = () => {
   const [busy, setBusy] = useState(false);
 
   const load = async () => {
-    const { data: roles } = await supabase.from("user_roles").select("user_id").eq("role", "admin");
-    const ids = (roles ?? []).map((r: { user_id: string }) => r.user_id);
+    const { data: roles } = await supabase
+      .from("user_roles")
+      .select("user_id, role")
+      .in("role", ["admin", "owner"]);
+    const list = roles ?? [];
+    const ids = Array.from(new Set(list.map((r) => r.user_id)));
     if (!ids.length) {
       setRows([]);
       return;
     }
+    const owners = new Set(list.filter((r) => r.role === "owner").map((r) => r.user_id));
     const { data: profs } = await supabase
       .from("profiles")
       .select("user_id, display_name, email, public_id, badge")
       .in("user_id", ids);
-    setRows((profs ?? []) as AdminRow[]);
+    setRows(
+      ((profs ?? []) as AdminRow[]).map((p) => ({ ...p, is_owner: owners.has(p.user_id) }))
+    );
   };
 
   useEffect(() => {
@@ -69,12 +79,20 @@ const AdminAdmins = () => {
     }
   };
 
-  const removeAdmin = async (uid: string) => {
-    if (uid === user?.id) {
+  const removeAdmin = async (row: AdminRow) => {
+    if (row.user_id === user?.id) {
       toast.error("O'zingizni adminlikdan olib tashlay olmaysiz");
       return;
     }
-    const { error } = await supabase.from("user_roles").delete().eq("user_id", uid).eq("role", "admin");
+    if (row.is_owner) {
+      toast.error("Bosh adminni olib tashlab bo'lmaydi");
+      return;
+    }
+    const { error } = await supabase
+      .from("user_roles")
+      .delete()
+      .eq("user_id", row.user_id)
+      .eq("role", "admin");
     if (error) toast.error(error.message);
     else {
       toast.success("Adminlik olib tashlandi");
@@ -111,27 +129,36 @@ const AdminAdmins = () => {
         <p className="text-xs text-muted-foreground mt-1">Admin qo'shish, olib tashlash va nishonlar</p>
       </div>
 
-      <section className="glass rounded-xl p-4 sm:p-5 space-y-3">
-        <div className="flex items-center gap-2">
-          <UserPlus className="h-4 w-4 text-neon" />
-          <h2 className="font-display text-xs tracking-widest text-foreground/80">ADMIN QO'SHISH</h2>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-2">
-          <Input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="ID (masalan A7K2M9QX) yoki email"
-            className="flex-1"
-          />
-          <Button
-            onClick={addAdmin}
-            disabled={busy || !query.trim()}
-            className="bg-neon text-primary-foreground hover:bg-neon/90"
-          >
-            Qo'shish
-          </Button>
-        </div>
-      </section>
+      {ownerLoading ? null : isOwner ? (
+        <section className="glass rounded-xl p-4 sm:p-5 space-y-3">
+          <div className="flex items-center gap-2">
+            <UserPlus className="h-4 w-4 text-neon" />
+            <h2 className="font-display text-xs tracking-widest text-foreground/80">ADMIN QO'SHISH</h2>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="ID (masalan A7K2M9QX) yoki email"
+              className="flex-1"
+            />
+            <Button
+              onClick={addAdmin}
+              disabled={busy || !query.trim()}
+              className="bg-neon text-primary-foreground hover:bg-neon/90"
+            >
+              Qo'shish
+            </Button>
+          </div>
+        </section>
+      ) : (
+        <section className="glass rounded-xl p-4 sm:p-5 flex items-center gap-3">
+          <Lock className="h-4 w-4 text-amber-400 shrink-0" />
+          <p className="text-xs text-muted-foreground">
+            Admin qo'shish yoki olib tashlash faqat bosh admin (owner) uchun mavjud.
+          </p>
+        </section>
+      )}
 
       <section className="glass rounded-xl p-4 sm:p-5 space-y-3">
         <div className="flex items-center gap-2">
@@ -175,6 +202,11 @@ const AdminAdmins = () => {
             <div className="min-w-0 flex-1">
               <div className="text-sm text-foreground/90 truncate flex items-center gap-2">
                 {r.display_name || r.public_id}
+                {r.is_owner && (
+                  <span className="px-1.5 py-0.5 rounded-full text-[9px] font-display tracking-widest bg-amber-400/15 text-amber-400 border border-amber-400/40 flex items-center gap-1">
+                    <Crown className="h-2.5 w-2.5" /> BOSH ADMIN
+                  </span>
+                )}
                 {r.badge && (
                   <span className="px-1.5 py-0.5 rounded-full text-[9px] font-display tracking-widest bg-amber-400/15 text-amber-400 border border-amber-400/40">
                     {r.badge}
@@ -185,14 +217,16 @@ const AdminAdmins = () => {
                 {r.email} · {r.public_id}
               </div>
             </div>
-            <Button
-              size="icon"
-              variant="ghost"
-              className="text-destructive shrink-0"
-              onClick={() => removeAdmin(r.user_id)}
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
+            {isOwner && !r.is_owner && (
+              <Button
+                size="icon"
+                variant="ghost"
+                className="text-destructive shrink-0"
+                onClick={() => removeAdmin(r)}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            )}
           </div>
         ))}
       </section>

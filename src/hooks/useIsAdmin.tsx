@@ -22,10 +22,9 @@ export const useIsAdmin = () => {
         .from("user_roles")
         .select("role")
         .eq("user_id", user.id)
-        .eq("role", "admin")
-        .maybeSingle();
+        .in("role", ["admin", "owner"]);
       if (!active) return;
-      setIsAdmin(!!data);
+      setIsAdmin((data ?? []).length > 0);
       setLoading(false);
     })();
     return () => {
