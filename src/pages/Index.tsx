@@ -79,11 +79,11 @@ const Index = ({ category }: Props) => {
     [content]
   );
 
-  const hasFilters = !!(activeGenre || activeYear);
+  const hasFilters = activeGenres.length > 0 || activeYears.length > 0;
 
   const filtered = content.filter((c) => {
-    if (activeGenre && !c.genre?.includes(activeGenre)) return false;
-    if (activeYear && c.year !== activeYear) return false;
+    if (activeGenres.length && !activeGenres.every((g) => c.genre?.includes(g))) return false;
+    if (activeYears.length && !(c.year && activeYears.includes(c.year))) return false;
     if (!search.trim()) return true;
     return c.title.toLowerCase().includes(search.trim().toLowerCase());
   });
@@ -198,13 +198,13 @@ const Index = ({ category }: Props) => {
                 onClose={() => setFilterOpen(false)}
                 genres={allGenres}
                 years={allYears}
-                activeGenre={activeGenre}
-                activeYear={activeYear}
-                onGenre={setActiveGenre}
-                onYear={setActiveYear}
+                activeGenres={activeGenres}
+                activeYears={activeYears}
+                onToggleGenre={toggleGenre}
+                onToggleYear={toggleYear}
                 onClear={() => {
-                  setActiveGenre(null);
-                  setActiveYear(null);
+                  setActiveGenres([]);
+                  setActiveYears([]);
                 }}
                 resultCount={filtered.length}
               />
