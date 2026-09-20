@@ -42,12 +42,22 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const { data } = await supabase
-        .from("episodes")
-        .select("*")
-        .eq("content_id", content.id)
-        .order("episode_number", { ascending: true });
-      const eps = (data ?? []) as Episode[];
+      // Metadata for the full episode list (no video links, safe for everyone)
+      const [metaRes, srcRes] = await Promise.all([
+        supabase
+          .from("episodes_public" as any)
+          .select("*")
+          .eq("content_id", content.id)
+          .order("episode_number", { ascending: true }),
+        // Video links: the database only returns rows the viewer is entitled to
+        supabase.from("episodes").select("*").eq("content_id", content.id),
+      ]);
+      const sources = new Map<string, any>(
+        ((srcRes.data ?? []) as any[]).map((e) => [e.id, e])
+      );
+      const eps = ((metaRes.data ?? []) as any[]).map(
+        (m) => ({ ...m, ...(sources.get(m.id) ?? {}) }) as Episode
+      );
       setEpisodes(eps);
 
       // Pick deep-linked episode if present, otherwise first
