@@ -19,6 +19,7 @@ interface AuthContextValue {
   isVip: boolean;
   vipDaysLeft: number | null;
   loading: boolean;
+  connectionError: boolean;
   refreshProfile: () => Promise<void>;
   signOut: () => Promise<void>;
 }
@@ -30,6 +31,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [connectionError, setConnectionError] = useState(false);
 
   const loadProfile = async (uid: string) => {
     const { data } = await supabase
@@ -53,15 +55,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     });
 
-    // Then check existing session
-    supabase.auth.getSession().then(({ data: { session: sess } }) => {
-      setSession(sess);
-      setUser(sess?.user ?? null);
-      if (sess?.user) loadProfile(sess.user.id);
+    const timeout = window.setTimeout(() => {
+      setConnectionError(true);
       setLoading(false);
-    });
+    }, 8000);
 
-    return () => subscription.unsubscribe();
+    supabase.auth.getSession()
+      .then(({ data: { session: sess } }) => {
+        window.clearTimeout(timeout);
+        setSession(sess);
+        setUser(sess?.user ?? null);
+        if (sess?.user) loadProfile(sess.user.id);
+        setLoading(false);
+      })
+      .catch(() => {
+        window.clearTimeout(timeout);
+        setConnectionError(true);
+        setLoading(false);
+      });
+
+    return () => {
+      window.clearTimeout(timeout);
+      subscription.unsubscribe();
+    };
   }, []);
 
   const refreshProfile = async () => {
@@ -79,7 +95,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     : null;
 
   return (
-    <AuthContext.Provider value={{ session, user, profile, isVip, vipDaysLeft, loading, refreshProfile, signOut }}>
+    <AuthContext.Provider value={{ session, user, profile, isVip, vipDaysLeft, loading, connectionError, refreshProfile, signOut }}>
       {children}
     </AuthContext.Provider>
   );
