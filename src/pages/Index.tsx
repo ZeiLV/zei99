@@ -35,6 +35,7 @@ const Index = ({ category }: Props) => {
   const [activeYears, setActiveYears] = useState<number[]>([]);
   const [filterOpen, setFilterOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
   const toggleGenre = (g: string) =>
     setActiveGenres((prev) => (prev.includes(g) ? prev.filter((x) => x !== g) : [...prev, g]));
@@ -49,14 +50,25 @@ const Index = ({ category }: Props) => {
   }, [category]);
 
   useEffect(() => {
+    let active = true;
+    const timeout = window.setTimeout(() => {
+      if (!active) return;
+      setLoadError(true);
+      setLoading(false);
+    }, 10000);
     (async () => {
       setLoading(true);
+      setLoadError(false);
       let query = supabase.from("content").select("*").order("created_at", { ascending: false });
       if (category) query = query.eq("category", category);
-      const { data } = await query;
+      const { data, error } = await query;
+      if (!active) return;
+      window.clearTimeout(timeout);
       setContent((data ?? []) as Content[]);
+      setLoadError(!!error);
       setLoading(false);
     })();
+    return () => { active = false; window.clearTimeout(timeout); };
   }, [category]);
 
   // Deep-link: select content from ?id=
@@ -224,6 +236,12 @@ const Index = ({ category }: Props) => {
                         className="aspect-[9/16] rounded-xl glass animate-pulse"
                       />
                     ))}
+                  </div>
+                ) : loadError ? (
+                  <div className="flex flex-col items-center justify-center gap-3 py-24 text-center">
+                    <div className="font-display text-lg neon-text">KATALOGNI OCHIB BO'LMADI</div>
+                    <div className="max-w-sm text-sm text-muted-foreground">Lovable Cloud faol emas yoki internet aloqasi uzildi. Cloud yoqilgach qayta urinib ko'ring.</div>
+                    <button type="button" onClick={() => window.location.reload()} className="rounded-md border border-neon/40 px-4 py-2 text-xs font-display tracking-widest text-neon">QAYTA URINISH</button>
                   </div>
                 ) : !category && !search.trim() && !hasFilters ? (
                   // Netflix-style rows on home

@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { ImageUpload } from "@/components/ImageUpload";
 import { ArrowLeft, Tv, Save } from "lucide-react";
 import { toast } from "sonner";
+import { isZeilabMediaUrl } from "@/lib/mediaUrl";
 
 interface FormState {
   title: string;
@@ -80,6 +81,14 @@ const AdminContentEdit = () => {
   const save = async () => {
     if (!form.title.trim()) {
       toast.error("Sarlavha kerak");
+      return;
+    }
+    if (form.poster_url && !isZeilabMediaUrl(form.poster_url)) {
+      toast.error("Poster uchun cdn.zeilab.uz havolasini kiriting");
+      return;
+    }
+    if (form.banner_url && !isZeilabMediaUrl(form.banner_url)) {
+      toast.error("Banner uchun cdn.zeilab.uz havolasini kiriting");
       return;
     }
     setSaving(true);

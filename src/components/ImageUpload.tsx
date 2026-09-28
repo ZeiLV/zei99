@@ -1,9 +1,7 @@
-import { useRef, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Upload, X } from "lucide-react";
-import { toast } from "sonner";
+import { ExternalLink, Image as ImageIcon, X } from "lucide-react";
+import { isZeilabMediaUrl, ZEILAB_MEDIA_HINT } from "@/lib/mediaUrl";
 
 interface Props {
   value: string;
@@ -13,37 +11,8 @@ interface Props {
 }
 
 export const ImageUpload = ({ value, onChange, folder, aspect = "16/9" }: Props) => {
-  const [uploading, setUploading] = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
-
-  const upload = async (file: File) => {
-    if (!file.type.startsWith("image/")) {
-      toast.error("Faqat rasm fayli");
-      return;
-    }
-    if (file.size > 8 * 1024 * 1024) {
-      toast.error("Rasm 8MB dan kichik bo'lishi kerak");
-      return;
-    }
-    setUploading(true);
-    try {
-      const ext = file.name.split(".").pop() || "jpg";
-      const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-      const { error } = await supabase.storage.from("media").upload(path, file, {
-        cacheControl: "3600",
-        upsert: false,
-      });
-      if (error) {
-        toast.error(error.message);
-        return;
-      }
-      const { data } = supabase.storage.from("media").getPublicUrl(path);
-      onChange(data.publicUrl);
-      toast.success("Yuklandi");
-    } finally {
-      setUploading(false);
-    }
-  };
+  const [imageFailed, setImageFailed] = useState(false);
+  const valid = !value || isZeilabMediaUrl(value);
 
   return (
     <div className="space-y-2">
@@ -52,9 +21,9 @@ export const ImageUpload = ({ value, onChange, folder, aspect = "16/9" }: Props)
           aspect === "9/16" ? "aspect-[9/16] max-w-[140px]" : "aspect-video"
         }`}
       >
-        {value ? (
+        {value && !imageFailed ? (
           <>
-            <img src={value} alt="" className="w-full h-full object-cover" />
+            <img src={value} alt="" className="w-full h-full object-cover" onError={() => setImageFailed(true)} />
             <button
               type="button"
               onClick={() => onChange("")}
@@ -65,55 +34,27 @@ export const ImageUpload = ({ value, onChange, folder, aspect = "16/9" }: Props)
             </button>
           </>
         ) : (
-          <button
-            type="button"
-            onClick={() => fileRef.current?.click()}
-            disabled={uploading}
-            className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-neon transition-colors"
-          >
-            {uploading ? (
-              <div className="h-8 w-8 rounded-full border-2 border-neon/20 border-t-neon animate-spin-neon" />
-            ) : (
-              <>
-                <Upload className="h-5 w-5" />
-                <span className="text-[11px] font-display tracking-widest">YUKLASH</span>
-              </>
-            )}
-          </button>
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-muted-foreground">
+              <ImageIcon className="h-5 w-5" />
+              <span className="text-[11px] font-display tracking-widest">CDN RASM HAVOLASI</span>
+            </div>
         )}
       </div>
 
-      <div className="flex items-center gap-2">
-        <Button
-          type="button"
-          size="sm"
-          variant="ghost"
-          onClick={() => fileRef.current?.click()}
-          disabled={uploading}
-          className="text-xs"
-        >
-          <Upload className="h-3 w-3 mr-1" />
-          {value ? "Almashtirish" : "Tanlash"}
-        </Button>
+      <div className="space-y-1.5">
+        <div className="relative">
+          <ExternalLink className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-neon" />
         <Input
           value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder="yoki URL kiriting"
-          className="text-xs h-8"
+            onChange={(e) => { setImageFailed(false); onChange(e.target.value); }}
+            placeholder={ZEILAB_MEDIA_HINT}
+            className={`h-9 pl-9 text-xs ${valid ? "" : "border-destructive"}`}
         />
+        </div>
+        <p className={`text-[10px] ${valid ? "text-muted-foreground" : "text-destructive"}`}>
+          {valid ? `${folder === "posters" ? "Poster" : "Banner"} avval Zeilab CDN'ga yuklanadi, keyin tayyor havola shu yerga qo'yiladi.` : "Faqat cdn.zeilab.uz dagi to'g'ridan-to'g'ri fayl havolasini kiriting."}
+        </p>
       </div>
-
-      <input
-        ref={fileRef}
-        type="file"
-        accept="image/*"
-        className="hidden"
-        onChange={(e) => {
-          const f = e.target.files?.[0];
-          if (f) upload(f);
-          e.target.value = "";
-        }}
-      />
     </div>
   );
 };
