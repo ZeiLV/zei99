@@ -8,11 +8,13 @@ interface Props {
   onChange: (url: string) => void;
   folder: "posters" | "banners";
   aspect?: "9/16" | "16/9";
+  initialValue?: string;
 }
 
-export const ImageUpload = ({ value, onChange, folder, aspect = "16/9" }: Props) => {
+export const ImageUpload = ({ value, onChange, folder, aspect = "16/9", initialValue = "" }: Props) => {
   const [imageFailed, setImageFailed] = useState(false);
-  const valid = !value || isZeilabMediaUrl(value);
+  const isUnchangedLegacy = !!value && value === initialValue;
+  const valid = !value || isZeilabMediaUrl(value) || isUnchangedLegacy;
 
   return (
     <div className="space-y-2">
@@ -52,7 +54,11 @@ export const ImageUpload = ({ value, onChange, folder, aspect = "16/9" }: Props)
         />
         </div>
         <p className={`text-[10px] ${valid ? "text-muted-foreground" : "text-destructive"}`}>
-          {valid ? `${folder === "posters" ? "Poster" : "Banner"} avval Zeilab CDN'ga yuklanadi, keyin tayyor havola shu yerga qo'yiladi.` : "Faqat cdn.zeilab.uz dagi to'g'ridan-to'g'ri fayl havolasini kiriting."}
+          {isUnchangedLegacy && !isZeilabMediaUrl(value)
+            ? "Eski havola saqlanadi. Almashtirsangiz, yangi Zeilab CDN havolasini kiriting."
+            : valid
+              ? `${folder === "posters" ? "Poster" : "Banner"} avval Zeilab CDN'ga yuklanadi, keyin tayyor havola shu yerga qo'yiladi.`
+              : "Faqat cdn.zeilab.uz dagi to'g'ridan-to'g'ri fayl havolasini kiriting."}
         </p>
       </div>
     </div>

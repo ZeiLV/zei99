@@ -47,6 +47,7 @@ const AdminContentEdit = () => {
   const [form, setForm] = useState<FormState>(empty);
   const [loading, setLoading] = useState(isEdit);
   const [saving, setSaving] = useState(false);
+  const [initialMedia, setInitialMedia] = useState({ poster_url: "", banner_url: "" });
 
   useEffect(() => {
     if (!id) return;
@@ -71,6 +72,7 @@ const AdminContentEdit = () => {
         is_trending: c.is_trending,
         is_featured: c.is_featured,
       });
+      setInitialMedia({ poster_url: c.poster_url ?? "", banner_url: c.banner_url ?? "" });
       setLoading(false);
     })();
   }, [id, navigate]);
@@ -83,11 +85,11 @@ const AdminContentEdit = () => {
       toast.error("Sarlavha kerak");
       return;
     }
-    if (form.poster_url && !isZeilabMediaUrl(form.poster_url)) {
+    if (form.poster_url && form.poster_url !== initialMedia.poster_url && !isZeilabMediaUrl(form.poster_url)) {
       toast.error("Poster uchun cdn.zeilab.uz havolasini kiriting");
       return;
     }
-    if (form.banner_url && !isZeilabMediaUrl(form.banner_url)) {
+    if (form.banner_url && form.banner_url !== initialMedia.banner_url && !isZeilabMediaUrl(form.banner_url)) {
       toast.error("Banner uchun cdn.zeilab.uz havolasini kiriting");
       return;
     }
@@ -232,6 +234,7 @@ const AdminContentEdit = () => {
               onChange={(url) => update("poster_url", url)}
               folder="posters"
               aspect="9/16"
+              initialValue={initialMedia.poster_url}
             />
           </div>
           <div className="glass rounded-xl p-4 sm:p-5 space-y-2">
@@ -241,6 +244,7 @@ const AdminContentEdit = () => {
               onChange={(url) => update("banner_url", url)}
               folder="banners"
               aspect="16/9"
+              initialValue={initialMedia.banner_url}
             />
           </div>
         </div>

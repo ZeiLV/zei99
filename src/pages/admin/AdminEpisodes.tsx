@@ -49,6 +49,7 @@ const AdminEpisodes = () => {
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [editing, setEditing] = useState<EpForm | null>(null);
   const [loading, setLoading] = useState(true);
+  const [initialSources, setInitialSources] = useState({ video_url: "", server2_url: "", quality_4k_url: "" });
 
   const load = async () => {
     if (!id) return;
@@ -67,9 +68,9 @@ const AdminEpisodes = () => {
   const save = async () => {
     if (!editing || !id) return;
     if (!editing.title.trim()) return toast.error("Sarlavha kerak");
-    if (!isSupportedVideoUrl(editing.video_url)) return toast.error("Asosiy video uchun to'g'ri Zeilab CDN havolasi kerak");
-    if (editing.server2_url && !isSupportedVideoUrl(editing.server2_url)) return toast.error("Server 2 havolasi noto'g'ri");
-    if (editing.quality_4k_url && !isSupportedVideoUrl(editing.quality_4k_url)) return toast.error("4K havolasi noto'g'ri");
+    if (editing.video_url !== initialSources.video_url && !isSupportedVideoUrl(editing.video_url)) return toast.error("Asosiy video uchun to'g'ri Zeilab CDN havolasi kerak");
+    if (editing.server2_url && editing.server2_url !== initialSources.server2_url && !isSupportedVideoUrl(editing.server2_url)) return toast.error("Server 2 havolasi noto'g'ri");
+    if (editing.quality_4k_url && editing.quality_4k_url !== initialSources.quality_4k_url && !isSupportedVideoUrl(editing.quality_4k_url)) return toast.error("4K havolasi noto'g'ri");
 
     const payload = {
       content_id: id,
@@ -186,20 +187,24 @@ const AdminEpisodes = () => {
               <Button
                 size="sm"
                 variant="ghost"
-                onClick={() =>
+                onClick={() => {
+                  const sources = {
+                    video_url: ep.video_url ?? ep.gdrive_url ?? "",
+                    server2_url: ep.server2_url ?? "",
+                    quality_4k_url: ep.quality_4k_url ?? "",
+                  };
+                  setInitialSources(sources);
                   setEditing({
                     id: ep.id,
                     episode_number: ep.episode_number,
                     title: ep.title,
                     video_type: "direct",
                     gdrive_url: ep.gdrive_url ?? "",
-                    video_url: ep.video_url ?? ep.gdrive_url ?? "",
-                    server2_url: ep.server2_url ?? "",
-                    quality_4k_url: ep.quality_4k_url ?? "",
+                    ...sources,
                     is_vip: ep.is_vip,
                     early_access_until: ep.early_access_until,
-                  })
-                }
+                  });
+                }}
               >
                 <Pencil className="h-4 w-4" />
               </Button>
@@ -251,6 +256,7 @@ const AdminEpisodes = () => {
               value={editing.video_url}
               onChange={(v) => setEditing({ ...editing, video_url: v })}
               label="ASOSIY VIDEO · ZEILAB CDN"
+              initialValue={initialSources.video_url}
             />
 
             {/* Optional extra sources — Server 2 & 4K (collapsed visual section) */}
@@ -270,6 +276,7 @@ const AdminEpisodes = () => {
                     onChange={(v) => setEditing({ ...editing, server2_url: v })}
                     compact
                     label="SERVER 2 · ZEILAB CDN"
+                    initialValue={initialSources.server2_url}
                   />
                 </Field>
                 <Field label={(
@@ -280,6 +287,7 @@ const AdminEpisodes = () => {
                     onChange={(v) => setEditing({ ...editing, quality_4k_url: v })}
                     compact
                     label="4K MANBA · ZEILAB CDN"
+                    initialValue={initialSources.quality_4k_url}
                   />
                 </Field>
               </div>
