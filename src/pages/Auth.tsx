@@ -15,13 +15,21 @@ const passwordSchema = z.string().min(6, "Kamida 6 ta belgi").max(72);
 
 export default function Auth() {
   const navigate = useNavigate();
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, connectionError } = useAuth();
   const [stage, setStage] = useState<"intro" | "form" | "leaving">("intro");
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
+
+  const withTimeout = async <T,>(operation: Promise<T>): Promise<T> =>
+    Promise.race([
+      operation,
+      new Promise<T>((_, reject) =>
+        window.setTimeout(() => reject(new Error("Cloud timeout")), 10000)
+      ),
+    ]);
 
   useEffect(() => {
     if (!authLoading && user) navigate("/", { replace: true });
@@ -36,9 +44,9 @@ export default function Auth() {
     if (busy) return;
     setBusy(true);
     try {
-      const result = await lovable.auth.signInWithOAuth("google", {
+      const result = await withTimeout(lovable.auth.signInWithOAuth("google", {
         redirect_uri: window.location.origin,
-      });
+      }));
       if (result.error) {
         toast.error("Google bilan kirishda xatolik");
         setBusy(false);
@@ -47,7 +55,7 @@ export default function Auth() {
       if (result.redirected) return;
       goNext();
     } catch {
-      toast.error("Xatolik yuz berdi");
+      toast.error("Cloud bilan aloqa yo'q. Keyinroq qayta urinib ko'ring.");
       setBusy(false);
     }
   };
@@ -64,14 +72,14 @@ export default function Auth() {
     setBusy(true);
     try {
       if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
+        const { error } = await withTimeout(supabase.auth.signUp({
           email,
           password,
           options: {
             emailRedirectTo: window.location.origin,
             data: { full_name: name || email.split("@")[0] },
           },
-        });
+        }));
         if (error) {
           if (error.message.includes("already")) toast.error("Bu email allaqachon ro'yxatdan o'tgan");
           else toast.error(error.message);
@@ -80,7 +88,7 @@ export default function Auth() {
         }
         toast.success("Akkaunt yaratildi!");
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { error } = await withTimeout(supabase.auth.signInWithPassword({ email, password }));
         if (error) {
           toast.error("Email yoki parol noto'g'ri");
           setBusy(false);
@@ -89,7 +97,7 @@ export default function Auth() {
       }
       goNext();
     } catch {
-      toast.error("Xatolik yuz berdi");
+      toast.error("Cloud bilan aloqa yo'q. Keyinroq qayta urinib ko'ring.");
       setBusy(false);
     }
   };
@@ -109,7 +117,21 @@ export default function Auth() {
         <Particles count={48} />
 
         <main className="relative flex-1 flex flex-col items-center justify-center px-5 py-10 z-10">
-          {stage === "intro" && (
+          {connectionError ? (
+            <div className="flex max-w-sm flex-col items-center gap-4 text-center animate-fade-up">
+              <h1 className="font-display text-xl tracking-widest neon-text">CLOUD BILAN ALOQA YO'Q</h1>
+              <p className="text-sm leading-relaxed text-white/55">
+                Kirish va anime katalogi hozir ochilmaydi. Lovable Cloud qayta yoqilgach sayt avtomatik ishlaydi.
+              </p>
+              <button
+                type="button"
+                onClick={() => window.location.reload()}
+                className="rounded-lg border border-neon/50 px-5 py-2.5 font-display text-xs tracking-widest text-neon transition-colors hover:bg-neon/10"
+              >
+                QAYTA URINISH
+              </button>
+            </div>
+          ) : stage === "intro" && (
             <div className="flex flex-col items-center gap-10 animate-fade-up">
               <h1
                 data-text="ZEI DUBBING"
@@ -134,7 +156,7 @@ export default function Auth() {
             </div>
           )}
 
-          {stage !== "intro" && (
+          {!connectionError && stage !== "intro" && (
             <div className="w-full flex flex-col items-center animate-zoom-in">
               <div className="text-center mb-8">
                 <h1
