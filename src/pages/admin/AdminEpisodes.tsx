@@ -142,7 +142,10 @@ const AdminEpisodes = () => {
           </div>
         </div>
         <Button
-          onClick={() => setEditing(emptyEp(episodes.length + 1, episodes.length > 0))}
+          onClick={() => {
+            setInitialSources({ video_url: "", server2_url: "", quality_4k_url: "" });
+            setEditing(emptyEp(episodes.length + 1, episodes.length > 0));
+          }}
           className="bg-neon text-primary-foreground hover:bg-neon/90 neon-glow-sm"
         >
           <Plus className="h-4 w-4 mr-1" /> Yangi epizod
