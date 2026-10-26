@@ -1,5 +1,6 @@
 import { X, Check } from "lucide-react";
 import { createPortal } from "react-dom";
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 
 interface Props {
   open: boolean;
@@ -27,37 +28,40 @@ export const FilterSheet = ({
   onClear,
   resultCount,
 }: Props) => {
+  useBodyScrollLock(open);
+
   const chipCls = (active: boolean) =>
-    `px-3.5 py-2 rounded-xl text-[12px] tracking-wide transition-all duration-300 active:scale-95 flex items-center gap-1.5 ${
+    `px-3.5 py-2 rounded-full text-[12px] tracking-wide transition-all duration-200 active:scale-95 flex items-center gap-1.5 border ${
       active
-        ? "bg-neon/15 text-neon border border-neon/60 shadow-[0_0_16px_-4px_hsl(var(--neon)/0.8)]"
-        : "glass text-foreground/75 border border-white/5 hover:text-neon hover:border-neon/40 hover:shadow-[0_0_14px_-6px_hsl(var(--neon)/0.9)]"
+        ? "bg-foreground/90 text-background border-transparent"
+        : "bg-foreground/[0.06] text-foreground/80 border-foreground/10 hover:bg-foreground/10"
     }`;
 
   const selectedCount = activeGenres.length + activeYears.length;
 
   return createPortal(
     <div
-      className={`fixed inset-0 z-[70] transition-opacity duration-300 ${
+      className={`fixed inset-0 z-[70] overscroll-none transition-opacity duration-300 ${
         open ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
       onClick={onClose}
+      onTouchMove={(e) => { if (e.target === e.currentTarget) e.preventDefault(); }}
       aria-hidden={!open}
     >
-      <div className="absolute inset-0 bg-background/75 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-background/50 backdrop-blur-md" />
 
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`absolute left-0 right-0 bottom-0 max-h-[82vh] flex flex-col rounded-t-3xl glass-strong border-t border-neon/30 shadow-[0_-10px_50px_-20px_hsl(var(--neon)/0.8)] transition-transform duration-300 ${
-          open ? "translate-y-0" : "translate-y-full"
+        className={`absolute left-2 right-2 bottom-2 max-h-[78vh] flex flex-col rounded-[28px] ios-glass transition-transform duration-300 ease-out ${
+          open ? "translate-y-0" : "translate-y-[110%]"
         }`}
       >
         <div className="pt-3 pb-1 flex justify-center shrink-0">
-          <div className="h-1.5 w-12 rounded-full bg-foreground/25" />
+          <div className="h-1.5 w-10 rounded-full bg-foreground/25" />
         </div>
 
         <div className="flex items-center justify-between px-5 pt-2 pb-3 shrink-0">
-          <span className="font-display text-lg tracking-widest neon-text">
+          <span className="font-display text-base tracking-widest text-foreground">
             FILTRLASH{selectedCount > 0 ? ` (${selectedCount})` : ""}
           </span>
           <div className="flex items-center gap-3">
