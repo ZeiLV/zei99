@@ -81,11 +81,11 @@ export const FilterSheet = ({
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-5 pb-4 space-y-6">
+        <div className="flex-1 overflow-y-auto overscroll-contain px-5 pb-4 space-y-6">
           {genres.length > 0 && (
             <section>
-              <div className="text-[11px] tracking-[0.2em] font-display text-foreground/50 mb-3">
-                JANR (bir nechtasini tanlash mumkin)
+              <div className="text-[11px] tracking-[0.15em] text-foreground/50 mb-3">
+                Janr (bir nechtasini tanlash mumkin)
               </div>
               <div className="flex flex-wrap gap-2">
                 {genres.map((g) => {
@@ -103,7 +103,7 @@ export const FilterSheet = ({
 
           {years.length > 0 && (
             <section>
-              <div className="text-[11px] tracking-[0.2em] font-display text-foreground/50 mb-3">YIL</div>
+              <div className="text-[11px] tracking-[0.15em] text-foreground/50 mb-3">Yil</div>
               <div className="flex flex-wrap gap-2">
                 {years.map((y) => {
                   const active = activeYears.includes(y);
@@ -123,10 +123,10 @@ export const FilterSheet = ({
           )}
         </div>
 
-        <div className="p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shrink-0 border-t border-white/5">
+        <div className="p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shrink-0 border-t border-foreground/10">
           <button
             onClick={onClose}
-            className="w-full h-12 rounded-2xl font-display text-[12px] tracking-[0.2em] text-background bg-neon transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_28px_-4px_hsl(var(--neon))] active:scale-[0.98]"
+            className="w-full h-12 rounded-full font-display text-[12px] tracking-[0.2em] text-background bg-foreground/90 transition-all duration-200 active:scale-[0.98]"
           >
             FILTRLASH ({resultCount})
           </button>
