@@ -91,10 +91,10 @@
   }
 
   .glass {
-    background: linear-gradient(135deg, hsl(0 0% 100% / 0.05), hsl(0 0% 100% / 0.015));
-    backdrop-filter: blur(15px) saturate(150%);
-    -webkit-backdrop-filter: blur(15px) saturate(150%);
-    border: 1px solid hsl(var(--neon) / 0.18);
+    background: hsl(0 0% 100% / 0.06);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid hsl(0 0% 100% / 0.10);
     box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.06);
   }
 
@@ -102,8 +102,16 @@
     background: linear-gradient(135deg, hsl(0 0% 100% / 0.08), hsl(0 0% 100% / 0.025));
     backdrop-filter: blur(20px) saturate(170%);
     -webkit-backdrop-filter: blur(20px) saturate(170%);
-    border: 1px solid hsl(var(--neon) / 0.28);
+    border: 1px solid hsl(0 0% 100% / 0.12);
     box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.08), 0 8px 32px hsl(0 0% 0% / 0.3);
+  }
+
+  .ios-glass {
+    background: hsl(222 30% 14% / 0.62);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border: 1px solid hsl(0 0% 100% / 0.12);
+    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.10), 0 20px 50px -12px hsl(0 0% 0% / 0.6);
   }
 
   .player-frame {
@@ -123,10 +131,7 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    filter:
-      drop-shadow(0 0 8px hsl(var(--neon) / 0.85))
-      drop-shadow(0 0 18px hsl(var(--neon-purple) / 0.6));
-    animation: logo-pulse 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 4px hsl(var(--neon) / 0.25));
   }
 
   @keyframes logo-pulse {
@@ -144,7 +149,7 @@
 
   .neon-text {
     color: hsl(var(--neon));
-    text-shadow: 0 0 6px hsl(var(--neon) / 0.7), 0 0 18px hsl(var(--neon) / 0.45);
+    text-shadow: 0 0 6px hsl(var(--neon) / 0.2);
   }
 
   .multineon-text {
@@ -152,18 +157,17 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    filter: drop-shadow(0 0 8px hsl(var(--neon) / 0.55))
-            drop-shadow(0 0 18px hsl(var(--neon-purple) / 0.45));
+    filter: none;
   }
 
   .neon-border {
     border: 1px solid hsl(var(--neon) / 0.6);
-    box-shadow: var(--shadow-neon-sm), inset 0 0 12px hsl(var(--neon) / 0.08);
+    box-shadow: none;
   }
 
-  .neon-glow-sm { box-shadow: var(--shadow-neon-sm); }
-  .neon-glow-md { box-shadow: var(--shadow-neon-md); }
-  .neon-glow-lg { box-shadow: var(--shadow-neon-lg); }
+  .neon-glow-sm { box-shadow: 0 4px 14px -6px hsl(var(--neon) / 0.25); }
+  .neon-glow-md { box-shadow: 0 6px 20px -8px hsl(var(--neon) / 0.3); }
+  .neon-glow-lg { box-shadow: 0 8px 26px -10px hsl(var(--neon) / 0.35); }
 }
 
 @layer utilities {
@@ -176,7 +180,7 @@
   0%, 100% { box-shadow: 0 0 12px hsl(var(--neon) / 0.5), 0 0 24px hsl(var(--neon) / 0.25); }
   50% { box-shadow: 0 0 20px hsl(var(--neon) / 0.8), 0 0 48px hsl(var(--neon) / 0.45); }
 }
-.animate-neon-pulse { animation: neon-pulse 2.4s ease-in-out infinite; }
+.animate-neon-pulse { }
 
 /* Multicolor breathing backlight — used behind cards / heroes */
 @keyframes breathing-glow {
@@ -317,7 +321,7 @@
     transform: scale(1.025);
   }
 }
-.breathing-btn { animation: breathing-btn 2.6s ease-in-out infinite; }
+.breathing-btn { }
 
 /* Smoke layer */
 @keyframes smoke-shift {
