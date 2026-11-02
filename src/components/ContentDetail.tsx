@@ -313,10 +313,10 @@ const EpisodesGrid = ({ episodes, loading, selectedId, userIsVip, onPick }: Grid
   return (
     <section className="mt-10 pb-16 animate-fade-up">
       <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
-        <h2 className="font-display text-lg tracking-widest text-foreground/90">
-          EPIZODLAR
+        <h2 className="font-display text-lg text-foreground/90">
+          Epizodlar
           {episodes.length > 0 && (
-            <span className="ml-2 text-[11px] text-neon/80 tabular-nums">· {episodes.length}</span>
+            <span className="ml-2 text-[11px] text-foreground/50 tabular-nums">· {episodes.length}</span>
           )}
         </h2>
         {pages.length > 1 && (
@@ -325,10 +325,10 @@ const EpisodesGrid = ({ episodes, loading, selectedId, userIsVip, onPick }: Grid
               <button
                 key={p.label}
                 onClick={() => setPage(i)}
-                className={`shrink-0 px-3 py-1.5 rounded-full text-[10px] font-display tracking-widest transition-all tabular-nums ${
+                className={`shrink-0 px-3 py-1.5 rounded-full text-[10px] font-semibold transition-all tabular-nums ${
                   i === page
-                    ? "bg-neon/20 text-neon neon-glow-sm border border-neon/50"
-                    : "glass text-foreground/60 hover:text-neon"
+                    ? "bg-foreground text-background"
+                    : "glass text-foreground/60 hover:text-foreground"
                 }`}
               >
                 {p.label}
@@ -353,25 +353,25 @@ const EpisodesGrid = ({ episodes, loading, selectedId, userIsVip, onPick }: Grid
                 key={ep.id}
                 onClick={() => onPick(ep)}
                 title={`${ep.episode_number}. ${ep.title}${ep.is_vip ? " · VIP" : earlyLocked ? " · VIP erta" : ""}`}
-                className={`group relative aspect-square rounded-md font-display text-sm tabular-nums tracking-wider transition-all duration-200
+                className={`group relative aspect-square rounded-xl font-semibold text-sm tabular-nums transition-all duration-200
                   ${active
-                    ? "bg-neon/20 text-neon neon-border neon-glow-sm scale-105"
+                    ? "bg-primary text-primary-foreground scale-105 shadow-md"
                     : locked
                     ? ep.is_vip
-                      ? "bg-[#0A0F1E] text-neon-pink/90 border border-neon-pink/40 hover:border-neon-pink hover:bg-neon-pink/10"
-                      : "bg-[#0A0F1E] text-amber-300/90 border border-amber-400/40 hover:border-amber-300"
-                    : "bg-[#0A0F1E] text-foreground/70 border border-neon/20 hover:text-neon hover:border-neon/60 hover:bg-neon/5"}
+                      ? "bg-secondary text-amber-300/90 border border-amber-400/30 hover:border-amber-400/60"
+                      : "bg-secondary text-amber-300/80 border border-amber-400/25 hover:border-amber-400/50"
+                    : "bg-secondary text-foreground/70 border border-foreground/10 hover:text-foreground hover:border-foreground/25"}
                 `}
               >
                 {ep.episode_number}
                 {ep.is_vip && (
-                  <Lock className="absolute top-0.5 right-0.5 h-2.5 w-2.5 text-neon-pink" />
+                  <Lock className="absolute top-0.5 right-0.5 h-2.5 w-2.5 text-amber-400" />
                 )}
                 {!ep.is_vip && earlyLocked && (
                   <Clock3 className="absolute top-0.5 right-0.5 h-2.5 w-2.5 text-amber-400" />
                 )}
                 {active && (
-                  <Play className="absolute bottom-0.5 right-0.5 h-2.5 w-2.5 text-neon fill-neon" />
+                  <Play className="absolute bottom-0.5 right-0.5 h-2.5 w-2.5 text-primary-foreground fill-primary-foreground" />
                 )}
               </button>
             );
@@ -381,11 +381,11 @@ const EpisodesGrid = ({ episodes, loading, selectedId, userIsVip, onPick }: Grid
 
       {/* Legend */}
       {episodes.length > 0 && (
-        <div className="mt-4 flex flex-wrap items-center gap-3 text-[10px] font-display tracking-widest text-foreground/60">
-          <span className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-sm bg-neon/30 border border-neon/60" /> JORIY</span>
-          <span className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-sm bg-[#0A0F1E] border border-neon/30" /> BEPUL</span>
-          <span className="flex items-center gap-1"><Clock3 className="h-3 w-3 text-amber-400" /> VIP ERTA</span>
-          <span className="flex items-center gap-1"><Lock className="h-3 w-3 text-neon-pink" /> VIP</span>
+        <div className="mt-4 flex flex-wrap items-center gap-3 text-[10px] font-medium text-foreground/55">
+          <span className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-sm bg-primary" /> Joriy</span>
+          <span className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-sm bg-secondary border border-foreground/15" /> Bepul</span>
+          <span className="flex items-center gap-1"><Clock3 className="h-3 w-3 text-amber-400" /> VIP erta</span>
+          <span className="flex items-center gap-1"><Lock className="h-3 w-3 text-amber-400" /> VIP</span>
         </div>
       )}
     </section>
