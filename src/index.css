@@ -1,59 +1,60 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ZEI DUBBING — Cyberpunk multicolor neon design system. All colors HSL. */
+/* ZEI DUBBING — Soft iOS design system. All colors HSL. */
 
 @layer base {
   :root {
-    /* Deep Dark Blue (Midnight) — #0A0F1E */
-    --background: 226 50% 8%;
-    --foreground: 210 30% 96%;
+    /* Deep soft dark — calm, not cyber */
+    --background: 222 28% 9%;
+    --foreground: 210 25% 96%;
 
-    --card: 226 45% 11%;
-    --card-foreground: 210 30% 96%;
+    --card: 222 26% 12%;
+    --card-foreground: 210 25% 96%;
 
-    --popover: 226 45% 12%;
-    --popover-foreground: 210 30% 96%;
+    --popover: 222 26% 13%;
+    --popover-foreground: 210 25% 96%;
 
-    --primary: 200 95% 60%;
-    --primary-foreground: 226 50% 8%;
+    --primary: 213 85% 62%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 226 40% 14%;
-    --secondary-foreground: 210 30% 96%;
+    --secondary: 222 22% 16%;
+    --secondary-foreground: 210 25% 96%;
 
-    --muted: 226 35% 16%;
-    --muted-foreground: 215 20% 70%;
+    --muted: 222 20% 18%;
+    --muted-foreground: 215 15% 68%;
 
-    --accent: 200 95% 60%;
-    --accent-foreground: 226 50% 8%;
+    --accent: 213 85% 62%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 75% 60%;
+    --destructive: 0 72% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 40% 22%;
-    --input: 226 40% 14%;
-    --ring: 200 90% 60%;
+    --border: 220 18% 24%;
+    --input: 222 22% 16%;
+    --ring: 213 85% 62%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
-    /* Softer neon palette tuned for midnight blue */
-    --neon: 200 95% 60%;             /* Soft sky blue */
-    --neon-soft: 200 90% 75%;
-    --neon-cyan: 190 90% 60%;
-    --neon-purple: 265 75% 65%;
-    --neon-pink: 325 80% 65%;
+    /* Soft iOS accent palette (kept under the legacy "neon" token names) */
+    --neon: 213 85% 66%;             /* Soft iOS blue */
+    --neon-soft: 213 80% 78%;
+    --neon-cyan: 195 70% 62%;
+    --neon-purple: 258 60% 70%;
+    --neon-pink: 330 60% 70%;
     --glass: 220 40% 100%;
 
-    --shadow-neon-sm: 0 0 6px hsl(var(--neon) / 0.35);
-    --shadow-neon-md: 0 0 12px hsl(var(--neon) / 0.30), 0 0 24px hsl(var(--neon) / 0.18);
-    --shadow-neon-lg: 0 0 18px hsl(var(--neon) / 0.40), 0 0 36px hsl(var(--neon-purple) / 0.25), 0 0 72px hsl(var(--neon) / 0.12);
+    /* Subtle, soft shadows — no glow */
+    --shadow-neon-sm: 0 2px 8px hsl(222 40% 4% / 0.35);
+    --shadow-neon-md: 0 4px 16px hsl(222 40% 4% / 0.4);
+    --shadow-neon-lg: 0 10px 32px hsl(222 40% 4% / 0.5);
 
-    --gradient-glass: linear-gradient(135deg, hsl(220 40% 100% / 0.05), hsl(220 40% 100% / 0.015));
-    --gradient-banner: linear-gradient(180deg, transparent 0%, hsl(226 50% 5% / 0.55) 60%, hsl(226 50% 5%) 100%);
-    --gradient-multineon: linear-gradient(120deg, hsl(var(--neon-cyan)), hsl(var(--neon)) 40%, hsl(var(--neon-purple)) 75%, hsl(var(--neon-pink)));
+    --gradient-glass: linear-gradient(135deg, hsl(220 40% 100% / 0.06), hsl(220 40% 100% / 0.02));
+    --gradient-banner: linear-gradient(180deg, transparent 0%, hsl(222 28% 6% / 0.55) 60%, hsl(222 28% 6%) 100%);
+    --gradient-multineon: linear-gradient(120deg, hsl(var(--neon)), hsl(var(--neon-purple)));
     --gradient-bg: none;
 
     --transition-smooth: cubic-bezier(0.22, 1, 0.36, 1);
