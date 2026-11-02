@@ -1,59 +1,60 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ZEI DUBBING — Cyberpunk multicolor neon design system. All colors HSL. */
+/* ZEI DUBBING — Soft iOS design system. All colors HSL. */
 
 @layer base {
   :root {
-    /* Deep Dark Blue (Midnight) — #0A0F1E */
-    --background: 226 50% 8%;
-    --foreground: 210 30% 96%;
+    /* Deep soft dark — calm, not cyber */
+    --background: 222 28% 9%;
+    --foreground: 210 25% 96%;
 
-    --card: 226 45% 11%;
-    --card-foreground: 210 30% 96%;
+    --card: 222 26% 12%;
+    --card-foreground: 210 25% 96%;
 
-    --popover: 226 45% 12%;
-    --popover-foreground: 210 30% 96%;
+    --popover: 222 26% 13%;
+    --popover-foreground: 210 25% 96%;
 
-    --primary: 200 95% 60%;
-    --primary-foreground: 226 50% 8%;
+    --primary: 213 85% 62%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 226 40% 14%;
-    --secondary-foreground: 210 30% 96%;
+    --secondary: 222 22% 16%;
+    --secondary-foreground: 210 25% 96%;
 
-    --muted: 226 35% 16%;
-    --muted-foreground: 215 20% 70%;
+    --muted: 222 20% 18%;
+    --muted-foreground: 215 15% 68%;
 
-    --accent: 200 95% 60%;
-    --accent-foreground: 226 50% 8%;
+    --accent: 213 85% 62%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 75% 60%;
+    --destructive: 0 72% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 40% 22%;
-    --input: 226 40% 14%;
-    --ring: 200 90% 60%;
+    --border: 220 18% 24%;
+    --input: 222 22% 16%;
+    --ring: 213 85% 62%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
-    /* Softer neon palette tuned for midnight blue */
-    --neon: 200 95% 60%;             /* Soft sky blue */
-    --neon-soft: 200 90% 75%;
-    --neon-cyan: 190 90% 60%;
-    --neon-purple: 265 75% 65%;
-    --neon-pink: 325 80% 65%;
+    /* Soft iOS accent palette (kept under the legacy "neon" token names) */
+    --neon: 213 85% 66%;             /* Soft iOS blue */
+    --neon-soft: 213 80% 78%;
+    --neon-cyan: 195 70% 62%;
+    --neon-purple: 258 60% 70%;
+    --neon-pink: 330 60% 70%;
     --glass: 220 40% 100%;
 
-    --shadow-neon-sm: 0 0 6px hsl(var(--neon) / 0.35);
-    --shadow-neon-md: 0 0 12px hsl(var(--neon) / 0.30), 0 0 24px hsl(var(--neon) / 0.18);
-    --shadow-neon-lg: 0 0 18px hsl(var(--neon) / 0.40), 0 0 36px hsl(var(--neon-purple) / 0.25), 0 0 72px hsl(var(--neon) / 0.12);
+    /* Subtle, soft shadows — no glow */
+    --shadow-neon-sm: 0 2px 8px hsl(222 40% 4% / 0.35);
+    --shadow-neon-md: 0 4px 16px hsl(222 40% 4% / 0.4);
+    --shadow-neon-lg: 0 10px 32px hsl(222 40% 4% / 0.5);
 
-    --gradient-glass: linear-gradient(135deg, hsl(220 40% 100% / 0.05), hsl(220 40% 100% / 0.015));
-    --gradient-banner: linear-gradient(180deg, transparent 0%, hsl(226 50% 5% / 0.55) 60%, hsl(226 50% 5%) 100%);
-    --gradient-multineon: linear-gradient(120deg, hsl(var(--neon-cyan)), hsl(var(--neon)) 40%, hsl(var(--neon-purple)) 75%, hsl(var(--neon-pink)));
+    --gradient-glass: linear-gradient(135deg, hsl(220 40% 100% / 0.06), hsl(220 40% 100% / 0.02));
+    --gradient-banner: linear-gradient(180deg, transparent 0%, hsl(222 28% 6% / 0.55) 60%, hsl(222 28% 6%) 100%);
+    --gradient-multineon: linear-gradient(120deg, hsl(var(--neon)), hsl(var(--neon-purple)));
     --gradient-bg: none;
 
     --transition-smooth: cubic-bezier(0.22, 1, 0.36, 1);
@@ -86,88 +87,64 @@
 
 @layer components {
   .font-display {
-    font-family: 'Orbitron', sans-serif;
-    letter-spacing: 0.08em;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.02em;
   }
 
   .glass {
-    background: hsl(0 0% 100% / 0.06);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: hsl(0 0% 100% / 0.07);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
     border: 1px solid hsl(0 0% 100% / 0.10);
-    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.06);
+    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.05);
   }
 
   .glass-strong {
-    background: linear-gradient(135deg, hsl(0 0% 100% / 0.08), hsl(0 0% 100% / 0.025));
-    backdrop-filter: blur(20px) saturate(170%);
-    -webkit-backdrop-filter: blur(20px) saturate(170%);
+    background: linear-gradient(135deg, hsl(0 0% 100% / 0.09), hsl(0 0% 100% / 0.03));
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: 1px solid hsl(0 0% 100% / 0.12);
-    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.08), 0 8px 32px hsl(0 0% 0% / 0.3);
+    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.07), 0 8px 28px hsl(0 0% 0% / 0.28);
   }
 
   .ios-glass {
-    background: hsl(222 30% 14% / 0.62);
-    backdrop-filter: blur(28px) saturate(180%);
-    -webkit-backdrop-filter: blur(28px) saturate(180%);
-    border: 1px solid hsl(0 0% 100% / 0.12);
-    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.10), 0 20px 50px -12px hsl(0 0% 0% / 0.6);
+    background: hsl(222 24% 15% / 0.66);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    border: 1px solid hsl(0 0% 100% / 0.11);
+    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.08), 0 18px 44px -14px hsl(0 0% 0% / 0.55);
   }
 
   .player-frame {
-    border: 2px solid hsl(var(--neon) / 0.55);
+    border: 1px solid hsl(0 0% 100% / 0.12);
     border-radius: 1rem;
-    box-shadow:
-      0 0 0 1px hsl(var(--neon) / 0.15),
-      0 0 24px hsl(var(--neon) / 0.35),
-      0 0 60px hsl(var(--neon-purple) / 0.35);
+    box-shadow: 0 12px 36px -12px hsl(0 0% 0% / 0.6);
   }
 
   .logo-cyber {
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 900;
-    letter-spacing: 0.22em;
-    background: linear-gradient(120deg, hsl(var(--neon-cyan)) 0%, hsl(var(--neon)) 40%, hsl(var(--neon-purple)) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    filter: drop-shadow(0 0 4px hsl(var(--neon) / 0.25));
-  }
-
-  @keyframes logo-pulse {
-    0%, 100% {
-      filter:
-        drop-shadow(0 0 6px hsl(var(--neon) / 0.7))
-        drop-shadow(0 0 14px hsl(var(--neon-purple) / 0.5));
-    }
-    50% {
-      filter:
-        drop-shadow(0 0 12px hsl(var(--neon) / 1))
-        drop-shadow(0 0 26px hsl(var(--neon-purple) / 0.8));
-    }
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: hsl(var(--foreground));
   }
 
   .neon-text {
     color: hsl(var(--neon));
-    text-shadow: 0 0 6px hsl(var(--neon) / 0.2);
   }
 
   .multineon-text {
-    background: var(--gradient-multineon);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    filter: none;
+    color: hsl(var(--neon));
   }
 
   .neon-border {
-    border: 1px solid hsl(var(--neon) / 0.6);
+    border: 1px solid hsl(var(--neon) / 0.35);
     box-shadow: none;
   }
 
-  .neon-glow-sm { box-shadow: 0 4px 14px -6px hsl(var(--neon) / 0.25); }
-  .neon-glow-md { box-shadow: 0 6px 20px -8px hsl(var(--neon) / 0.3); }
-  .neon-glow-lg { box-shadow: 0 8px 26px -10px hsl(var(--neon) / 0.35); }
+  .neon-glow-sm { box-shadow: 0 3px 10px -4px hsl(222 40% 4% / 0.4); }
+  .neon-glow-md { box-shadow: 0 5px 16px -6px hsl(222 40% 4% / 0.45); }
+  .neon-glow-lg { box-shadow: 0 8px 24px -8px hsl(222 40% 4% / 0.5); }
 }
 
 @layer utilities {

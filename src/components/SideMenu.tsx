@@ -42,7 +42,7 @@ export const SideMenu = ({ open, onClose }: Props) => {
           }`}
         >
           <div className="flex items-center justify-between pl-4 pr-2 py-2.5 border-b border-foreground/10">
-            <span className="font-display text-[13px] tracking-[0.2em] text-foreground">ZEI DUBBING</span>
+            <span className="font-display text-[13px] text-foreground">ZEI DUBBING</span>
             <button
               onClick={onClose}
               className="h-8 w-8 rounded-full flex items-center justify-center text-foreground/60 hover:bg-foreground/10 transition-colors"
@@ -96,8 +96,8 @@ export const SideMenu = ({ open, onClose }: Props) => {
           <div className="p-2.5 border-t border-foreground/10">
             <button
               onClick={() => setVipOpen(true)}
-              className="w-full h-10 rounded-full font-display text-[11px] tracking-[0.16em] text-[#1a0f00] flex items-center justify-center gap-2 active:scale-95 transition-transform"
-              style={{ background: "linear-gradient(135deg, hsl(45 95% 60%), hsl(36 100% 52%))" }}
+              className="w-full h-10 rounded-full font-semibold text-[12px] text-[#1a0f00] flex items-center justify-center gap-2 active:scale-95 transition-transform"
+              style={{ background: "linear-gradient(135deg, hsl(45 90% 62%), hsl(36 90% 55%))" }}
             >
               <Crown className="h-3.5 w-3.5" /> VIP TARIFLAR
             </button>

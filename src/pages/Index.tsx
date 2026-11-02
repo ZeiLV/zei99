@@ -157,19 +157,19 @@ const Index = ({ category }: Props) => {
 
               {/* Title + filter trigger */}
               <div className="pt-6 px-[15px] sm:px-8 max-w-[1440px] mx-auto flex items-center justify-between gap-3">
-                <h2 className="font-display text-2xl sm:text-3xl multineon-text tracking-wider">
-                  {(categoryMeta?.label ?? "Katalog").toUpperCase()}
+                <h2 className="font-display text-2xl sm:text-3xl text-foreground tracking-tight">
+                  {categoryMeta?.label ?? "Katalog"}
                 </h2>
                 <button
                   onClick={() => setFilterOpen(true)}
-                  className={`shrink-0 h-10 px-4 rounded-full flex items-center gap-2 text-[11px] font-display tracking-widest transition-all duration-300 hover:scale-105 active:scale-95 ${
+                  className={`shrink-0 h-10 px-4 rounded-full flex items-center gap-2 text-[12px] font-semibold transition-all duration-200 active:scale-95 ${
                     hasFilters
-                      ? "bg-neon/15 text-neon border border-neon/60 shadow-[0_0_18px_-4px_hsl(var(--neon))]"
-                      : "glass text-foreground/70 border border-neon/20 hover:text-neon hover:border-neon/50 hover:shadow-[0_0_18px_-6px_hsl(var(--neon))]"
+                      ? "bg-primary text-primary-foreground"
+                      : "glass text-foreground/75 hover:text-foreground hover:bg-foreground/10"
                   }`}
                   aria-label="Filterlash"
                 >
-                  FILTERLASH
+                  Filterlash
                   <SlidersHorizontal className="h-4 w-4" />
                 </button>
               </div>
@@ -180,25 +180,25 @@ const Index = ({ category }: Props) => {
                   <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1 flex-nowrap">
                     <button
                       onClick={() => navigate("/")}
-                      className={`shrink-0 px-4 py-2 rounded-full text-[11px] font-display tracking-widest transition-all duration-300 hover:scale-[1.06] active:scale-95 ${
+                      className={`shrink-0 px-4 py-2 rounded-full text-[12px] font-semibold transition-all duration-200 active:scale-95 ${
                         !category
-                          ? "bg-neon/15 text-neon border border-neon/50 neon-glow-sm"
-                          : "glass text-foreground/70 border border-transparent hover:text-neon hover:border-neon/40 hover:shadow-[0_0_16px_-6px_hsl(var(--neon))]"
+                          ? "bg-foreground text-background"
+                          : "glass text-foreground/70 hover:text-foreground hover:bg-foreground/10"
                       }`}
                     >
-                      ASOSIY
+                      Asosiy
                     </button>
                     {availableCategories.map((c) => (
                       <button
                         key={c.value}
                         onClick={() => navigate(c.path)}
-                        className={`shrink-0 px-4 py-2 rounded-full text-[11px] font-display tracking-widest transition-all duration-300 hover:scale-[1.06] active:scale-95 ${
+                        className={`shrink-0 px-4 py-2 rounded-full text-[12px] font-semibold transition-all duration-200 active:scale-95 ${
                           category === c.value
-                            ? "bg-neon/15 text-neon border border-neon/50 neon-glow-sm"
-                            : "glass text-foreground/70 border border-transparent hover:text-neon hover:border-neon/40 hover:shadow-[0_0_16px_-6px_hsl(var(--neon))]"
+                            ? "bg-foreground text-background"
+                            : "glass text-foreground/70 hover:text-foreground hover:bg-foreground/10"
                         }`}
                       >
-                        {c.label.toUpperCase()}
+                        {c.label}
                       </button>
                     ))}
                   </div>
@@ -239,9 +239,9 @@ const Index = ({ category }: Props) => {
                   </div>
                 ) : loadError ? (
                   <div className="flex flex-col items-center justify-center gap-3 py-24 text-center">
-                    <div className="font-display text-lg neon-text">KATALOGNI OCHIB BO'LMADI</div>
+                    <div className="font-display text-lg text-foreground">Katalogni ochib bo'lmadi</div>
                     <div className="max-w-sm text-sm text-muted-foreground">Lovable Cloud faol emas yoki internet aloqasi uzildi. Cloud yoqilgach qayta urinib ko'ring.</div>
-                    <button type="button" onClick={() => window.location.reload()} className="rounded-md border border-neon/40 px-4 py-2 text-xs font-display tracking-widest text-neon">QAYTA URINISH</button>
+                    <button type="button" onClick={() => window.location.reload()} className="rounded-full bg-primary text-primary-foreground px-5 py-2.5 text-xs font-semibold active:scale-95 transition-transform">Qayta urinish</button>
                   </div>
                 ) : !category && !search.trim() && !hasFilters ? (
                   // Netflix-style rows on home

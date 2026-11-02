@@ -8,16 +8,16 @@ interface Props {
 export const PosterCard = ({ content, onClick }: Props) => {
   const rating = content.rating ?? 0;
 
-  // Neon-themed rating tier
+  // Soft rating tier — no glow
   const ratingStyle =
     rating >= 8
-      ? "text-[hsl(var(--neon))] border-[hsl(var(--neon))]/60 shadow-[0_0_10px_hsl(var(--neon)/0.6)]"
+      ? "text-[hsl(var(--neon))] border-[hsl(var(--neon))]/40"
       : rating >= 6.5
-      ? "text-emerald-300 border-emerald-400/50 shadow-[0_0_8px_rgb(52_211_153_/_0.5)]"
+      ? "text-emerald-300 border-emerald-400/40"
       : rating >= 5
-      ? "text-amber-300 border-amber-400/50 shadow-[0_0_8px_rgb(251_191_36_/_0.45)]"
+      ? "text-amber-300 border-amber-400/40"
       : rating > 0
-      ? "text-zinc-300 border-zinc-400/40"
+      ? "text-zinc-300 border-zinc-400/30"
       : "";
 
   return (
@@ -26,7 +26,7 @@ export const PosterCard = ({ content, onClick }: Props) => {
       className="group flex flex-col text-left w-full focus:outline-none"
     >
       <div
-        className="relative w-full overflow-hidden rounded-xl bg-secondary ring-1 ring-white/5 transition-all duration-500 ease-out group-hover:scale-[1.04] group-hover:shadow-[0_0_22px_hsl(var(--neon)/0.55),0_0_55px_hsl(var(--neon-purple)/0.35)] group-hover:ring-neon/60"
+        className="relative w-full overflow-hidden rounded-2xl bg-secondary ring-1 ring-white/5 transition-all duration-300 ease-out group-hover:scale-[1.02] group-hover:shadow-[0_10px_28px_-10px_hsl(0_0%_0%/0.6)] group-hover:ring-white/15"
         style={{ aspectRatio: "2 / 3" }}
       >
         {content.poster_url ? (
@@ -47,10 +47,10 @@ export const PosterCard = ({ content, onClick }: Props) => {
         {/* Bottom gradient for legibility */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-background/80 to-transparent" />
 
-        {/* Neon rating badge */}
+        {/* Soft rating badge */}
         {rating > 0 && (
           <div
-            className={`absolute top-2 left-2 ${ratingStyle} bg-background/70 backdrop-blur-md border text-[11px] font-bold px-1.5 py-0.5 rounded-md tabular-nums`}
+            className={`absolute top-2 left-2 ${ratingStyle} bg-background/60 backdrop-blur-md border text-[11px] font-semibold px-1.5 py-0.5 rounded-lg tabular-nums`}
           >
             {rating.toFixed(1)}
           </div>

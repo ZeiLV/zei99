@@ -133,22 +133,19 @@ export default function Auth() {
             </div>
           ) : stage === "intro" && (
             <div className="flex flex-col items-center gap-10 animate-fade-up">
-              <h1
-                data-text="ZEI DUBBING"
-                className="glitch font-display text-4xl sm:text-6xl md:text-7xl font-black multineon-text tracking-[0.2em] text-center"
-              >
+              <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold text-foreground tracking-tight text-center">
                 ZEI DUBBING
               </h1>
 
-              <p className="text-xs sm:text-sm text-white/55 tracking-[0.3em] uppercase">
+              <p className="text-xs sm:text-sm text-foreground/55 tracking-wide">
                 Premium Cinema Universe
               </p>
 
               <button
                 onClick={() => setStage("form")}
-                className="breathing-btn group relative px-10 py-4 rounded-full font-display text-sm tracking-[0.4em] text-white border border-neon/60 bg-neon/5 hover:bg-neon/10 transition-colors flex items-center gap-3"
+                className="group relative px-10 py-4 rounded-full font-semibold text-sm text-white bg-primary hover:bg-primary/90 transition-all active:scale-95 flex items-center gap-3 shadow-lg"
               >
-                <span>BOSHLASH</span>
+                <span>Boshlash</span>
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </button>
 
@@ -159,13 +156,10 @@ export default function Auth() {
           {!connectionError && stage !== "intro" && (
             <div className="w-full flex flex-col items-center animate-zoom-in">
               <div className="text-center mb-8">
-                <h1
-                  data-text="ZEI DUBBING"
-                  className="glitch font-display text-2xl sm:text-3xl multineon-text tracking-[0.2em]"
-                >
+                <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
                   ZEI DUBBING
                 </h1>
-                <p className="text-[11px] text-white/50 mt-2 tracking-widest uppercase">
+                <p className="text-[11px] text-foreground/50 mt-2">
                   Premium Streaming Platforma
                 </p>
               </div>
