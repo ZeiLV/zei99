@@ -105,7 +105,7 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
         />
         <button
           onClick={onBack}
-          className="absolute top-4 left-4 h-10 w-10 rounded-full glass flex items-center justify-center text-neon hover:neon-glow-sm transition-all"
+          className="absolute top-4 left-4 h-10 w-10 rounded-full glass flex items-center justify-center text-foreground/85 hover:bg-foreground/10 transition-all"
           aria-label="Orqaga"
         >
           <ArrowLeft className="h-4 w-4" />
@@ -113,13 +113,13 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
       </div>
 
       <div className="max-w-[1440px] mx-auto px-[15px] sm:px-8 -mt-20 sm:-mt-28 relative z-10">
-        <h1 className="font-display text-2xl sm:text-4xl font-black neon-text">{content.title}</h1>
+        <h1 className="font-display text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">{content.title}</h1>
 
         {/* Meta row */}
         <div className="flex flex-wrap items-center gap-3 mt-2 text-xs text-foreground/70">
           {content.rating != null && content.rating > 0 && (
             <span className="flex items-center gap-1">
-              <Star className="h-3.5 w-3.5 fill-neon text-neon" />
+              <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
               <span className="text-foreground">{content.rating.toFixed(1)}</span>
             </span>
           )}
@@ -148,7 +148,7 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
             {content.genre.map((g) => (
               <span
                 key={g}
-                className="px-2.5 py-1 rounded-full glass text-[11px] font-display tracking-widest text-neon"
+                className="px-2.5 py-1 rounded-full glass text-[11px] font-medium text-foreground/75"
               >
                 {g}
               </span>
@@ -172,13 +172,13 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
                 <div className="mb-3 flex flex-wrap items-center gap-2">
                   {hasServer2 && (
                     <div className="flex items-center gap-1 glass rounded-full p-1">
-                      <span className="text-[10px] font-display tracking-widest text-foreground/60 px-2">SERVER</span>
+                      <span className="text-[10px] font-medium text-foreground/60 px-2">Server</span>
                       {[1, 2].map((s) => (
                         <button
                           key={s}
                           onClick={() => setServer(s as 1 | 2)}
-                          className={`px-3 py-1 rounded-full text-[10px] font-display tracking-widest transition-all ${
-                            server === s ? "bg-neon/20 text-neon neon-glow-sm" : "text-foreground/60 hover:text-neon"
+                          className={`px-3 py-1 rounded-full text-[10px] font-semibold transition-all ${
+                            server === s ? "bg-foreground text-background" : "text-foreground/60 hover:text-foreground"
                           }`}
                         >
                           {s}
@@ -188,7 +188,7 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
                   )}
                   {has4K && (
                     <div className="flex items-center gap-1 glass rounded-full p-1">
-                      <span className="text-[10px] font-display tracking-widest text-foreground/60 px-2">SIFAT</span>
+                      <span className="text-[10px] font-medium text-foreground/60 px-2">Sifat</span>
                       {(["hd", "4k"] as const).map((q) => (
                         <button
                           key={q}
@@ -196,12 +196,12 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
                             if (q === "4k" && !userIsVip) return;
                             setQuality(q);
                           }}
-                          className={`px-3 py-1 rounded-full text-[10px] font-display tracking-widest transition-all ${
+                          className={`px-3 py-1 rounded-full text-[10px] font-semibold transition-all ${
                             quality === q
-                              ? "bg-neon/20 text-neon neon-glow-sm"
+                              ? "bg-foreground text-background"
                               : q === "4k" && !userIsVip
                               ? "text-amber-400/70"
-                              : "text-foreground/60 hover:text-neon"
+                              : "text-foreground/60 hover:text-foreground"
                           }`}
                           title={q === "4k" && !userIsVip ? "Faqat VIP" : undefined}
                         >
@@ -211,8 +211,8 @@ export const ContentDetail = ({ content, onBack, initialEpisodeNumber }: Props) 
                     </div>
                   )}
                   {userIsVip && (
-                    <span className="text-[10px] font-display tracking-widest text-neon-pink ml-auto">
-                      ⚡ VIP PRIORITY
+                    <span className="text-[10px] font-medium text-amber-300/90 ml-auto">
+                      VIP Priority
                     </span>
                   )}
                 </div>
