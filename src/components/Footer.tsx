@@ -35,7 +35,7 @@ export const Footer = () => {
               href="https://t.me/ZeiContactBot"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-neon hover:text-neon-soft transition-colors font-medium whitespace-nowrap"
+              className="text-foreground/85 hover:text-foreground transition-colors font-medium whitespace-nowrap"
             >
               @ZeiContactBot
             </a>{" "}
