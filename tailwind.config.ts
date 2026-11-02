@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Orbitron", "sans-serif"],
-        sans: ["Inter", "system-ui", "sans-serif"],
+        display: ["Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+        sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "system-ui", "sans-serif"],
       },
       colors: {
         neon: {

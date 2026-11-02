@@ -28,14 +28,14 @@ export const Header = (_props: HeaderProps) => {
             <div className="flex items-center gap-2 sm:gap-3 min-w-0">
               <button
                 onClick={() => setMenuOpen(true)}
-                className="h-10 w-10 rounded-full flex items-center justify-center text-foreground/80 hover:text-neon hover:bg-neon/10 transition-all shrink-0"
+                className="h-10 w-10 rounded-full flex items-center justify-center text-foreground/80 hover:text-foreground hover:bg-foreground/10 transition-all shrink-0"
                 aria-label="Menyu"
               >
                 <Menu className="h-5 w-5" />
               </button>
               <button
                 onClick={() => navigate("/")}
-                className="logo-cyber text-sm sm:text-xl select-none transition-all duration-300 hover:scale-[1.04] shrink-0 truncate"
+                className="logo-cyber text-sm sm:text-lg select-none transition-all duration-300 shrink-0 truncate"
               >
                 ZEI DUBBING
               </button>
@@ -45,7 +45,7 @@ export const Header = (_props: HeaderProps) => {
 
               <button
                 onClick={() => navigate("/search")}
-                className="h-9 w-9 sm:h-10 sm:w-10 rounded-full glass flex items-center justify-center text-neon transition-all hover:scale-105 active:scale-95"
+                className="h-9 w-9 sm:h-10 sm:w-10 rounded-full glass flex items-center justify-center text-foreground/85 transition-all hover:bg-foreground/10 active:scale-95"
                 aria-label="Qidirish"
               >
                 <Search className="h-4 w-4" />
@@ -55,10 +55,10 @@ export const Header = (_props: HeaderProps) => {
                 <button
                   onClick={() => navigate("/profile")}
                   aria-label="Profil"
-                  className={`h-9 w-9 sm:h-10 sm:w-10 rounded-full flex items-center justify-center font-display text-sm border transition-all overflow-hidden ${
+                  className={`h-9 w-9 sm:h-10 sm:w-10 rounded-full flex items-center justify-center font-semibold text-sm border transition-all overflow-hidden ${
                     isVip
-                      ? "border-amber-400/70 text-amber-400 shadow-[0_0_12px_hsl(45_95%_55%/0.45)]"
-                      : "border-neon/50 text-neon"
+                      ? "border-amber-400/60 text-amber-300"
+                      : "border-foreground/15 text-foreground/85"
                   } bg-foreground/5`}
                 >
                   {profile?.avatar_url ? (
