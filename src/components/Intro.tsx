@@ -5,19 +5,19 @@ interface IntroProps {
 }
 
 export const Intro = ({ onDone }: IntroProps) => {
-  const [stage, setStage] = useState<"loading" | "assemble" | "welcome" | "dissolve">("loading");
+  const [stage, setStage] = useState<"loading" | "welcome" | "dissolve">("loading");
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     if (stage !== "loading") return;
     let p = 0;
     const id = setInterval(() => {
-      p += Math.random() * 9 + 5;
+      p += Math.random() * 12 + 8;
       if (p >= 100) {
         p = 100;
         clearInterval(id);
         setProgress(100);
-        setTimeout(() => setStage("assemble"), 250);
+        setTimeout(() => setStage("welcome"), 250);
       } else {
         setProgress(p);
       }
@@ -26,16 +26,12 @@ export const Intro = ({ onDone }: IntroProps) => {
   }, [stage]);
 
   useEffect(() => {
-    if (stage === "assemble") {
-      const t = setTimeout(() => setStage("welcome"), 1700);
-      return () => clearTimeout(t);
-    }
     if (stage === "welcome") {
-      const t = setTimeout(() => setStage("dissolve"), 1800);
+      const t = setTimeout(() => setStage("dissolve"), 1400);
       return () => clearTimeout(t);
     }
     if (stage === "dissolve") {
-      const t = setTimeout(onDone, 850);
+      const t = setTimeout(onDone, 600);
       return () => clearTimeout(t);
     }
   }, [stage, onDone]);
@@ -45,76 +41,42 @@ export const Intro = ({ onDone }: IntroProps) => {
   return (
     <div
       onClick={skip}
-      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background cursor-pointer overflow-hidden ${
-        stage === "dissolve" ? "animate-dissolve" : ""
+      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background cursor-pointer overflow-hidden transition-opacity duration-500 ${
+        stage === "dissolve" ? "opacity-0" : "opacity-100"
       }`}
     >
-      {/* Ambient breathing backlight */}
-      <div className="absolute inset-0 animate-breathing pointer-events-none" />
+      {/* Soft ambient glow */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(60% 50% at 50% 40%, hsl(var(--neon) / 0.10), transparent 70%)",
+        }}
+      />
 
-      {/* Sweeping neon lines (always visible during intro until dissolve) */}
-      {stage !== "dissolve" && (
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* horizontal lines */}
-          <div
-            className="absolute left-0 right-0 h-px animate-line-h"
-            style={{ top: "28%", background: "linear-gradient(90deg, transparent, hsl(var(--neon-cyan)), transparent)", boxShadow: "0 0 12px hsl(var(--neon-cyan))" }}
-          />
-          <div
-            className="absolute left-0 right-0 h-px animate-line-h"
-            style={{ top: "48%", background: "linear-gradient(90deg, transparent, hsl(var(--neon-purple)), transparent)", boxShadow: "0 0 12px hsl(var(--neon-purple))", animationDelay: "0.4s" }}
-          />
-          <div
-            className="absolute left-0 right-0 h-px animate-line-h"
-            style={{ top: "68%", background: "linear-gradient(90deg, transparent, hsl(var(--neon-pink)), transparent)", boxShadow: "0 0 12px hsl(var(--neon-pink))", animationDelay: "0.8s" }}
-          />
-          {/* vertical lines */}
-          <div
-            className="absolute top-0 bottom-0 w-px animate-line-v"
-            style={{ left: "20%", background: "linear-gradient(180deg, transparent, hsl(var(--neon)), transparent)", boxShadow: "0 0 12px hsl(var(--neon))", animationDelay: "0.2s" }}
-          />
-          <div
-            className="absolute top-0 bottom-0 w-px animate-line-v"
-            style={{ left: "80%", background: "linear-gradient(180deg, transparent, hsl(var(--neon-pink)), transparent)", boxShadow: "0 0 12px hsl(var(--neon-pink))", animationDelay: "0.6s" }}
-          />
-        </div>
-      )}
+      <div className="relative z-10 flex flex-col items-center gap-6 animate-fade-up">
+        <h1 className="font-display text-3xl sm:text-5xl font-extrabold text-foreground tracking-tight">
+          ZEI DUBBING
+        </h1>
 
-      {stage === "loading" && (
-        <div className="relative z-10 w-64 sm:w-96 flex flex-col items-center gap-3">
-          <div className="h-[2px] w-full bg-white/5 overflow-hidden relative rounded-full">
-            <div
-              className="h-full transition-all duration-150 ease-out rounded-full"
-              style={{
-                width: `${progress}%`,
-                background: "var(--gradient-multineon)",
-                boxShadow: "0 0 10px hsl(var(--neon)), 0 0 20px hsl(var(--neon-purple) / 0.7)",
-              }}
-            />
-          </div>
-          <div className="font-display text-[10px] tracking-[0.4em] text-foreground/70">
-            {Math.floor(progress)}%
-          </div>
-        </div>
-      )}
-
-      {(stage === "assemble" || stage === "welcome" || stage === "dissolve") && (
-        <div className="relative z-10 flex flex-col items-center gap-6">
-          <h1 className="font-display text-3xl sm:text-5xl md:text-7xl font-black multineon-text animate-wordmark-coalesce">
-            ZEI DUBBING
-          </h1>
-          {(stage === "welcome" || stage === "dissolve") && (
-            <div
-              className="overflow-hidden whitespace-nowrap border-r-2 border-neon font-display text-[11px] sm:text-sm text-foreground/90 tracking-widest"
-              style={{
-                animation: "typewriter 1.4s steps(28) forwards, caret 0.7s step-end infinite",
-              }}
-            >
-              Zei Dubbing ga xush kelibsiz
+        {stage === "loading" ? (
+          <div className="w-48 sm:w-64 flex flex-col items-center gap-3">
+            <div className="h-1 w-full bg-foreground/10 overflow-hidden rounded-full">
+              <div
+                className="h-full transition-all duration-150 ease-out rounded-full bg-foreground/70"
+                style={{ width: `${progress}%` }}
+              />
             </div>
-          )}
-        </div>
-      )}
+            <div className="text-[11px] text-foreground/50 font-medium">
+              {Math.floor(progress)}%
+            </div>
+          </div>
+        ) : (
+          <p className="text-[13px] sm:text-sm text-foreground/60 animate-fade-up">
+            Zei Dubbing ga xush kelibsiz
+          </p>
+        )}
+      </div>
     </div>
   );
 };
