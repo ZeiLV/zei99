@@ -157,19 +157,19 @@ const Index = ({ category }: Props) => {
 
               {/* Title + filter trigger */}
               <div className="pt-6 px-[15px] sm:px-8 max-w-[1440px] mx-auto flex items-center justify-between gap-3">
-                <h2 className="font-display text-2xl sm:text-3xl multineon-text tracking-wider">
-                  {(categoryMeta?.label ?? "Katalog").toUpperCase()}
+                <h2 className="font-display text-2xl sm:text-3xl text-foreground tracking-tight">
+                  {categoryMeta?.label ?? "Katalog"}
                 </h2>
                 <button
                   onClick={() => setFilterOpen(true)}
-                  className={`shrink-0 h-10 px-4 rounded-full flex items-center gap-2 text-[11px] font-display tracking-widest transition-all duration-300 hover:scale-105 active:scale-95 ${
+                  className={`shrink-0 h-10 px-4 rounded-full flex items-center gap-2 text-[12px] font-semibold transition-all duration-200 active:scale-95 ${
                     hasFilters
-                      ? "bg-neon/15 text-neon border border-neon/60 shadow-[0_0_18px_-4px_hsl(var(--neon))]"
-                      : "glass text-foreground/70 border border-neon/20 hover:text-neon hover:border-neon/50 hover:shadow-[0_0_18px_-6px_hsl(var(--neon))]"
+                      ? "bg-primary text-primary-foreground"
+                      : "glass text-foreground/75 hover:text-foreground hover:bg-foreground/10"
                   }`}
                   aria-label="Filterlash"
                 >
-                  FILTERLASH
+                  Filterlash
                   <SlidersHorizontal className="h-4 w-4" />
                 </button>
               </div>
