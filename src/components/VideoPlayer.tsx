@@ -302,7 +302,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
 
       <div
         ref={containerRef}
-        className="relative mx-auto w-full overflow-hidden bg-[#0A0F1E] player-frame fullscreen-target sm:rounded-xl border border-neon/30 shadow-[0_0_40px_-10px_hsl(var(--neon)/0.55),0_0_120px_-30px_hsl(var(--neon-cyan)/0.55)]"
+        className="relative mx-auto w-full overflow-hidden bg-black player-frame fullscreen-target sm:rounded-2xl"
         style={{
           aspectRatio: `${frameAspect}`,
           maxHeight: isVertical ? "85vh" : undefined,
@@ -375,7 +375,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
               <div className="pointer-events-none absolute inset-0 z-[6] flex items-center justify-center">
                 <span
                   key={`flash-${flash}-${Date.now()}`}
-                  className="h-20 w-20 sm:h-24 sm:w-24 rounded-full bg-neon/15 backdrop-blur-sm flex items-center justify-center text-neon neon-glow-sm animate-scale-in"
+                  className="h-20 w-20 sm:h-24 sm:w-24 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center text-white animate-scale-in"
                 >
                   {flash === "play" && <Play className="h-9 w-9 sm:h-11 sm:w-11 ml-1" />}
                   {flash === "pause" && <Pause className="h-9 w-9 sm:h-11 sm:w-11" />}
@@ -392,7 +392,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
                 className="absolute inset-0 flex items-center justify-center z-[6] group"
                 aria-label="O'ynatish"
               >
-                <span className="h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-neon/20 backdrop-blur-sm hover:bg-neon/30 flex items-center justify-center text-neon neon-glow-md group-hover:scale-110 transition-all">
+                <span className="h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-white/15 backdrop-blur-md hover:bg-white/25 flex items-center justify-center text-white group-hover:scale-105 transition-all shadow-lg">
                   <Play className="h-7 w-7 sm:h-9 sm:w-9 ml-1" />
                 </span>
               </button>
@@ -423,10 +423,10 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
                     }}
                   >
                     <div
-                      className="h-full bg-neon rounded-full relative"
+                      className="h-full bg-white rounded-full relative"
                       style={{ width: `${duration ? (time / duration) * 100 : 0}%` }}
                     >
-                      <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 h-3.5 w-3.5 rounded-full bg-neon shadow-[0_0_10px_hsl(var(--neon)/0.9)]" />
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 h-3.5 w-3.5 rounded-full bg-white shadow-md" />
                     </div>
                   </div>
                   <span className="font-mono text-[11px] sm:text-xs text-white/70 tabular-nums shrink-0">
