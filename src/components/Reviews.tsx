@@ -139,7 +139,7 @@ export const Reviews = ({ contentId }: { contentId: string }) => {
                 >
                   <Star
                     className={`h-5 w-5 sm:h-6 sm:w-6 transition-all ${
-                      active ? "fill-neon text-neon drop-shadow-[0_0_6px_hsl(var(--neon)/0.7)]" : "text-foreground/30"
+                      active ? "fill-amber-400 text-amber-400" : "text-foreground/30"
                     }`}
                   />
                 </button>
@@ -161,7 +161,7 @@ export const Reviews = ({ contentId }: { contentId: string }) => {
             <button
               onClick={submit}
               disabled={submitting}
-              className="px-5 py-2 rounded-full font-display text-xs tracking-widest text-neon border border-neon/40 bg-neon/10 hover:bg-neon/20 hover:neon-glow-sm transition-all disabled:opacity-50"
+              className="px-5 py-2 rounded-full font-semibold text-xs text-primary-foreground bg-primary hover:bg-primary/90 active:scale-95 transition-all disabled:opacity-50"
             >
               {submitting ? "SAQLANMOQDA..." : "YUBORISH"}
             </button>
