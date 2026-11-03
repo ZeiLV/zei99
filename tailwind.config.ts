@@ -14,10 +14,11 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
-        sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "system-ui", "sans-serif"],
+        display: [ "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+        sans: [ "-apple-system", "BlinkMacSystemFont", "system-ui", "sans-serif"],
       },
       colors: {
+        vip: { DEFAULT: "hsl(var(--vip))", foreground: "hsl(var(--vip-foreground))" },
         neon: {
           DEFAULT: "hsl(var(--neon))",
           soft: "hsl(var(--neon-soft))",

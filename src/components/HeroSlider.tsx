@@ -6,13 +6,6 @@ interface Props {
   onSelect: (c: Content) => void;
 }
 
-const ACCENTS = [
-  "hsl(var(--neon-cyan))",
-  "hsl(var(--neon))",
-  "hsl(var(--neon-purple))",
-  "hsl(var(--neon-pink))",
-];
-
 const SWIPE_THRESHOLD = 50; // px
 
 export const HeroSlider = ({ items, onSelect }: Props) => {
@@ -52,7 +45,6 @@ export const HeroSlider = ({ items, onSelect }: Props) => {
 
   if (slides.length === 0) return null;
 
-  const accent = ACCENTS[idx % ACCENTS.length];
 
   const onPointerDown = (e: React.PointerEvent) => {
     if (slides.length <= 1) return;
@@ -111,22 +103,10 @@ export const HeroSlider = ({ items, onSelect }: Props) => {
 
   return (
     <section className="relative w-full max-w-[1440px] mx-auto px-[15px] sm:px-8 pt-6">
-      {/* Ambient backlight matching active slide accent */}
-      <div
-        aria-hidden
-        className="absolute inset-x-0 -top-4 h-[120%] -z-10 pointer-events-none transition-all duration-1000"
-        style={{
-          background: `radial-gradient(60% 50% at 50% 30%, ${accent.replace(")", " / 0.45)")}, transparent 70%)`,
-          filter: "blur(60px)",
-        }}
-      />
-
       <div
         ref={containerRef}
         className="relative w-full overflow-hidden rounded-2xl glass-strong select-none"
         style={{
-          boxShadow: `0 0 30px ${accent.replace(")", " / 0.35)")}, 0 0 80px ${accent.replace(")", " / 0.25)")}`,
-          transition: "box-shadow 1s ease",
           touchAction: "pan-y",
           cursor: isDragging ? "grabbing" : "grab",
         }}
@@ -192,8 +172,7 @@ export const HeroSlider = ({ items, onSelect }: Props) => {
                 className="h-1.5 rounded-full transition-all"
                 style={{
                   width: i === idx ? 24 : 6,
-                  background: i === idx ? accent : "hsl(0 0% 100% / 0.35)",
-                  boxShadow: i === idx ? `0 0 8px ${accent}` : "none",
+                  background: i === idx ? "hsl(var(--foreground))" : "hsl(var(--foreground) / 0.35)",
                 }}
               />
             ))}

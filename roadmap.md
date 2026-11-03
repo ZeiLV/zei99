@@ -6,3 +6,6 @@
 - [x] Preserve unchanged legacy media URLs during edits.
 - [x] Replace indefinite loading with a clear Cloud connection state.
 - [x] Resume Lovable Cloud.
+- [ ] Remove background blur and footer for V2.
+- [ ] Refresh intro and add tab navigation plus newest/trending pages.
+- [ ] Verify filters, navigation, and mobile/desktop presentation.

@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Menu, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -20,44 +21,44 @@ export const Header = (_props: HeaderProps) => {
   return (
     <>
       {/* Rounded floating header — sticks to the top and follows the user */}
-      <header className="sticky top-0 z-50">
+      <header className="relative z-50">
 
         <div className="max-w-[1200px] mx-auto px-3 sm:px-6 pt-3 sm:pt-4">
-          <div className="ios-glass rounded-full h-14 sm:h-16 px-2.5 sm:px-4 flex items-center justify-between gap-2">
+          <div className="bg-card border border-border rounded-full h-14 sm:h-16 px-2.5 sm:px-4 flex items-center justify-between gap-2">
 
             <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-              <button
+              <Button variant="ghost"
                 onClick={() => setMenuOpen(true)}
                 className="h-10 w-10 rounded-full flex items-center justify-center text-foreground/80 hover:text-foreground hover:bg-foreground/10 transition-all shrink-0"
                 aria-label="Menyu"
               >
                 <Menu className="h-5 w-5" />
-              </button>
-              <button
+              </Button>
+              <Button variant="ghost"
                 onClick={() => navigate("/")}
                 className="logo-cyber text-sm sm:text-lg select-none transition-all duration-300 shrink-0 truncate"
               >
-                ZEI DUBBING
-              </button>
+                ZEI DUBBING <span className="ml-1 text-[9px] text-muted-foreground">V2</span>
+              </Button>
             </div>
 
             <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
 
-              <button
+              <Button variant="ghost"
                 onClick={() => navigate("/search")}
                 className="h-9 w-9 sm:h-10 sm:w-10 rounded-full glass flex items-center justify-center text-foreground/85 transition-all hover:bg-foreground/10 active:scale-95"
                 aria-label="Qidirish"
               >
                 <Search className="h-4 w-4" />
-              </button>
+              </Button>
 
               {user && (
-                <button
+                <Button variant="ghost"
                   onClick={() => navigate("/profile")}
                   aria-label="Profil"
                   className={`h-9 w-9 sm:h-10 sm:w-10 rounded-full flex items-center justify-center font-semibold text-sm border transition-all overflow-hidden ${
                     isVip
-                      ? "border-amber-400/60 text-amber-300"
+                      ? "border-vip/60 text-vip"
                       : "border-foreground/15 text-foreground/85"
                   } bg-foreground/5`}
                 >
@@ -70,7 +71,7 @@ export const Header = (_props: HeaderProps) => {
                   ) : (
                     initial
                   )}
-                </button>
+                </Button>
               )}
             </div>
           </div>
