@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/hooks/useAuth";
 import { SocialLinks } from "@/components/SocialLinks";
-import { Particles } from "@/components/Particles";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Mail, Lock, Loader2, ArrowRight } from "lucide-react";
 import { z } from "zod";
@@ -110,44 +110,44 @@ export default function Auth() {
       </Helmet>
 
       <div
-        className={`min-h-screen flex flex-col bg-[#0A0F1E] relative overflow-hidden ${
-          stage === "leaving" ? "animate-dissolve" : ""
+        className={`min-h-screen flex flex-col bg-background relative overflow-hidden ${
+          stage === "leaving" ? "animate-fade-up" : ""
         }`}
       >
-        <Particles count={48} />
+        
 
         <main className="relative flex-1 flex flex-col items-center justify-center px-5 py-10 z-10">
           {connectionError ? (
             <div className="flex max-w-sm flex-col items-center gap-4 text-center animate-fade-up">
-              <h1 className="font-display text-xl tracking-widest neon-text">CLOUD BILAN ALOQA YO'Q</h1>
-              <p className="text-sm leading-relaxed text-white/55">
+              <h1 className="font-display text-xl tracking-normal neon-text">CLOUD BILAN ALOQA YO'Q</h1>
+              <p className="text-sm leading-relaxed text-foreground/55">
                 Kirish va anime katalogi hozir ochilmaydi. Lovable Cloud qayta yoqilgach sayt avtomatik ishlaydi.
               </p>
-              <button
+              <Button variant="ghost"
                 type="button"
                 onClick={() => window.location.reload()}
-                className="rounded-lg border border-neon/50 px-5 py-2.5 font-display text-xs tracking-widest text-neon transition-colors hover:bg-neon/10"
+                className="rounded-lg border border-neon/50 px-5 py-2.5 font-display text-xs tracking-normal text-neon transition-colors hover:bg-neon/10"
               >
                 QAYTA URINISH
-              </button>
+              </Button>
             </div>
           ) : stage === "intro" && (
             <div className="flex flex-col items-center gap-10 animate-fade-up">
-              <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold text-foreground tracking-tight text-center">
+              <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold text-foreground tracking-normal text-center">
                 ZEI DUBBING
               </h1>
 
               <p className="text-xs sm:text-sm text-foreground/55 tracking-wide">
-                Premium Cinema Universe
+                O‘zbek tilida. Yangi tomosha.
               </p>
 
-              <button
+              <Button variant="ghost"
                 onClick={() => setStage("form")}
-                className="group relative px-10 py-4 rounded-full font-semibold text-sm text-white bg-primary hover:bg-primary/90 transition-all active:scale-95 flex items-center gap-3 shadow-lg"
+                className="group relative px-10 py-4 rounded-full font-semibold text-sm text-primary-foreground bg-primary hover:bg-primary/90 transition-all active:scale-95 flex items-center gap-3 shadow-lg"
               >
                 <span>Boshlash</span>
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </button>
+              </Button>
 
               <SocialLinks />
             </div>
@@ -156,46 +156,40 @@ export default function Auth() {
           {!connectionError && stage !== "intro" && (
             <div className="w-full flex flex-col items-center animate-zoom-in">
               <div className="text-center mb-8">
-                <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+                <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-foreground tracking-normal">
                   ZEI DUBBING
                 </h1>
                 <p className="text-[11px] text-foreground/50 mt-2">
-                  Premium Streaming Platforma
+                  ZEI / V2
                 </p>
               </div>
 
               <div
-                className="w-full max-w-sm rounded-2xl p-6 shadow-2xl"
-                style={{
-                  background: "linear-gradient(135deg, hsl(0 0% 100% / 0.04), hsl(0 0% 100% / 0.01))",
-                  backdropFilter: "blur(22px) saturate(160%)",
-                  WebkitBackdropFilter: "blur(22px) saturate(160%)",
-                  border: "1px solid hsl(var(--neon) / 0.18)",
-                }}
+                className="w-full max-w-sm rounded-2xl p-6 bg-card border border-border"
               >
-                <div className="flex gap-1 p-1 rounded-xl bg-white/5 mb-5">
-                  <button
+                <div className="flex gap-1 p-1 rounded-xl bg-foreground/5 mb-5">
+                  <Button variant="ghost"
                     onClick={() => setMode("signin")}
-                    className={`flex-1 py-2 rounded-lg text-xs font-display tracking-widest transition-all ${
-                      mode === "signin" ? "bg-white/10 text-white" : "text-white/50 hover:text-white/80"
+                    className={`flex-1 py-2 rounded-lg text-xs font-display tracking-normal transition-all ${
+                      mode === "signin" ? "bg-foreground/10 text-foreground" : "text-foreground/50 hover:text-foreground/80"
                     }`}
                   >
                     KIRISH
-                  </button>
-                  <button
+                  </Button>
+                  <Button variant="ghost"
                     onClick={() => setMode("signup")}
-                    className={`flex-1 py-2 rounded-lg text-xs font-display tracking-widest transition-all ${
-                      mode === "signup" ? "bg-white/10 text-white" : "text-white/50 hover:text-white/80"
+                    className={`flex-1 py-2 rounded-lg text-xs font-display tracking-normal transition-all ${
+                      mode === "signup" ? "bg-foreground/10 text-foreground" : "text-foreground/50 hover:text-foreground/80"
                     }`}
                   >
                     RO'YXAT
-                  </button>
+                  </Button>
                 </div>
 
-                <button
+                <Button variant="ghost"
                   onClick={handleGoogle}
                   disabled={busy}
-                  className="w-full h-11 rounded-xl bg-white text-[#0A0F1E] font-medium text-sm flex items-center justify-center gap-3 hover:bg-white/90 disabled:opacity-50 transition-colors"
+                  className="w-full h-11 rounded-xl bg-foreground text-background font-medium text-sm flex items-center justify-center gap-3 hover:bg-foreground/90 disabled:opacity-50 transition-colors"
                 >
                   {busy ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -208,12 +202,12 @@ export default function Auth() {
                     </svg>
                   )}
                   Google bilan davom etish
-                </button>
+                </Button>
 
                 <div className="flex items-center gap-3 my-4">
-                  <div className="flex-1 h-px bg-white/10" />
-                  <span className="text-[10px] text-white/40 font-display tracking-widest">YOKI</span>
-                  <div className="flex-1 h-px bg-white/10" />
+                  <div className="flex-1 h-px bg-foreground/10" />
+                  <span className="text-[10px] text-foreground/40 font-display tracking-normal">YOKI</span>
+                  <div className="flex-1 h-px bg-foreground/10" />
                 </div>
 
                 <form onSubmit={handleEmail} className="space-y-3">
@@ -223,39 +217,39 @@ export default function Auth() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Ismingiz (ixtiyoriy)"
-                      className="w-full h-11 px-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/40 outline-none focus:border-neon/50 transition-colors text-sm"
+                      className="w-full h-11 px-4 rounded-xl bg-foreground/5 border border-foreground/10 text-foreground placeholder:text-foreground/40 outline-none focus:border-neon/50 transition-colors text-sm"
                     />
                   )}
                   <div className="relative">
-                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground/40" />
                     <input
                       type="email"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Email"
-                      className="w-full h-11 pl-10 pr-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/40 outline-none focus:border-neon/50 transition-colors text-sm"
+                      className="w-full h-11 pl-10 pr-4 rounded-xl bg-foreground/5 border border-foreground/10 text-foreground placeholder:text-foreground/40 outline-none focus:border-neon/50 transition-colors text-sm"
                     />
                   </div>
                   <div className="relative">
-                    <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
+                    <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground/40" />
                     <input
                       type="password"
                       required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Parol"
-                      className="w-full h-11 pl-10 pr-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/40 outline-none focus:border-neon/50 transition-colors text-sm"
+                      className="w-full h-11 pl-10 pr-4 rounded-xl bg-foreground/5 border border-foreground/10 text-foreground placeholder:text-foreground/40 outline-none focus:border-neon/50 transition-colors text-sm"
                     />
                   </div>
-                  <button
+                  <Button variant="ghost"
                     type="submit"
                     disabled={busy}
-                    className="breathing-btn w-full h-11 rounded-xl bg-gradient-to-r from-blue-500/90 to-indigo-500/90 text-white font-display text-xs tracking-widest hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 transition-transform flex items-center justify-center gap-2"
+                    className="breathing-btn w-full h-11 rounded-xl bg-primary text-primary-foreground font-display text-xs tracking-normal hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 transition-transform flex items-center justify-center gap-2"
                   >
                     {busy && <Loader2 className="h-4 w-4 animate-spin" />}
                     {mode === "signin" ? "KIRISH" : "RO'YXATDAN O'TISH"}
-                  </button>
+                  </Button>
                 </form>
               </div>
 
