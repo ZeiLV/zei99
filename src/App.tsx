@@ -24,6 +24,7 @@ import Voting from "./pages/Voting.tsx";
 import SearchPage from "./pages/Search.tsx";
 import Profile from "./pages/Profile.tsx";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { TabBar } from "@/components/TabBar";
 
 /** Loads and applies the admin-configured accent colour on boot. */
 const SiteSettingsLoader = () => {
@@ -48,6 +49,9 @@ const App = () => (
             <Routes>
               <Route path="/auth" element={<Auth />} />
               <Route path="/" element={<AuthGuard><Index /></AuthGuard>} />
+              <Route path="/index" element={<AuthGuard><Index /></AuthGuard>} />
+              <Route path="/newest" element={<AuthGuard><Index collection="newest" /></AuthGuard>} />
+              <Route path="/trending" element={<AuthGuard><Index collection="trending" /></AuthGuard>} />
               <Route path="/anime" element={<AuthGuard><Index category="anime" /></AuthGuard>} />
               <Route path="/drama" element={<AuthGuard><Index category="drama" /></AuthGuard>} />
               <Route path="/kino" element={<AuthGuard><Index category="kino" /></AuthGuard>} />
@@ -71,6 +75,7 @@ const App = () => (
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <TabBar />
           </AuthProvider>
         </BrowserRouter>
       </TooltipProvider>

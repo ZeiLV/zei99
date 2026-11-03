@@ -13,12 +13,15 @@ import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { Category, Content, CATEGORIES } from "@/lib/types";
 import { useAvailableCategories } from "@/hooks/useAvailableCategories";
+import { TabBar } from "@/components/TabBar";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   category?: Category;
+  collection?: "newest" | "trending";
 }
 
-const Index = ({ category }: Props) => {
+const Index = ({ category, collection }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { categories: availableCategories } = useAvailableCategories();
@@ -26,7 +29,7 @@ const Index = ({ category }: Props) => {
   const deepEp = searchParams.get("ep");
 
   const [showIntro, setShowIntro] = useState(() =>
-    category ? false : !sessionStorage.getItem("zei-intro-done") && !deepId
+    category || collection ? false : !sessionStorage.getItem("zei-intro-v2-done") && !deepId
   );
   const [content, setContent] = useState<Content[]>([]);
   const [search, setSearch] = useState("");
@@ -47,7 +50,7 @@ const Index = ({ category }: Props) => {
     setActiveGenres([]);
     setActiveYears([]);
     setFilterOpen(false);
-  }, [category]);
+  }, [category, collection]);
 
   useEffect(() => {
     let active = true;
@@ -94,6 +97,7 @@ const Index = ({ category }: Props) => {
   const hasFilters = activeGenres.length > 0 || activeYears.length > 0;
 
   const filtered = content.filter((c) => {
+    if (collection === "trending" && !c.is_trending) return false;
     if (activeGenres.length && !activeGenres.every((g) => c.genre?.includes(g))) return false;
     if (activeYears.length && !(c.year && activeYears.includes(c.year))) return false;
     if (!search.trim()) return true;
@@ -106,12 +110,13 @@ const Index = ({ category }: Props) => {
   const newest = content.slice(0, 12);
 
   const finishIntro = () => {
-    sessionStorage.setItem("zei-intro-done", "1");
+    sessionStorage.setItem("zei-intro-v2-done", "1");
     setShowIntro(false);
   };
 
   const categoryMeta = category ? CATEGORIES.find((c) => c.value === category) : null;
-  const pageTitle = categoryMeta
+  const collectionTitle = collection === "newest" ? "Yangi qo‘shilgan" : collection === "trending" ? "Trend" : null;
+  const pageTitle = collectionTitle ? `${collectionTitle} — ZEI DUBBING` : categoryMeta
     ? `${categoryMeta.label} — ZEI DUBBING`
     : "ZEI DUBBING — Premium Streaming Platforma";
   const pageDesc = categoryMeta
@@ -151,14 +156,14 @@ const Index = ({ category }: Props) => {
               <Header search={search} onSearchChange={setSearch} />
               <h1 className="sr-only">{pageTitle}</h1>
 
-              {!search.trim() && content.length > 0 && (
+              {!collection && !search.trim() && content.length > 0 && (
                 <HeroSlider items={newest} onSelect={setSelected} />
               )}
 
               {/* Title + filter trigger */}
               <div className="pt-6 px-[15px] sm:px-8 max-w-[1440px] mx-auto flex items-center justify-between gap-3">
                 <h2 className="font-display text-2xl sm:text-3xl text-foreground tracking-tight">
-                  {categoryMeta?.label ?? "Katalog"}
+                  {collectionTitle ?? categoryMeta?.label ?? "Katalog"}
                 </h2>
                 <button
                   onClick={() => setFilterOpen(true)}
@@ -178,10 +183,12 @@ const Index = ({ category }: Props) => {
               {availableCategories.length > 0 && (
                 <div className="px-[15px] sm:px-8 max-w-[1440px] mx-auto pt-4">
                   <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1 flex-nowrap">
+                    <Button variant="ghost" onClick={() => navigate("/newest")} className={`shrink-0 rounded-full text-xs ${collection === "newest" ? "bg-foreground text-background" : "text-muted-foreground"}`}>Yangilar</Button>
+                    <Button variant="ghost" onClick={() => navigate("/trending")} className={`shrink-0 rounded-full text-xs ${collection === "trending" ? "bg-foreground text-background" : "text-muted-foreground"}`}>Trend</Button>
                     <button
                       onClick={() => navigate("/")}
                       className={`shrink-0 px-4 py-2 rounded-full text-[12px] font-semibold transition-all duration-200 active:scale-95 ${
-                        !category
+                        !category && !collection
                           ? "bg-foreground text-background"
                           : "glass text-foreground/70 hover:text-foreground hover:bg-foreground/10"
                       }`}
@@ -224,7 +231,7 @@ const Index = ({ category }: Props) => {
 
 
               <main
-                className={`px-[15px] sm:px-8 max-w-[1440px] mx-auto pb-16 ${
+                className={`px-[15px] sm:px-8 max-w-[1440px] mx-auto pb-28 ${
                   category ? "pt-8" : "pt-8 sm:pt-12"
                 }`}
               >
@@ -243,7 +250,7 @@ const Index = ({ category }: Props) => {
                     <div className="max-w-sm text-sm text-muted-foreground">Lovable Cloud faol emas yoki internet aloqasi uzildi. Cloud yoqilgach qayta urinib ko'ring.</div>
                     <button type="button" onClick={() => window.location.reload()} className="rounded-full bg-primary text-primary-foreground px-5 py-2.5 text-xs font-semibold active:scale-95 transition-transform">Qayta urinish</button>
                   </div>
-                ) : !category && !search.trim() && !hasFilters ? (
+                ) : !category && !collection && !search.trim() && !hasFilters ? (
                   // Netflix-style rows on home
                   <div className="space-y-12 sm:space-y-16">
                     {trending.length > 0 && (
@@ -287,6 +294,7 @@ const Index = ({ category }: Props) => {
               </main>
 
               <Footer />
+              <TabBar catalog />
             </>
           )}
 
