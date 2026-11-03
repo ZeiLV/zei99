@@ -29,34 +29,29 @@ export const ContentRow = ({ title, icon, items, onSelect }: Props) => {
   return (
     <section className="space-y-3 sm:space-y-4">
       <div className="flex items-center justify-between px-1 pb-2 relative">
-        <h2 className="font-display text-base sm:text-base tracking-widest text-foreground/90 flex items-center gap-2">
+        <h2 className="font-display text-base sm:text-lg text-foreground/90 flex items-center gap-2">
           {Icon && (
-            <span className="group/icon inline-flex text-neon">
-              <Icon className="h-4 w-4 transition-transform duration-300 group-hover/icon:scale-125 group-hover/icon:rotate-6" />
+            <span className="group/icon inline-flex text-foreground/70">
+              <Icon className="h-4 w-4 transition-transform duration-300 group-hover/icon:scale-110" />
             </span>
           )}
           {title}
         </h2>
         <span
           aria-hidden
-          className="absolute left-1 right-1 bottom-0 h-px"
-          style={{
-            background:
-              "linear-gradient(90deg, hsl(var(--neon) / 0.5), hsl(var(--neon) / 0.05) 60%, transparent)",
-            boxShadow: "0 0 8px hsl(var(--neon) / 0.35)",
-          }}
+          className="absolute left-1 right-1 bottom-0 h-px bg-foreground/10"
         />
         <div className="hidden sm:flex items-center gap-1">
           <button
             onClick={() => scroll("left")}
-            className="h-8 w-8 rounded-full glass flex items-center justify-center text-neon hover:neon-glow-sm transition-all"
+            className="h-8 w-8 rounded-full glass flex items-center justify-center text-foreground/70 hover:text-foreground hover:bg-foreground/10 transition-all"
             aria-label="Chap"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
           <button
             onClick={() => scroll("right")}
-            className="h-8 w-8 rounded-full glass flex items-center justify-center text-neon hover:neon-glow-sm transition-all"
+            className="h-8 w-8 rounded-full glass flex items-center justify-center text-foreground/70 hover:text-foreground hover:bg-foreground/10 transition-all"
             aria-label="O'ng"
           >
             <ChevronRight className="h-4 w-4" />
