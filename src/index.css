@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,22 +7,22 @@
 @layer base {
   :root {
     /* Deep soft dark — calm, not cyber */
-    --background: 222 28% 9%;
+    --background: 240 6% 7%;
     --foreground: 210 25% 96%;
 
-    --card: 222 26% 12%;
+    --card: 240 5% 11%;
     --card-foreground: 210 25% 96%;
 
-    --popover: 222 26% 13%;
+    --popover: 240 5% 13%;
     --popover-foreground: 210 25% 96%;
 
     --primary: 213 85% 62%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 222 22% 16%;
+    --secondary: 240 4% 17%;
     --secondary-foreground: 210 25% 96%;
 
-    --muted: 222 20% 18%;
+    --muted: 240 4% 18%;
     --muted-foreground: 215 15% 68%;
 
     --accent: 213 85% 62%;
@@ -33,11 +31,13 @@
     --destructive: 0 72% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 18% 24%;
+    --border: 240 4% 23%;
     --input: 222 22% 16%;
     --ring: 213 85% 62%;
 
     --radius: 1rem;
+    --vip: 44 88% 66%;
+    --vip-foreground: 40 40% 10%;
 
     /* Soft iOS accent palette (kept under the legacy "neon" token names) */
     --neon: 213 85% 66%;             /* Soft iOS blue */
@@ -72,7 +72,7 @@
   }
 
   body {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     background: hsl(var(--background));
     color: hsl(var(--foreground));
     -webkit-font-smoothing: antialiased;
@@ -87,31 +87,25 @@
 
 @layer components {
   .font-display {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 700;
-    letter-spacing: 0.02em;
+    letter-spacing: 0;
   }
 
   .glass {
     background: hsl(0 0% 100% / 0.07);
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
     border: 1px solid hsl(0 0% 100% / 0.10);
     box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.05);
   }
 
   .glass-strong {
     background: linear-gradient(135deg, hsl(0 0% 100% / 0.09), hsl(0 0% 100% / 0.03));
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: 1px solid hsl(0 0% 100% / 0.12);
     box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.07), 0 8px 28px hsl(0 0% 0% / 0.28);
   }
 
   .ios-glass {
-    background: hsl(222 24% 15% / 0.66);
-    backdrop-filter: blur(28px) saturate(160%);
-    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    background: hsl(var(--popover));
     border: 1px solid hsl(0 0% 100% / 0.11);
     box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.08), 0 18px 44px -14px hsl(0 0% 0% / 0.55);
   }
@@ -123,9 +117,9 @@
   }
 
   .logo-cyber {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 800;
-    letter-spacing: 0.06em;
+    letter-spacing: 0;
     color: hsl(var(--foreground));
   }
 
@@ -316,8 +310,8 @@
 
 /* Page zoom-in transition */
 @keyframes zoom-in-page {
-  0% { transform: scale(0.92); opacity: 0; filter: blur(6px); }
-  100% { transform: scale(1); opacity: 1; filter: blur(0); }
+  0% { transform: translateY(6px); opacity: 0; }
+  100% { transform: none; opacity: 1; }
 }
 .animate-zoom-in { animation: zoom-in-page 0.7s var(--transition-smooth) both; }
 
@@ -410,4 +404,18 @@ iframe:-webkit-full-screen {
 /* Smooth theme transition */
 html, body {
   transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* V2: crisp surfaces, no blur layers or decorative glow. */
+[class*="backdrop-blur"] { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+.animate-breathing, .animate-player-glow, .animate-smoke { display: none; }
+.vip-badge { animation: none; box-shadow: none; }
+.vip-progress { background: hsl(var(--vip)); box-shadow: none; }
+.v2-tabbar { box-shadow: 0 -8px 24px hsl(var(--background) / 0.35); }
+body:has(.v2-tabbar) { padding-bottom: 80px; }
+.v2-intro-mark { animation: fade-up 0.65s var(--transition-smooth) both; }
+.v2-intro-progress { transform-origin: left; animation: v2-progress 1.1s ease-out both; }
+@keyframes v2-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }

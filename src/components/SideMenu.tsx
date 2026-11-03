@@ -1,5 +1,7 @@
+import { createPortal } from "react-dom";
+import { Button } from "@/components/ui/button";
 import { NavLink, useNavigate } from "react-router-dom";
-import { X, Home, Vote, User, Send, Crown, Shield } from "lucide-react";
+import { X, Home, Compass, TrendingUp, Vote, User, Send, Crown, Shield } from "lucide-react";
 import { useAvailableCategories } from "@/hooks/useAvailableCategories";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
@@ -23,33 +25,33 @@ export const SideMenu = ({ open, onClose }: Props) => {
       isActive ? "bg-foreground/10 text-foreground" : "text-foreground/75 hover:bg-foreground/[0.06]"
     }`;
 
-  const section = "pt-2.5 pb-1 px-3 text-[10px] tracking-[0.18em] text-foreground/40";
+  const section = "pt-2.5 pb-1 px-3 text-[10px] tracking-normal text-foreground/40";
 
   return (
     <>
-      <div
+      {createPortal(<div
         className={`fixed inset-0 z-[60] overscroll-none transition-opacity duration-300 ${
           open ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={onClose}
         onTouchMove={(e) => { if (e.target === e.currentTarget) e.preventDefault(); }}
       >
-        <div className="absolute inset-0 bg-background/40 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-background/20" />
         <aside
           onClick={(e) => e.stopPropagation()}
-          className={`absolute left-2 top-[max(0.5rem,env(safe-area-inset-top))] w-[240px] max-h-[calc(100dvh-1rem)] rounded-[24px] ios-glass flex flex-col transition-all duration-300 ease-out origin-top-left ${
+          className={`absolute left-2 top-[max(0.5rem,env(safe-area-inset-top))] w-[240px] max-h-[calc(100dvh-1rem)] rounded-[24px] bg-popover border border-border shadow-xl flex flex-col transition-all duration-300 ease-out origin-top-left ${
             open ? "translate-x-0 scale-100 opacity-100" : "-translate-x-4 scale-95 opacity-0"
           }`}
         >
           <div className="flex items-center justify-between pl-4 pr-2 py-2.5 border-b border-foreground/10">
             <span className="font-display text-[13px] text-foreground">ZEI DUBBING</span>
-            <button
+            <Button variant="ghost"
               onClick={onClose}
               className="h-8 w-8 rounded-full flex items-center justify-center text-foreground/60 hover:bg-foreground/10 transition-colors"
               aria-label="Yopish"
             >
               <X className="h-4 w-4" />
-            </button>
+            </Button>
           </div>
 
           <nav className="flex-1 overflow-y-auto overscroll-contain p-2 space-y-0.5">
@@ -67,7 +69,9 @@ export const SideMenu = ({ open, onClose }: Props) => {
               </NavLink>
             ))}
 
-            <div className={section}>BOSHQA</div>
+            <div className={section}>BO‘LIMLAR</div>
+            <NavLink to="/newest" className={itemCls} onClick={onClose}><Compass className="h-4 w-4" /> Yangilar</NavLink>
+            <NavLink to="/trending" className={itemCls} onClick={onClose}><TrendingUp className="h-4 w-4" /> Trend</NavLink>
             <NavLink to="/voting" className={itemCls} onClick={onClose}>
               <Vote className="h-4 w-4" /> Ovoz berish
             </NavLink>
@@ -84,26 +88,25 @@ export const SideMenu = ({ open, onClose }: Props) => {
             </a>
 
             {isAdmin && (
-              <button
+              <Button variant="ghost"
                 onClick={() => { onClose(); navigate("/admin"); }}
                 className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[13px] text-foreground bg-foreground/[0.06] hover:bg-foreground/10 transition-colors"
               >
                 <Shield className="h-4 w-4" /> Admin panel
-              </button>
+              </Button>
             )}
           </nav>
 
           <div className="p-2.5 border-t border-foreground/10">
-            <button
+            <Button variant="ghost"
               onClick={() => setVipOpen(true)}
-              className="w-full h-10 rounded-full font-semibold text-[12px] text-[#1a0f00] flex items-center justify-center gap-2 active:scale-95 transition-transform"
-              style={{ background: "linear-gradient(135deg, hsl(45 90% 62%), hsl(36 90% 55%))" }}
+              className="w-full h-10 rounded-full font-semibold text-[12px] text-vip-foreground bg-vip hover:bg-vip/90 flex items-center justify-center gap-2 active:scale-95 transition-transform"
             >
               <Crown className="h-3.5 w-3.5" /> VIP TARIFLAR
-            </button>
+            </Button>
           </div>
         </aside>
-      </div>
+      </div>, document.body)}
 
       <VipModal open={vipOpen} onOpenChange={setVipOpen} />
     </>
