@@ -436,14 +436,14 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
 
                 {/* Button row */}
                 <div className="flex items-center gap-1 sm:gap-2">
-                  <button onClick={togglePlay} className="text-white hover:text-neon rounded-full p-2 hover:bg-white/10 hover:shadow-[0_0_16px_-4px_hsl(var(--neon))] transition-all duration-300 hover:scale-110 active:scale-90" aria-label={playing ? "Pauza" : "O'ynatish"}>
+                  <button onClick={togglePlay} className="text-white rounded-full p-2 hover:bg-white/10 transition-all duration-200 active:scale-90" aria-label={playing ? "Pauza" : "O'ynatish"}>
                     {playing ? <Pause className="h-6 w-6 sm:h-5 sm:w-5" /> : <Play className="h-6 w-6 sm:h-5 sm:w-5" />}
                   </button>
 
-                  <button onClick={() => skip(-10)} className="text-white hover:text-neon rounded-full p-2 hover:bg-white/10 hover:shadow-[0_0_16px_-4px_hsl(var(--neon))] transition-all duration-300 hover:scale-110 active:scale-90" aria-label="10s orqaga">
+                  <button onClick={() => skip(-10)} className="text-white rounded-full p-2 hover:bg-white/10 transition-all duration-200 active:scale-90" aria-label="10s orqaga">
                     <RotateCcw className="h-5 w-5" />
                   </button>
-                  <button onClick={() => skip(10)} className="text-white hover:text-neon rounded-full p-2 hover:bg-white/10 hover:shadow-[0_0_16px_-4px_hsl(var(--neon))] transition-all duration-300 hover:scale-110 active:scale-90" aria-label="10s oldinga">
+                  <button onClick={() => skip(10)} className="text-white rounded-full p-2 hover:bg-white/10 transition-all duration-200 active:scale-90" aria-label="10s oldinga">
                     <RotateCw className="h-5 w-5" />
                   </button>
 
@@ -452,7 +452,7 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
                     <div className="flex items-center gap-2 group/vol">
                       <button
                         onClick={() => { const v = videoRef.current; if (v) v.muted = !v.muted; }}
-                        className="text-white hover:text-neon rounded-full p-2 hover:bg-white/10 hover:shadow-[0_0_16px_-4px_hsl(var(--neon))] transition-all duration-300 hover:scale-110 active:scale-90"
+                        className="text-white rounded-full p-2 hover:bg-white/10 transition-all duration-200 active:scale-90"
                         aria-label="Ovoz"
                       >
                         {muted || volume === 0 ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
@@ -467,13 +467,13 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
                           const v = videoRef.current;
                           if (v) { v.volume = parseFloat(e.target.value); v.muted = false; }
                         }}
-                        className="hidden sm:block w-20 accent-[hsl(var(--neon))]"
+                        className="hidden sm:block w-20 accent-white"
                       />
                     </div>
 
                     <button
                       onClick={goFullscreen}
-                      className="text-white hover:text-neon rounded-lg p-2 border border-white/20 hover:bg-white/10 hover:border-neon/50 hover:shadow-[0_0_16px_-5px_hsl(var(--neon))] transition-all duration-300 hover:scale-105 active:scale-95"
+                      className="text-white rounded-full p-2 hover:bg-white/10 transition-all duration-200 active:scale-90"
                       aria-label="To'liq ekran"
                     >
                       <Maximize className="h-5 w-5 sm:h-4 sm:w-4" />
@@ -539,14 +539,14 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
           <div
             className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-10 bg-[#0A0F1E]/80 backdrop-blur-md px-6 text-center"
           >
-            <div className="h-12 w-12 rounded-full flex items-center justify-center bg-neon/10 border border-neon/40 neon-glow-sm">
-              <Lock className="h-5 w-5 text-neon" />
+            <div className="h-12 w-12 rounded-full flex items-center justify-center bg-white/10 border border-white/20">
+              <Lock className="h-5 w-5 text-white" />
             </div>
             <div className="font-display text-sm sm:text-base text-foreground/90 max-w-md leading-relaxed">
               Ushbu qism hozircha faqat VIP foydalanuvchilar uchun ochiq.
             </div>
             {earlyAccessUntil && new Date(earlyAccessUntil).getTime() > Date.now() && (
-              <div className="font-mono text-2xl sm:text-3xl multineon-text tracking-widest tabular-nums">
+              <div className="font-mono text-2xl sm:text-3xl text-foreground tabular-nums">
                 {formatCountdown(earlyAccessUntil)}
               </div>
             )}
@@ -554,10 +554,10 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
               href="https://t.me/ZeiContactBot"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 py-3 rounded-full bg-neon text-primary-foreground font-display text-xs sm:text-sm tracking-widest neon-glow-lg hover:scale-105 transition-transform inline-flex items-center gap-2"
+              className="px-6 py-3 rounded-full bg-white text-black font-semibold text-xs sm:text-sm hover:bg-white/90 active:scale-95 transition-all inline-flex items-center gap-2"
             >
               <Crown className="h-4 w-4" />
-              VIP SOTIB OLISH
+              VIP sotib olish
             </a>
           </div>
         )}
@@ -568,15 +568,15 @@ export const VideoPlayer = ({ videoUrl, gdriveUrl, isVip, earlyAccessUntil }: Pr
         <div className="mt-3 flex justify-end">
           <button
             onClick={handleDownload}
-            className={`inline-flex items-center gap-2 px-4 py-2.5 sm:py-2 rounded-lg transition-all text-xs sm:text-sm font-display tracking-widest hover:scale-[1.03] active:scale-95 ${
+            className={`inline-flex items-center gap-2 px-4 py-2.5 sm:py-2 rounded-full transition-all text-xs sm:text-sm font-semibold active:scale-95 ${
               userIsVip
-                ? "bg-secondary/80 hover:bg-secondary text-foreground border border-neon/30 hover:border-neon/60 neon-glow-sm"
-                : "bg-amber-400/10 hover:bg-amber-400/20 text-amber-400 border border-amber-400/30 hover:border-amber-400/60"
+                ? "bg-secondary/80 hover:bg-secondary text-foreground border border-foreground/15"
+                : "bg-amber-400/10 hover:bg-amber-400/20 text-amber-400 border border-amber-400/30"
             }`}
             aria-label="Yuklab olish"
           >
-            {userIsVip ? <Download className="h-4 w-4 text-neon" /> : <Crown className="h-4 w-4" />}
-            <span>{userIsVip ? "YUKLAB OLISH" : "VIP YUKLAB OLISH"}</span>
+            {userIsVip ? <Download className="h-4 w-4" /> : <Crown className="h-4 w-4" />}
+            <span>{userIsVip ? "Yuklab olish" : "VIP yuklab olish"}</span>
           </button>
         </div>
       )}
