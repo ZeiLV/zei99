@@ -34,6 +34,7 @@ export const SideMenu = ({ open, onClose }: Props) => {
           open ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={onClose}
+        aria-hidden={!open}
         onTouchMove={(e) => { if (e.target === e.currentTarget) e.preventDefault(); }}
       >
         <div className="absolute inset-0 bg-background/20" />

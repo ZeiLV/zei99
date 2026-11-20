@@ -1,6 +1,7 @@
 import { Home, Compass, Search, Vote, User } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { createPortal } from "react-dom";
 
 const tabs = [
   { to: "/", label: "Asosiy", icon: Home },
@@ -14,7 +15,7 @@ export const TabBar = ({ catalog = false }: { catalog?: boolean }) => {
   const { pathname } = useLocation();
   const catalogPaths = ["/", "/index", "/anime", "/drama", "/kino", "/multfilm", "/newest", "/trending"];
   if (!catalog && (catalogPaths.includes(pathname) || pathname === "/auth" || pathname.startsWith("/admin"))) return null;
-  return (
+  return createPortal(
     <nav aria-label="Asosiy navigatsiya" className="v2-tabbar fixed bottom-0 inset-x-0 z-40 border-t border-border bg-background pb-[env(safe-area-inset-bottom)]">
       <div className="mx-auto grid max-w-lg grid-cols-5 px-2 py-2">
         {tabs.map(({ to, label, icon: Icon }) => (
@@ -26,6 +27,6 @@ export const TabBar = ({ catalog = false }: { catalog?: boolean }) => {
           </Button>
         ))}
       </div>
-    </nav>
+    </nav>, document.body
   );
 };
