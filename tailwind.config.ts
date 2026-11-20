@@ -18,6 +18,8 @@ export default {
         sans: [ "-apple-system", "BlinkMacSystemFont", "system-ui", "sans-serif"],
       },
       colors: {
+        discovery: "hsl(var(--discovery))",
+        fresh: "hsl(var(--fresh))",
         vip: { DEFAULT: "hsl(var(--vip))", foreground: "hsl(var(--vip-foreground))" },
         neon: {
           DEFAULT: "hsl(var(--neon))",

@@ -8,6 +8,9 @@
   :root {
     /* Deep soft dark — calm, not cyber */
     --background: 240 6% 7%;
+    --discovery: 350 78% 69%;
+    --fresh: 162 55% 58%;
+    --gradient-feature: linear-gradient(180deg, hsl(var(--background) / 0.02) 0%, hsl(var(--background) / 0.18) 28%, hsl(var(--background) / 0.88) 77%, hsl(var(--background)) 100%);
     --foreground: 210 25% 96%;
 
     --card: 240 5% 11%;
@@ -419,3 +422,21 @@ body:has(.v2-tabbar) { padding-bottom: 80px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* Content-first app edition. Crisp, colorful, no ambient blur. */
+.app-feature { height: 420px; }
+.app-feature-shade { background: var(--gradient-feature); }
+.app-feature-image { animation: app-image-in 0.8s ease-out both; object-position: center 30%; }
+.app-intro-symbol { animation: app-symbol-in 0.8s var(--transition-smooth) both; }
+.app-intro-letter { display: inline-block; animation: app-letter-in 0.8s var(--transition-smooth) both; }
+.app-letter-1 { animation-delay: 0.12s; }
+.app-letter-2 { animation-delay: 0.24s; }
+.app-intro-bar { height: 3px; width: 28px; border-radius: 2px; animation: app-bar-in 1.6s ease-in-out both; }
+.app-intro-bar:nth-child(2) { animation-delay: 0.15s; }
+.app-intro-bar:nth-child(3) { animation-delay: 0.3s; }
+@keyframes app-symbol-in { from { opacity: 0; transform: scale(0.65) rotate(-12deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
+@keyframes app-letter-in { from { opacity: 0; transform: translateY(100%); } to { opacity: 1; transform: translateY(0); } }
+@keyframes app-bar-in { 0% { transform: scaleX(0); opacity: 0; } 40%, 100% { transform: scaleX(1); opacity: 1; } }
+@keyframes app-image-in { from { opacity: 0.6; transform: scale(1.025); } to { opacity: 1; transform: scale(1); } }
+@media (min-width: 640px) { .app-feature { height: 530px; } }
+@media (prefers-reduced-motion: reduce) { .app-feature-image, .app-intro-symbol, .app-intro-letter, .app-intro-bar { animation: none; } }

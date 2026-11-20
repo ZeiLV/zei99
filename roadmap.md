@@ -9,3 +9,6 @@
 - [x] Remove background blur and footer for V2.
 - [x] Refresh intro and add tab navigation plus newest/trending pages.
 - [x] Verify filters, navigation, and mobile/desktop presentation.
+- [ ] Enrich the app with cinematic content, colored accents, and a refreshed animated intro.
+- [ ] Add device-local saved titles, catalog sorting, and random discovery.
+- [ ] Verify saved-title navigation and mobile/desktop layouts while signed in.

@@ -24,6 +24,7 @@ import Voting from "./pages/Voting.tsx";
 import SearchPage from "./pages/Search.tsx";
 import Profile from "./pages/Profile.tsx";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { SavedTitlesProvider } from "@/hooks/useSavedTitles";
 import { TabBar } from "@/components/TabBar";
 
 /** Loads and applies the admin-configured accent colour on boot. */
@@ -45,12 +46,14 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <AuthProvider>
+            <SavedTitlesProvider>
             <SiteSettingsLoader />
             <Routes>
               <Route path="/auth" element={<Auth />} />
               <Route path="/" element={<AuthGuard><Index /></AuthGuard>} />
               <Route path="/index" element={<AuthGuard><Index /></AuthGuard>} />
               <Route path="/newest" element={<AuthGuard><Index collection="newest" /></AuthGuard>} />
+              <Route path="/saved" element={<AuthGuard><Index collection="saved" /></AuthGuard>} />
               <Route path="/trending" element={<AuthGuard><Index collection="trending" /></AuthGuard>} />
               <Route path="/anime" element={<AuthGuard><Index category="anime" /></AuthGuard>} />
               <Route path="/drama" element={<AuthGuard><Index category="drama" /></AuthGuard>} />
@@ -76,6 +79,7 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
             <TabBar />
+            </SavedTitlesProvider>
           </AuthProvider>
         </BrowserRouter>
       </TooltipProvider>

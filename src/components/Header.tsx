@@ -24,7 +24,7 @@ export const Header = (_props: HeaderProps) => {
       <header className="relative z-50">
 
         <div className="max-w-[1200px] mx-auto px-3 sm:px-6 pt-3 sm:pt-4">
-          <div className="bg-card border border-border rounded-full h-14 sm:h-16 px-2.5 sm:px-4 flex items-center justify-between gap-2">
+          <div className="bg-background border-b border-border/60 h-14 sm:h-16 px-2.5 sm:px-4 flex items-center justify-between gap-2">
 
             <div className="flex items-center gap-2 sm:gap-3 min-w-0">
               <Button variant="ghost"
@@ -38,7 +38,7 @@ export const Header = (_props: HeaderProps) => {
                 onClick={() => navigate("/")}
                 className="logo-cyber text-sm sm:text-lg select-none transition-all duration-300 shrink-0 truncate"
               >
-                ZEI DUBBING <span className="ml-1 text-[9px] text-muted-foreground">V2</span>
+                <span className="text-2xl font-bold">ZEI<span className="text-primary">.</span></span> <span className="text-[9px] font-medium text-muted-foreground">DUBBING / V2</span>
               </Button>
             </div>
 
