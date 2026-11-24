@@ -5,6 +5,11 @@ import { ChevronLeft, ChevronRight, Flame, Sparkles, Star } from "lucide-react";
 
 const ICONS = { flame: Flame, sparkles: Sparkles, star: Star } as const;
 export type RowIcon = keyof typeof ICONS;
+const ICON_COLORS: Record<RowIcon, string> = {
+  flame: "text-discovery",
+  sparkles: "text-fresh",
+  star: "text-vip",
+};
 
 interface Props {
   title: string;
@@ -31,7 +36,7 @@ export const ContentRow = ({ title, icon, items, onSelect }: Props) => {
       <div className="flex items-center justify-between px-1 pb-2 relative">
         <h2 className="font-display text-base sm:text-lg text-foreground/90 flex items-center gap-2">
           {Icon && (
-            <span className="group/icon inline-flex text-foreground/70">
+            <span className={`group/icon inline-flex ${icon ? ICON_COLORS[icon] : "text-foreground/70"}`}>
               <Icon className="h-4 w-4 transition-transform duration-300 group-hover/icon:scale-110" />
             </span>
           )}

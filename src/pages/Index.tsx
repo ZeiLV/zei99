@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { SlidersHorizontal } from "lucide-react";
+import { Shuffle, SlidersHorizontal } from "lucide-react";
 import { Intro } from "@/components/Intro";
 import { Header } from "@/components/Header";
 import { PosterCard } from "@/components/PosterCard";
@@ -13,18 +13,22 @@ import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { Category, Content, CATEGORIES } from "@/lib/types";
 import { useAvailableCategories } from "@/hooks/useAvailableCategories";
+import { useSavedTitles } from "@/hooks/useSavedTitles";
 import { TabBar } from "@/components/TabBar";
 import { Button } from "@/components/ui/button";
 
 interface Props {
   category?: Category;
-  collection?: "newest" | "trending";
+  collection?: "newest" | "trending" | "saved";
 }
+
+type SortBy = "newest" | "rating" | "views";
 
 const Index = ({ category, collection }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { categories: availableCategories } = useAvailableCategories();
+  const { ids: savedIds } = useSavedTitles();
   const deepId = searchParams.get("id");
   const deepEp = searchParams.get("ep");
 
@@ -36,6 +40,7 @@ const Index = ({ category, collection }: Props) => {
   const [selected, setSelected] = useState<Content | null>(null);
   const [activeGenres, setActiveGenres] = useState<string[]>([]);
   const [activeYears, setActiveYears] = useState<number[]>([]);
+  const [sortBy, setSortBy] = useState<SortBy>("newest");
   const [filterOpen, setFilterOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
@@ -49,6 +54,7 @@ const Index = ({ category, collection }: Props) => {
     setSelected(null);
     setActiveGenres([]);
     setActiveYears([]);
+    setSortBy("newest");
     setFilterOpen(false);
   }, [category, collection]);
 
@@ -94,15 +100,28 @@ const Index = ({ category, collection }: Props) => {
     [content]
   );
 
-  const hasFilters = activeGenres.length > 0 || activeYears.length > 0;
+  const hasFilters = activeGenres.length > 0 || activeYears.length > 0 || sortBy !== "newest";
 
-  const filtered = content.filter((c) => {
+  const filtered = useMemo(() => {
+    const list = content.filter((c) => {
     if (collection === "trending" && !c.is_trending) return false;
+      if (collection === "saved" && !savedIds.includes(c.id)) return false;
     if (activeGenres.length && !activeGenres.every((g) => c.genre?.includes(g))) return false;
     if (activeYears.length && !(c.year && activeYears.includes(c.year))) return false;
     if (!search.trim()) return true;
     return c.title.toLowerCase().includes(search.trim().toLowerCase());
   });
+    if (sortBy === "rating") return [...list].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+    if (sortBy === "views") return [...list].sort((a, b) => (b.views ?? 0) - (a.views ?? 0));
+    return list;
+  }, [content, collection, savedIds, activeGenres, activeYears, search, sortBy]);
+
+  const pickRandom = () => {
+    const pool = filtered.length > 0 ? filtered : content;
+    if (pool.length === 0) return;
+    const picked = pool[Math.floor(Math.random() * pool.length)];
+    if (picked) setSelected(picked);
+  };
 
 
   const trending = content.filter((c) => c.is_trending).slice(0, 12);
@@ -115,7 +134,14 @@ const Index = ({ category, collection }: Props) => {
   };
 
   const categoryMeta = category ? CATEGORIES.find((c) => c.value === category) : null;
-  const collectionTitle = collection === "newest" ? "Yangi qo‘shilgan" : collection === "trending" ? "Trend" : null;
+  const collectionTitle =
+    collection === "newest"
+      ? "Yangi qo‘shilgan"
+      : collection === "trending"
+      ? "Trend"
+      : collection === "saved"
+      ? "Saqlanganlar"
+      : null;
   const pageTitle = collectionTitle ? `${collectionTitle} — ZEI DUBBING` : categoryMeta
     ? `${categoryMeta.label} — ZEI DUBBING`
     : "ZEI DUBBING — Premium Streaming Platforma";
@@ -165,26 +191,40 @@ const Index = ({ category, collection }: Props) => {
                 <h2 className="font-display text-2xl sm:text-3xl text-foreground tracking-tight">
                   {collectionTitle ?? categoryMeta?.label ?? "Katalog"}
                 </h2>
-                <button
-                  onClick={() => setFilterOpen(true)}
-                  className={`shrink-0 h-10 px-4 rounded-full flex items-center gap-2 text-[12px] font-semibold transition-all duration-200 active:scale-95 ${
-                    hasFilters
-                      ? "bg-primary text-primary-foreground"
-                      : "glass text-foreground/75 hover:text-foreground hover:bg-foreground/10"
-                  }`}
-                  aria-label="Filterlash"
-                >
-                  Filterlash
-                  <SlidersHorizontal className="h-4 w-4" />
-                </button>
+                <div className="flex items-center gap-2 shrink-0">
+                  {content.length > 0 && (
+                    <Button
+                      variant="secondary"
+                      onClick={pickRandom}
+                      className="h-10 rounded-full px-3.5 text-xs font-semibold border border-border/70 hover:bg-secondary/80"
+                      aria-label="Tasodifiy tanlash"
+                    >
+                      <Shuffle className="h-3.5 w-3.5 text-discovery" />
+                      <span className="hidden sm:inline">Tasodifiy</span>
+                    </Button>
+                  )}
+                  <button
+                    onClick={() => setFilterOpen(true)}
+                    className={`shrink-0 h-10 px-4 rounded-full flex items-center gap-2 text-[12px] font-semibold transition-all duration-200 active:scale-95 ${
+                      hasFilters
+                        ? "bg-primary text-primary-foreground"
+                        : "glass text-foreground/75 hover:text-foreground hover:bg-foreground/10"
+                    }`}
+                    aria-label="Filterlash"
+                  >
+                    Filterlash
+                    <SlidersHorizontal className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
 
               {/* Dynamic category tabs */}
               {availableCategories.length > 0 && (
                 <div className="px-[15px] sm:px-8 max-w-[1440px] mx-auto pt-4">
                   <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1 flex-nowrap">
-                    <Button variant="ghost" onClick={() => navigate("/newest")} className={`shrink-0 rounded-full text-xs ${collection === "newest" ? "bg-foreground text-background" : "text-muted-foreground"}`}>Yangilar</Button>
-                    <Button variant="ghost" onClick={() => navigate("/trending")} className={`shrink-0 rounded-full text-xs ${collection === "trending" ? "bg-foreground text-background" : "text-muted-foreground"}`}>Trend</Button>
+                    <Button variant="ghost" onClick={() => navigate("/newest")} className={`shrink-0 rounded-full text-xs ${collection === "newest" ? "bg-fresh text-background hover:bg-fresh/90 hover:text-background" : "text-muted-foreground"}`}>Yangilar</Button>
+                    <Button variant="ghost" onClick={() => navigate("/trending")} className={`shrink-0 rounded-full text-xs ${collection === "trending" ? "bg-discovery text-background hover:bg-discovery/90 hover:text-background" : "text-muted-foreground"}`}>Trend</Button>
+                    <Button variant="ghost" onClick={() => navigate("/saved")} className={`shrink-0 rounded-full text-xs ${collection === "saved" ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground" : "text-muted-foreground"}`}>Saqlanganlar{savedIds.length > 0 ? ` (${savedIds.length})` : ""}</Button>
                     <button
                       onClick={() => navigate("/")}
                       className={`shrink-0 px-4 py-2 rounded-full text-[12px] font-semibold transition-all duration-200 active:scale-95 ${
@@ -209,6 +249,24 @@ const Index = ({ category, collection }: Props) => {
                       </button>
                     ))}
                   </div>
+                  {(category || collection || hasFilters || search.trim()) && (
+                    <div className="mt-3 flex items-center gap-1.5 overflow-x-auto scrollbar-hide">
+                      {([["newest", "Yangi"], ["rating", "Reyting"], ["views", "Mashhur"]] as const).map(([value, label]) => (
+                        <button
+                          key={value}
+                          type="button"
+                          onClick={() => setSortBy(value)}
+                          className={`shrink-0 rounded-full px-3 py-1 text-[11px] font-medium transition-colors ${
+                            sortBy === value
+                              ? "bg-primary/20 text-primary border border-primary/40"
+                              : "bg-secondary/60 text-muted-foreground hover:text-foreground"
+                          }`}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -278,10 +336,18 @@ const Index = ({ category, collection }: Props) => {
                 ) : filtered.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-24 text-center">
                     <div className="font-display text-lg neon-text mb-2">
-                      {content.length === 0 ? "Kontent hali yo'q" : "Hech narsa topilmadi"}
+                      {collection === "saved"
+                        ? "Saqlanganlar bo‘sh"
+                        : content.length === 0
+                        ? "Kontent hali yo'q"
+                        : "Hech narsa topilmadi"}
                     </div>
                     <div className="text-muted-foreground text-sm">
-                      {content.length === 0 ? "Tez orada qo'shiladi" : "Boshqa so'z bilan urinib ko'ring"}
+                      {collection === "saved"
+                        ? "Kartochkadagi belgi orqali yoqqanlarini shu qurilmada saqlang"
+                        : content.length === 0
+                        ? "Tez orada qo'shiladi"
+                        : "Boshqa so'z bilan urinib ko'ring"}
                     </div>
                   </div>
                 ) : (
