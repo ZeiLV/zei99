@@ -349,6 +349,13 @@ export type Database = {
     }
     Functions: {
       generate_public_id: { Args: never; Returns: string }
+      get_voting_counts: {
+        Args: never
+        Returns: {
+          project_id: string
+          vote_count: number
+        }[]
+      }
       grant_vip_days: {
         Args: { _days: number; _public_id: string }
         Returns: string

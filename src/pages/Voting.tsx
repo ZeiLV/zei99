@@ -28,12 +28,19 @@ const Voting = () => {
       .eq("is_active", true)
       .order("created_at", { ascending: false });
     const list = (pr ?? []) as VotingProject[];
-    const { data: votes } = await supabase.from("voting_votes").select("project_id, user_id");
+    const [{ data: countRows }, myVotesRes] = await Promise.all([
+      supabase.rpc("get_voting_counts"),
+      user
+        ? supabase.from("voting_votes").select("project_id").eq("user_id", user.id)
+        : Promise.resolve({ data: [] as { project_id: string }[] }),
+    ]);
     const counts: Record<string, number> = {};
     const mine: Record<string, boolean> = {};
-    (votes ?? []).forEach((v: any) => {
-      counts[v.project_id] = (counts[v.project_id] ?? 0) + 1;
-      if (user && v.user_id === user.id) mine[v.project_id] = true;
+    (countRows ?? []).forEach((row) => {
+      counts[row.project_id] = Number(row.vote_count ?? 0);
+    });
+    (myVotesRes.data ?? []).forEach((v) => {
+      mine[v.project_id] = true;
     });
     setProjects(list.map((p) => ({ ...p, vote_count: counts[p.id] ?? 0, user_voted: !!mine[p.id] })));
     setLoading(false);
